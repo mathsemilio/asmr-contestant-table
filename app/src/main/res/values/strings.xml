@@ -1,0 +1,36 @@
+<resources>
+    <string name="app_name">ASMR Contestant Table</string>
+
+    <!-- Content Description -->
+    <string name="content_description_add_contestant">Add Contestant</string>
+    <string name="content_description_week_highlights">Highlights of the Week</string>
+
+    <!-- Common -->
+    <string name="contestants_table">Contestants Table</string>
+    <string name="week_highlights">Week Highlights</string>
+    <string name="reset_contest">Reset Contest</string>
+
+    <!-- Contestants list screen -->
+    <string name="no_contestants_registered">No Contestants Registered! Click the \"Add\" button to register one.</string>
+
+    <!-- Reset Contest Dialog -->
+    <string name="dialog_title_reset_contest">Reset Contest</string>
+    <string name="dialog_title_no_contestants_registered">No Contestants Registered</string>
+
+    <!-- Messages -->
+    <string name="all_contestants_deleted_successfully">All Contestants deleted successfully</string>
+
+    <!-- Dialog messages -->
+    <string name="dialog_message_reset_contest">Are you sure? Resetting the contest will delete all contestants and week highlights.</string>
+    <string name="dialog_message_no_contestants_registered">To start the contest, you need to first set the number of participants and the deadline on the app settings.</string>
+
+    <!-- Dialog button -->
+    <string name="dialog_positive_button_ok">OK</string>
+    <string name="dialog_negative_button_cancel">Cancel</string>
+    <string name="dialog_positive_button_reset">Reset</string>
+
+    <!-- Week highlights list item -->
+    <string name="week_highlights_item_week">Week %d</string>
+    <string name="week_highlights_item_contestants_name">%1$s &amp; %2$s</string>
+
+</resources>
