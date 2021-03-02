@@ -16,9 +16,9 @@ class ContestantsListAdapter(
         fun onContestantClicked(contestant: ASMRContestant)
     }
 
-    class ViewHolder(listItem: ContestantsListItemView) :
-        RecyclerView.ViewHolder(listItem.rootView) {
-        val contestantsListItemView = listItem
+    class ViewHolder(listItemView: ContestantsListItemView) :
+        RecyclerView.ViewHolder(listItemView.rootView) {
+        val contestantsListItemView = listItemView
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

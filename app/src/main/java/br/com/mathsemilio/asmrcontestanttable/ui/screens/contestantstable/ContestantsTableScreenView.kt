@@ -24,15 +24,16 @@ class ContestantsTableScreenView(layoutInflater: LayoutInflater, container: View
     private lateinit var contestantsListAdapter: ContestantsListAdapter
 
     init {
-        rootView = layoutInflater.inflate(R.layout.contestants_list_screen, container, false)
+        rootView = layoutInflater.inflate(R.layout.contestants_table_screen, container, false)
         initializeViews()
         setupRecyclerView(layoutInflater)
+        buttonAddContestant.setOnClickListener { onAddContestantButtonCLicked() }
     }
 
     private fun initializeViews() {
         buttonAddContestant = findViewById(R.id.fab_add_contestant)
         progressBarContestantsTable = findViewById(R.id.progress_bar_contestants_table)
-        textViewNoContestantsRegistered = findViewById(R.id.text_view_no_contestants_registered)
+        textViewNoContestantsRegistered = findViewById(R.id.text_view_contestants_registered)
         recyclerViewContestantsTable = findViewById(R.id.recycler_view_contestant_table)
     }
 
@@ -50,6 +51,10 @@ class ContestantsTableScreenView(layoutInflater: LayoutInflater, container: View
             recyclerViewContestantsTable.visibility = View.VISIBLE
             textViewNoContestantsRegistered.visibility = View.GONE
         }
+    }
+
+    private fun onAddContestantButtonCLicked() {
+        listeners.forEach { it.onAddButtonClicked() }
     }
 
     override fun showProgressIndicator() {

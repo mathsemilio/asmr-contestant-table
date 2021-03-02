@@ -18,7 +18,8 @@ class MainActivityView(layoutInflater: LayoutInflater, parent: ViewGroup?) :
     init {
         rootView = layoutInflater.inflate(R.layout.activity_main, parent, false)
         initializeViews()
-        attachOnBottomNavViewOnNavigationItemSelectedListener()
+        attachBottomNavViewOnNavigationItemSelectedListener()
+        attachToolbarMenuItemClickListener()
     }
 
     private fun initializeViews() {
@@ -27,23 +28,35 @@ class MainActivityView(layoutInflater: LayoutInflater, parent: ViewGroup?) :
         bottomNavViewApp = findViewById(R.id.bottom_nav_view_app)
     }
 
-    private fun attachOnBottomNavViewOnNavigationItemSelectedListener() {
+    private fun attachBottomNavViewOnNavigationItemSelectedListener() {
         bottomNavViewApp.setOnNavigationItemSelectedListener { menu ->
             when (menu.itemId) {
                 R.id.bottom_nav_item_contestants_table -> {
                     NavDestination.CONTESTANTS_TABLE.let {
-                        setToolbarTitleBasedOnDestination(it)
+                        onBottomNavigationItemClicked(it)
                         setToolbarMenuBasedOnDestination(it)
-                        onBottomNavItemClicked(it)
+                        setToolbarTitleBasedOnDestination(it)
                     }
                     true
                 }
                 R.id.bottom_nav_item_week_highlights -> {
                     NavDestination.WEEK_HIGHLIGHTS.let {
-                        setToolbarTitleBasedOnDestination(it)
+                        onBottomNavigationItemClicked(it)
                         setToolbarMenuBasedOnDestination(it)
-                        onBottomNavItemClicked(it)
+                        setToolbarTitleBasedOnDestination(it)
                     }
+                    true
+                }
+                else -> false
+            }
+        }
+    }
+
+    private fun attachToolbarMenuItemClickListener() {
+        materialToolbarApp.setOnMenuItemClickListener { menu ->
+            when (menu.itemId) {
+                R.id.toolbar_menu_item_reset_contest -> {
+                    onToolbarActionResetContestClicked()
                     true
                 }
                 else -> false
@@ -63,14 +76,20 @@ class MainActivityView(layoutInflater: LayoutInflater, parent: ViewGroup?) :
     override fun setToolbarMenuBasedOnDestination(destination: NavDestination) {
         val toolbarMenu = materialToolbarApp.menu
         when (destination) {
-            NavDestination.CONTESTANTS_TABLE ->
-                toolbarMenu.setGroupVisible(R.id.toolbar_menu_group_contestants_table, true)
-            NavDestination.WEEK_HIGHLIGHTS ->
-                toolbarMenu.setGroupVisible(R.id.toolbar_menu_group_contestants_table, false)
+            NavDestination.CONTESTANTS_TABLE -> {
+                toolbarMenu.setGroupVisible(R.id.toolbar_menu_group_reset_contest, true)
+            }
+            NavDestination.WEEK_HIGHLIGHTS -> {
+                toolbarMenu.setGroupVisible(R.id.toolbar_menu_group_reset_contest, false)
+            }
         }
     }
 
-    private fun onBottomNavItemClicked(destination: NavDestination) {
+    private fun onBottomNavigationItemClicked(destination: NavDestination) {
         listeners.forEach { it.onBottomNavigationItemClicked(destination) }
+    }
+
+    private fun onToolbarActionResetContestClicked() {
+        listeners.forEach { it.onToolbarActionResetContestClicked() }
     }
 }

@@ -11,9 +11,9 @@ import br.com.mathsemilio.asmrcontestanttable.domain.model.WeekHighlights
 import br.com.mathsemilio.asmrcontestanttable.ui.common.view.BaseObservableView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
-class WeekHighlightsListScreenView(layoutInflater: LayoutInflater, container: ViewGroup?) :
-    BaseObservableView<WeekHighlightsContract.ListScreen.Listener>(),
-    WeekHighlightsContract.ListScreen {
+class WeekHighlightsViewView(layoutInflater: LayoutInflater, container: ViewGroup?) :
+    BaseObservableView<WeekHighlightsContract.View.Listener>(),
+    WeekHighlightsContract.View {
 
     private lateinit var buttonAddWeekHighlights: FloatingActionButton
     private lateinit var progressBarWeekHighlightsList: ProgressBar
@@ -23,16 +23,17 @@ class WeekHighlightsListScreenView(layoutInflater: LayoutInflater, container: Vi
     private lateinit var weekHighlightsListAdapter: WeekHighlightsListAdapter
 
     init {
-        rootView = layoutInflater.inflate(R.layout.contestants_list_screen, container, false)
+        rootView = layoutInflater.inflate(R.layout.week_highlights_list_screen, container, false)
         initializeViews()
         setupRecyclerView(layoutInflater)
+        buttonAddWeekHighlights.setOnClickListener { onAddWeekHighlightsButtonClicked() }
     }
 
     private fun initializeViews() {
-        buttonAddWeekHighlights = findViewById(R.id.fab_add_contestant)
-        progressBarWeekHighlightsList = findViewById(R.id.progress_bar_contestants_table)
-        textViewNoWeekHighlightsRegistered = findViewById(R.id.text_view_no_contestants_registered)
-        recyclerViewWeekHighlightsList = findViewById(R.id.recycler_view_contestant_table)
+        buttonAddWeekHighlights = findViewById(R.id.fab_add_week_highlights)
+        progressBarWeekHighlightsList = findViewById(R.id.progress_bar_week_highlights_list)
+        textViewNoWeekHighlightsRegistered = findViewById(R.id.text_view_no_week_highlights_registered)
+        recyclerViewWeekHighlightsList = findViewById(R.id.recycler_view_week_highlights)
     }
 
     private fun setupRecyclerView(layoutInflater: LayoutInflater) {
@@ -49,6 +50,10 @@ class WeekHighlightsListScreenView(layoutInflater: LayoutInflater, container: Vi
             recyclerViewWeekHighlightsList.visibility = View.VISIBLE
             textViewNoWeekHighlightsRegistered.visibility = View.GONE
         }
+    }
+
+    private fun onAddWeekHighlightsButtonClicked() {
+        listeners.forEach { it.onAddButtonClicked() }
     }
 
     override fun showProgressIndicator() {

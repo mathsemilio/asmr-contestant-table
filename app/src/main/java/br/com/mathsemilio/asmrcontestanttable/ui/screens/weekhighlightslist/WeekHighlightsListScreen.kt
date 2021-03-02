@@ -1,42 +1,43 @@
-
 package br.com.mathsemilio.asmrcontestanttable.ui.screens.weekhighlightslist
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import br.com.mathsemilio.asmrcontestanttable.common.observable.EventObserver
+import br.com.mathsemilio.asmrcontestanttable.common.INVALID_EVENT
 import br.com.mathsemilio.asmrcontestanttable.domain.model.OperationResult
 import br.com.mathsemilio.asmrcontestanttable.domain.model.WeekHighlights
 import br.com.mathsemilio.asmrcontestanttable.domain.usecase.FetchWeekHighlightsUseCase
 import br.com.mathsemilio.asmrcontestanttable.ui.common.BaseFragment
-import br.com.mathsemilio.asmrcontestanttable.ui.common.helper.DialogHelper
-import br.com.mathsemilio.asmrcontestanttable.ui.common.helper.MessagesHelper
+import br.com.mathsemilio.asmrcontestanttable.ui.common.event.ModelModifiedEvent
+import br.com.mathsemilio.asmrcontestanttable.ui.common.helper.DialogManager
+import br.com.mathsemilio.asmrcontestanttable.ui.common.event.poster.EventPoster
+import br.com.mathsemilio.asmrcontestanttable.ui.common.helper.MessagesManager
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.cancel
+import kotlinx.coroutines.cancelChildren
 import kotlinx.coroutines.launch
 
 class WeekHighlightsListScreen : BaseFragment(),
-    WeekHighlightsContract.ListScreen.Listener,
-    EventObserver<OperationResult<List<WeekHighlights>>> {
+    WeekHighlightsContract.View.Listener,
+    WeekHighlightsContract.Screen,
+    FetchWeekHighlightsUseCase.Listener,
+    EventPoster.EventListener {
 
-    private lateinit var view: WeekHighlightsListScreenView
+    private lateinit var view: WeekHighlightsViewView
 
     private lateinit var coroutineScope: CoroutineScope
-    private lateinit var messagesHelper: MessagesHelper
-    private lateinit var dialogHelper: DialogHelper
+    private lateinit var messagesManager: MessagesManager
+    private lateinit var dialogManager: DialogManager
+    private lateinit var eventPoster: EventPoster
 
     private lateinit var fetchWeekHighlightsUseCase: FetchWeekHighlightsUseCase
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         coroutineScope = compositionRoot.coroutineScopeProvider.UIBoundScope
-
-        messagesHelper = compositionRoot.messagesHelper
-
-        dialogHelper = compositionRoot.dialogHelper
-
+        messagesManager = compositionRoot.messagesHelper
+        dialogManager = compositionRoot.dialogHelper
+        eventPoster = compositionRoot.eventPoster
         fetchWeekHighlightsUseCase = compositionRoot.fetchWeekHighlightsUseCase
     }
 
@@ -49,54 +50,69 @@ class WeekHighlightsListScreen : BaseFragment(),
         return view.rootView
     }
 
-    private fun getWeekHighlights() {
-        coroutineScope.launch { fetchWeekHighlightsUseCase.getAllWeekHighlights() }
-    }
-
     override fun onAddButtonClicked() {
-        dialogHelper.showAddWeekHighlightsBottomSheet()
+        dialogManager.showAddWeekHighlightsBottomSheet()
     }
 
-    override fun onEvent(event: OperationResult<List<WeekHighlights>>) {
-        when (event) {
-            OperationResult.OnStarted ->
-                onFetchWeekHighlightsStarted()
-            is OperationResult.OnCompleted ->
-                onFetchWeekHighlightsCompleted(event.data ?: throw NullPointerException())
-            is OperationResult.OnError ->
-                onFetchWeekHighlightsError(event.errorMessage!!)
-        }
+    override fun fetchWeekHighlights() {
+        coroutineScope.launch { fetchWeekHighlightsUseCase.fetchWeekHighlights() }
     }
 
-    private fun onFetchWeekHighlightsStarted() {
+    override fun onWeekHighlightsFetchStarted() {
         view.showProgressIndicator()
     }
 
-    private fun onFetchWeekHighlightsCompleted(weekHighlights: List<WeekHighlights>) {
+    override fun onWeekHighlightsFetchCompleted(weekHighlights: List<WeekHighlights>) {
         view.hideProgressIndicator()
         view.bindWeekHighlights(weekHighlights)
     }
 
-    private fun onFetchWeekHighlightsError(errorMessage: String) {
+    override fun onWeekHighlightsFetchFailed(errorMessage: String) {
         view.hideProgressIndicator()
-        messagesHelper.showFetchWeekHighlightsUseCaseErrorMessage(errorMessage)
+        messagesManager.showFetchWeekHighlightsUseCaseErrorMessage(errorMessage)
+    }
+
+    override fun onWeekHighlightsModified(event: ModelModifiedEvent.Event) {
+        when (event) {
+            ModelModifiedEvent.Event.WEEK_HIGHLIGHTS_MODIFIED -> fetchWeekHighlights()
+            else -> throw IllegalArgumentException(INVALID_EVENT)
+        }
+    }
+
+    override fun onFetchWeekHighlightsUseCaseEvent(result: OperationResult<List<WeekHighlights>>) {
+        when (result) {
+            OperationResult.OnStarted ->
+                onWeekHighlightsFetchStarted()
+            is OperationResult.OnCompleted ->
+                onWeekHighlightsFetchCompleted(result.data ?: throw NullPointerException())
+            is OperationResult.OnError ->
+                onWeekHighlightsFetchFailed(result.errorMessage!!)
+        }
+    }
+
+    override fun onEvent(event: Any) {
+        when (event) {
+            is ModelModifiedEvent -> onWeekHighlightsModified(event.modelModifiedEvent)
+        }
     }
 
     override fun onStart() {
         view.addListener(this)
         fetchWeekHighlightsUseCase.addListener(this)
-        getWeekHighlights()
+        eventPoster.addListener(this)
+        fetchWeekHighlights()
         super.onStart()
     }
 
     override fun onStop() {
         view.removeListener(this)
         fetchWeekHighlightsUseCase.removeListener(this)
+        eventPoster.removeListener(this)
         super.onStop()
     }
 
     override fun onDestroyView() {
-        coroutineScope.cancel()
+        coroutineScope.coroutineContext.cancelChildren()
         super.onDestroyView()
     }
 }

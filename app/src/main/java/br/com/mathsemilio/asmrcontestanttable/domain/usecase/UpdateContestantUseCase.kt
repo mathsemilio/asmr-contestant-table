@@ -1,18 +1,23 @@
 package br.com.mathsemilio.asmrcontestanttable.domain.usecase
 
 import br.com.mathsemilio.asmrcontestanttable.common.observable.BaseObservable
-import br.com.mathsemilio.asmrcontestanttable.common.observable.EventObserver
 import br.com.mathsemilio.asmrcontestanttable.data.repository.ContestantsRepository
 import br.com.mathsemilio.asmrcontestanttable.domain.model.ASMRContestant
 import br.com.mathsemilio.asmrcontestanttable.domain.model.OperationResult
-import kotlinx.coroutines.Dispatchers
+import br.com.mathsemilio.asmrcontestanttable.ui.common.helper.DispatcherProvider
 import kotlinx.coroutines.withContext
 
-class UpdateContestantUseCase(private val contestantsRepository: ContestantsRepository) :
-    BaseObservable<EventObserver<OperationResult<Nothing>>>() {
+class UpdateContestantUseCase(
+    private val contestantsRepository: ContestantsRepository,
+    private val dispatcherProvider: DispatcherProvider
+) : BaseObservable<UpdateContestantUseCase.Listener>() {
+
+    interface Listener {
+        fun onUpdateContestantsUseCaseEvent(result: OperationResult<Nothing>)
+    }
 
     suspend fun updateContestantTimesSlept(contestant: ASMRContestant) {
-        withContext(Dispatchers.IO) {
+        withContext(dispatcherProvider.background) {
             try {
                 val previousContestantOverallScore = contestant.score
                 val previousContestantTimesSlept = contestant.timesSlept
@@ -22,11 +27,11 @@ class UpdateContestantUseCase(private val contestantsRepository: ContestantsRepo
                         timesSlept = previousContestantTimesSlept.inc()
                     )
                 )
-                withContext(Dispatchers.Main.immediate) {
+                withContext(dispatcherProvider.main) {
                     onContestantUpdatedSuccessfully()
                 }
             } catch (e: Exception) {
-                withContext(Dispatchers.Main.immediate) {
+                withContext(dispatcherProvider.main) {
                     onContestantUpdateFailed(e.message!!)
                 }
             }
@@ -34,17 +39,17 @@ class UpdateContestantUseCase(private val contestantsRepository: ContestantsRepo
     }
 
     suspend fun updateContestantTimesDidNotSlept(contestant: ASMRContestant) {
-        withContext(Dispatchers.IO) {
+        withContext(dispatcherProvider.background) {
             try {
                 val previousContestantTimesNotSlept = contestant.timesDidNotSlept
                 contestantsRepository.updateData(
                     contestant.copy(timesDidNotSlept = previousContestantTimesNotSlept.inc())
                 )
-                withContext(Dispatchers.Main.immediate) {
+                withContext(dispatcherProvider.main) {
                     onContestantUpdatedSuccessfully()
                 }
             } catch (e: Exception) {
-                withContext(Dispatchers.Main.immediate) {
+                withContext(dispatcherProvider.main) {
                     onContestantUpdateFailed(e.message!!)
                 }
             }
@@ -52,7 +57,7 @@ class UpdateContestantUseCase(private val contestantsRepository: ContestantsRepo
     }
 
     suspend fun updateContestantTimesFeltTired(contestant: ASMRContestant) {
-        withContext(Dispatchers.IO) {
+        withContext(dispatcherProvider.background) {
             try {
                 val previousContestantOverallScore = contestant.score
                 val previousContestantTimesFeltTired = contestant.timesFeltTired
@@ -62,11 +67,11 @@ class UpdateContestantUseCase(private val contestantsRepository: ContestantsRepo
                         timesFeltTired = previousContestantTimesFeltTired.inc()
                     )
                 )
-                withContext(Dispatchers.Main.immediate) {
+                withContext(dispatcherProvider.main) {
                     onContestantUpdatedSuccessfully()
                 }
             } catch (e: Exception) {
-                withContext(Dispatchers.Main.immediate) {
+                withContext(dispatcherProvider.main) {
                     onContestantUpdateFailed(e.message!!)
                 }
             }
@@ -74,10 +79,10 @@ class UpdateContestantUseCase(private val contestantsRepository: ContestantsRepo
     }
 
     private fun onContestantUpdatedSuccessfully() {
-        listeners.forEach { it.onEvent(OperationResult.OnCompleted(null)) }
+        listeners.forEach { it.onUpdateContestantsUseCaseEvent(OperationResult.OnCompleted(null)) }
     }
 
     private fun onContestantUpdateFailed(errorMessage: String) {
-        listeners.forEach { it.onEvent(OperationResult.OnError()) }
+        listeners.forEach { it.onUpdateContestantsUseCaseEvent(OperationResult.OnError(errorMessage)) }
     }
 }

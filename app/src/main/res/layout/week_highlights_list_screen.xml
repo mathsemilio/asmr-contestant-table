@@ -6,17 +6,17 @@
     android:layout_height="match_parent">
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_add_contestant"
+        android:id="@+id/fab_add_week_highlights"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="24dp"
-        android:contentDescription="@string/content_description_add_contestant"
+        android:contentDescription="@string/content_description_add_week_highlights"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/ic_baseline_add_24" />
 
     <ProgressBar
-        android:id="@+id/progress_bar_contestants_table"
+        android:id="@+id/progress_bar_week_highlights_list"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -27,13 +27,13 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/text_view_no_contestants_registered"
+        android:id="@+id/text_view_no_week_highlights_registered"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:gravity="center_horizontal"
-        android:text="@string/no_contestants_registered"
+        android:text="@string/no_week_highlights_registered"
         android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:visibility="gone"
@@ -43,7 +43,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_view_contestant_table"
+        android:id="@+id/recycler_view_week_highlights"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:paddingTop="4dp"
@@ -54,7 +54,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:listitem="@layout/contestant_list_item"
+        tools:listitem="@layout/week_highlights_list_item"
         tools:visibility="visible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

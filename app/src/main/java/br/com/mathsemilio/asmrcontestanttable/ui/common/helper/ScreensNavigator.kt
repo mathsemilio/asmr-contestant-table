@@ -6,12 +6,12 @@ import br.com.mathsemilio.asmrcontestanttable.ui.screens.weekhighlightslist.Week
 
 class ScreensNavigator(
     private val fragmentManager: FragmentManager,
-    private val fragmentContainerHelper: FragmentContainerHelper
+    private val fragmentContainerManager: FragmentContainerManager
 ) {
     fun navigateToContestantsTableScreen() {
         fragmentManager.beginTransaction().apply {
             setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
-            replace(fragmentContainerHelper.getFragmentContainer().id, ContestantsTableScreen())
+            replace(fragmentContainerManager.getFragmentContainer().id, ContestantsTableScreen())
             commitNow()
         }
     }
@@ -19,7 +19,7 @@ class ScreensNavigator(
     fun navigateToWeekHighlightsScreen() {
         fragmentManager.beginTransaction().apply {
             setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
-            replace(fragmentContainerHelper.getFragmentContainer().id, WeekHighlightsListScreen())
+            replace(fragmentContainerManager.getFragmentContainer().id, WeekHighlightsListScreen())
             commitNow()
         }
     }

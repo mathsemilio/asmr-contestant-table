@@ -4,8 +4,17 @@ import br.com.mathsemilio.asmrcontestanttable.domain.model.ASMRContestant
 
 interface ContestantDetailsContract {
 
-    interface View {
+    interface BottomSheet {
+        fun getContestant(): ASMRContestant
 
+        fun bindContestant()
+
+        fun onUpdateContestantCompleted()
+
+        fun onUpdateContestantFailed(errorMessage: String)
+    }
+
+    interface View {
         interface Listener {
             fun onIncrementTimesSleptButtonClicked()
             fun onIncrementTimesDidNotSleptButtonClicked()

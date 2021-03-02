@@ -5,9 +5,9 @@ import android.widget.FrameLayout
 interface MainActivityContract {
 
     interface View {
-
         interface Listener {
             fun onBottomNavigationItemClicked(destination: NavDestination)
+            fun onToolbarActionResetContestClicked()
         }
 
         val fragmentContainer: FrameLayout

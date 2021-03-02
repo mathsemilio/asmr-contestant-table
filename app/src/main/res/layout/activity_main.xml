@@ -19,7 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="?actionBarSize"
             app:menu="@menu/app_toolbar_menu"
-            tools:title="Contestants Table" />
+            app:title="@string/contestants_table" />
 
     </com.google.android.material.appbar.AppBarLayout>
 

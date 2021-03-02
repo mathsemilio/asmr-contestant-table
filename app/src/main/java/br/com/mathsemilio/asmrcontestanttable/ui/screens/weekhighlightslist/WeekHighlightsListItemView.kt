@@ -15,6 +15,7 @@ class WeekHighlightsListItemView(layoutInflater: LayoutInflater, parent: ViewGro
 
     init {
         rootView = layoutInflater.inflate(R.layout.week_highlights_list_item, parent, false)
+        initializeViews()
     }
 
     private fun initializeViews() {

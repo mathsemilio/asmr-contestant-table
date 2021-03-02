@@ -6,11 +6,10 @@ import br.com.mathsemilio.asmrcontestanttable.R
 import br.com.mathsemilio.asmrcontestanttable.domain.model.ASMRContestant
 import br.com.mathsemilio.asmrcontestanttable.ui.dialog.bottomsheet.addcontestant.AddContestantBottomSheet
 import br.com.mathsemilio.asmrcontestanttable.ui.dialog.bottomsheet.addweekhighlights.AddWeekHighlightsBottomSheet
-import br.com.mathsemilio.asmrcontestanttable.ui.dialog.dialog.contestantsnumber.ContestantsNumberDialog
-import br.com.mathsemilio.asmrcontestanttable.ui.dialog.dialog.contestdeadline.ContestDeadlineDatePickerDialog
+import br.com.mathsemilio.asmrcontestanttable.ui.dialog.bottomsheet.contestantdetails.ContestantDetailsBottomSheet
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
-class DialogHelper(private val fragmentManager: FragmentManager, private val context: Context) {
+class DialogManager(private val fragmentManager: FragmentManager, private val context: Context) {
 
     fun showAddContestantBottomSheet() {
         val addContestantBottomSheet = AddContestantBottomSheet()
@@ -23,18 +22,8 @@ class DialogHelper(private val fragmentManager: FragmentManager, private val con
     }
 
     fun showContestantDetailsBottomSheet(contestant: ASMRContestant) {
-        TODO()
-    }
-
-    fun showNoContestantsRegisteredDialog(onPositiveButtonClicked: () -> Unit) {
-        MaterialAlertDialogBuilder(context).apply {
-            setTitle(context.getString(R.string.dialog_title_no_contestants_registered))
-            setMessage(context.getString(R.string.dialog_message_no_contestants_registered))
-            setPositiveButton(context.getString(R.string.dialog_positive_button_ok))
-            { _, _ -> onPositiveButtonClicked() }
-            setCancelable(false)
-            show()
-        }
+        val contestantsDetailsBottomSheet = ContestantDetailsBottomSheet.newInstance(contestant)
+        contestantsDetailsBottomSheet.show(fragmentManager, null)
     }
 
     fun showResetContestDialog(onPositiveButtonClicked: () -> Unit) {
@@ -48,15 +37,5 @@ class DialogHelper(private val fragmentManager: FragmentManager, private val con
             setCancelable(true)
             show()
         }
-    }
-
-    fun showSetContestantsNumberDialog() {
-        val contestantsNumberDialog = ContestantsNumberDialog()
-        contestantsNumberDialog.show(fragmentManager, null)
-    }
-
-    fun showSetContestDeadlineDatePickerDialog() {
-        val contestDeadlineDatePickerDialog = ContestDeadlineDatePickerDialog()
-        contestDeadlineDatePickerDialog.show(fragmentManager, null)
     }
 }

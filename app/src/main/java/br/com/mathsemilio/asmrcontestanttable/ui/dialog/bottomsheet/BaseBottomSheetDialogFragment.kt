@@ -1,4 +1,4 @@
-package br.com.mathsemilio.asmrcontestanttable.ui.dialog.bottomsheet.common
+package br.com.mathsemilio.asmrcontestanttable.ui.dialog.bottomsheet
 
 import br.com.mathsemilio.asmrcontestanttable.common.di.ControllerCompositionRoot
 import br.com.mathsemilio.asmrcontestanttable.ui.MainActivity

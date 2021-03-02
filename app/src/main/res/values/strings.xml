@@ -3,31 +3,61 @@
 
     <!-- Content Description -->
     <string name="content_description_add_contestant">Add Contestant</string>
+    <string name="content_description_add_week_highlights">Add Week Highlights</string>
     <string name="content_description_week_highlights">Highlights of the Week</string>
+    <string name="content_description_increment_number_of_times_slept">Increment Number of times Slept</string>
+    <string name="content_description_increment_number_os_times_you_did_not_slept">Increment Number os times You Did Not Slept</string>
+    <string name="content_description_increment_number_of_time_you_felt_tired">Increment Number of time you Felt Tired</string>
+    <string name="content_description_decrement_number_of_contestants">Decrement number of contestants</string>
+    <string name="content_description_increment_number_of_contestants">Increment number of contestants</string>
+    <string name="content_description_slider">Slider to close the dialog</string>
 
     <!-- Common -->
+    <string name="name">Name</string>
+    <string name="add">Add</string>
     <string name="contestants_table">Contestants Table</string>
     <string name="week_highlights">Week Highlights</string>
     <string name="reset_contest">Reset Contest</string>
+    <string name="contest_details">Contest details</string>
+
+    <!-- Toolbar menu items -->
+    <string name="set_contestants_number">Set contestants number</string>
+    <string name="set_contest_deadline">Set contest deadline</string>
 
     <!-- Contestants list screen -->
     <string name="no_contestants_registered">No Contestants Registered! Click the \"Add\" button to register one.</string>
 
+    <!-- Week highlights list screen -->
+    <string name="no_week_highlights_registered">No Week Highlights registered! Click the \"Add\" button to register one</string>
+
+    <!-- Add contestant dialog -->
+    <string name="add_contestant">Add Contestant</string>
+    <string name="adding_contestant">Adding Contestant…</string>
+    <string name="please_enter_contestant_name">Please enter the contestant\'s name</string>
+
+    <!-- Add Week Highlights dialog -->
+    <string name="add_week_highlights">Add Week Highlight</string>
+    <string name="first_contestant">First Contestant</string>
+    <string name="second_contestant">Second Contestant</string>
+    <string name="adding_week_highlights">Adding Week Highlights…</string>
+
+    <!-- Contestant details dialog -->
+    <string name="felt_tired">Felt Tired</string>
+    <string name="did_not_slept">Did Not Slept</string>
+    <string name="times_slept">Times Slept</string>
+
     <!-- Reset Contest Dialog -->
     <string name="dialog_title_reset_contest">Reset Contest</string>
-    <string name="dialog_title_no_contestants_registered">No Contestants Registered</string>
-
-    <!-- Messages -->
-    <string name="all_contestants_deleted_successfully">All Contestants deleted successfully</string>
 
     <!-- Dialog messages -->
     <string name="dialog_message_reset_contest">Are you sure? Resetting the contest will delete all contestants and week highlights.</string>
-    <string name="dialog_message_no_contestants_registered">To start the contest, you need to first set the number of participants and the deadline on the app settings.</string>
 
     <!-- Dialog button -->
-    <string name="dialog_positive_button_ok">OK</string>
     <string name="dialog_negative_button_cancel">Cancel</string>
     <string name="dialog_positive_button_reset">Reset</string>
+
+    <!-- Messages -->
+    <string name="contest_rebooted_successfully">Contest rebooted successfully</string>
 
     <!-- Week highlights list item -->
     <string name="week_highlights_item_week">Week %d</string>

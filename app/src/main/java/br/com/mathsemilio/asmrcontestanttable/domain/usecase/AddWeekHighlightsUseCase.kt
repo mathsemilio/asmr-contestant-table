@@ -1,30 +1,37 @@
 package br.com.mathsemilio.asmrcontestanttable.domain.usecase
 
 import br.com.mathsemilio.asmrcontestanttable.common.observable.BaseObservable
-import br.com.mathsemilio.asmrcontestanttable.common.observable.EventObserver
 import br.com.mathsemilio.asmrcontestanttable.data.repository.WeekHighlightsRepository
 import br.com.mathsemilio.asmrcontestanttable.domain.model.OperationResult
 import br.com.mathsemilio.asmrcontestanttable.domain.model.WeekHighlights
-import kotlinx.coroutines.Dispatchers
+import br.com.mathsemilio.asmrcontestanttable.ui.common.helper.DispatcherProvider
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class AddWeekHighlightsUseCase(private val weekHighlightsRepository: WeekHighlightsRepository) :
-    BaseObservable<EventObserver<OperationResult<Nothing>>>() {
+class AddWeekHighlightsUseCase(
+    private val weekHighlightsRepository: WeekHighlightsRepository,
+    private val dispatcherProvider: DispatcherProvider
+) : BaseObservable<AddWeekHighlightsUseCase.Listener>() {
+
+    interface Listener {
+        fun onAddWeekHighlightsUseCaseEvent(result: OperationResult<Nothing>)
+    }
 
     suspend fun insertContestant(firstContestantName: String, secondContestantName: String) {
         onAddWeekHighlightsStarted()
-        withContext(Dispatchers.IO) {
+        withContext(dispatcherProvider.background) {
             try {
-                weekHighlightsRepository.insertData(
-                    WeekHighlights(
-                        0, getWeekNumber(), firstContestantName, secondContestantName
+                launch {
+                    val weekNumber = getWeekNumber()
+                    weekHighlightsRepository.insertData(
+                        WeekHighlights(0, weekNumber, firstContestantName, secondContestantName)
                     )
-                )
-                withContext(Dispatchers.Main.immediate) {
+                }
+                withContext(dispatcherProvider.main) {
                     onWeekHighlightsAddedSuccessfully()
                 }
             } catch (e: Exception) {
-                withContext(Dispatchers.Main.immediate) {
+                withContext(dispatcherProvider.main) {
                     onAddWeekHighlightsError(e.message!!)
                 }
             }
@@ -32,7 +39,7 @@ class AddWeekHighlightsUseCase(private val weekHighlightsRepository: WeekHighlig
     }
 
     private suspend fun getWeekNumber(): Int {
-        return withContext(Dispatchers.IO) {
+        return withContext(dispatcherProvider.background) {
             try {
                 weekHighlightsRepository.getAllWeekHighlights().size + 1
             } catch (e: Exception) {
@@ -42,14 +49,14 @@ class AddWeekHighlightsUseCase(private val weekHighlightsRepository: WeekHighlig
     }
 
     private fun onAddWeekHighlightsStarted() {
-        listeners.forEach { it.onEvent(OperationResult.OnStarted) }
+        listeners.forEach { it.onAddWeekHighlightsUseCaseEvent(OperationResult.OnStarted) }
     }
 
     private fun onWeekHighlightsAddedSuccessfully() {
-        listeners.forEach { it.onEvent(OperationResult.OnCompleted(null)) }
+        listeners.forEach { it.onAddWeekHighlightsUseCaseEvent(OperationResult.OnCompleted(null)) }
     }
 
     private fun onAddWeekHighlightsError(errorMessage: String) {
-        listeners.forEach { it.onEvent(OperationResult.OnError()) }
+        listeners.forEach { it.onAddWeekHighlightsUseCaseEvent(OperationResult.OnError(errorMessage)) }
     }
 }

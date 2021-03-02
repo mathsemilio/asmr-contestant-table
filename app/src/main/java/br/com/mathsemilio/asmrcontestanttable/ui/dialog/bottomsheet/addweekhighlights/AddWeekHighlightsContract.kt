@@ -2,10 +2,17 @@ package br.com.mathsemilio.asmrcontestanttable.ui.dialog.bottomsheet.addweekhigh
 
 interface AddWeekHighlightsContract {
 
-    interface View {
+    interface BottomSheet {
+        fun onAddWeekHighlightsStarted()
 
+        fun onAddWeekHighlightsCompleted()
+
+        fun onAddWeekHighlightsFailed(errorMessage: String)
+    }
+
+    interface View {
         interface Listener {
-            fun onAddButtonClicked(contestantName: String)
+            fun onAddButtonClicked(firstContestantName: String, secondContestantName: String)
         }
 
         fun changeAddButtonState()

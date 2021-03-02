@@ -1,7 +1,6 @@
 package br.com.mathsemilio.asmrcontestanttable.domain.usecase
 
 import br.com.mathsemilio.asmrcontestanttable.common.observable.BaseObservable
-import br.com.mathsemilio.asmrcontestanttable.common.observable.EventObserver
 import br.com.mathsemilio.asmrcontestanttable.data.repository.ContestantsRepository
 import br.com.mathsemilio.asmrcontestanttable.domain.model.ASMRContestant
 import br.com.mathsemilio.asmrcontestanttable.domain.model.OperationResult
@@ -11,9 +10,13 @@ import kotlinx.coroutines.withContext
 class FetchContestantsUseCase(
     private val contestantsRepository: ContestantsRepository,
     private val dispatcherProvider: DispatcherProvider
-) : BaseObservable<EventObserver<OperationResult<List<ASMRContestant>>>>() {
+) : BaseObservable<FetchContestantsUseCase.Listener>() {
 
-    suspend fun getAllContestants() {
+    interface Listener {
+        fun onFetchContestantsUseCaseEvent(result: OperationResult<List<ASMRContestant>>)
+    }
+
+    suspend fun fetchContestants() {
         onFetchContestantsStarted()
         withContext(dispatcherProvider.background) {
             try {
@@ -30,14 +33,14 @@ class FetchContestantsUseCase(
     }
 
     private fun onFetchContestantsStarted() {
-        listeners.forEach { it.onEvent(OperationResult.OnStarted) }
+        listeners.forEach { it.onFetchContestantsUseCaseEvent(OperationResult.OnStarted) }
     }
 
     private fun onFetchContestantsCompleted(contestants: List<ASMRContestant>) {
-        listeners.forEach { it.onEvent(OperationResult.OnCompleted(contestants)) }
+        listeners.forEach { it.onFetchContestantsUseCaseEvent(OperationResult.OnCompleted(contestants)) }
     }
 
     private fun onFetchContestantsFailed(errorMessage: String) {
-        listeners.forEach { it.onEvent(OperationResult.OnError(errorMessage)) }
+        listeners.forEach { it.onFetchContestantsUseCaseEvent(OperationResult.OnError(errorMessage)) }
     }
 }
