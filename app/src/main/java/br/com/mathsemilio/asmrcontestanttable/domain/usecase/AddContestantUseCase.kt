@@ -4,7 +4,7 @@ import br.com.mathsemilio.asmrcontestanttable.common.observable.BaseObservable
 import br.com.mathsemilio.asmrcontestanttable.data.repository.ContestantsRepository
 import br.com.mathsemilio.asmrcontestanttable.domain.model.ASMRContestant
 import br.com.mathsemilio.asmrcontestanttable.domain.model.OperationResult
-import br.com.mathsemilio.asmrcontestanttable.ui.common.helper.DispatcherProvider
+import br.com.mathsemilio.asmrcontestanttable.common.provider.DispatcherProvider
 import kotlinx.coroutines.withContext
 
 class AddContestantUseCase(
@@ -18,14 +18,14 @@ class AddContestantUseCase(
 
     suspend fun insertContestant(contestantName: String) {
         onAddContestantStarted()
-        withContext(dispatcherProvider.background) {
+        withContext(dispatcherProvider.BACKGROUND) {
             try {
                 contestantsRepository.insertData(ASMRContestant(0, contestantName))
-                withContext(dispatcherProvider.main) {
+                withContext(dispatcherProvider.MAIN) {
                     onContestantAddedSuccessfully()
                 }
             } catch (e: Exception) {
-                withContext(dispatcherProvider.main) {
+                withContext(dispatcherProvider.MAIN) {
                     onAddContestantError(e.message!!)
                 }
             }

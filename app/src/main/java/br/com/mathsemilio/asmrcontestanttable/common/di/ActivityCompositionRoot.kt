@@ -50,7 +50,11 @@ class ActivityCompositionRoot(
     val messagesHelper get() = _messagesHelper
 
     private val _screensNavigator by lazy {
-        ScreensNavigator(activity.supportFragmentManager, activity as FragmentContainerManager)
+        ScreensNavigator(
+            eventPoster,
+            activity.supportFragmentManager,
+            activity as FragmentContainerManager
+        )
     }
     val screensNavigator get() = _screensNavigator
 

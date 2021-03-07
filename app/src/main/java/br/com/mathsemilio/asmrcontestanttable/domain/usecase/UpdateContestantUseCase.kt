@@ -4,7 +4,7 @@ import br.com.mathsemilio.asmrcontestanttable.common.observable.BaseObservable
 import br.com.mathsemilio.asmrcontestanttable.data.repository.ContestantsRepository
 import br.com.mathsemilio.asmrcontestanttable.domain.model.ASMRContestant
 import br.com.mathsemilio.asmrcontestanttable.domain.model.OperationResult
-import br.com.mathsemilio.asmrcontestanttable.ui.common.helper.DispatcherProvider
+import br.com.mathsemilio.asmrcontestanttable.common.provider.DispatcherProvider
 import kotlinx.coroutines.withContext
 
 class UpdateContestantUseCase(
@@ -17,7 +17,7 @@ class UpdateContestantUseCase(
     }
 
     suspend fun updateContestantTimesSlept(contestant: ASMRContestant) {
-        withContext(dispatcherProvider.background) {
+        withContext(dispatcherProvider.BACKGROUND) {
             try {
                 val previousContestantOverallScore = contestant.score
                 val previousContestantTimesSlept = contestant.timesSlept
@@ -27,11 +27,11 @@ class UpdateContestantUseCase(
                         timesSlept = previousContestantTimesSlept.inc()
                     )
                 )
-                withContext(dispatcherProvider.main) {
+                withContext(dispatcherProvider.MAIN) {
                     onContestantUpdatedSuccessfully()
                 }
             } catch (e: Exception) {
-                withContext(dispatcherProvider.main) {
+                withContext(dispatcherProvider.MAIN) {
                     onContestantUpdateFailed(e.message!!)
                 }
             }
@@ -39,17 +39,17 @@ class UpdateContestantUseCase(
     }
 
     suspend fun updateContestantTimesDidNotSlept(contestant: ASMRContestant) {
-        withContext(dispatcherProvider.background) {
+        withContext(dispatcherProvider.BACKGROUND) {
             try {
                 val previousContestantTimesNotSlept = contestant.timesDidNotSlept
                 contestantsRepository.updateData(
                     contestant.copy(timesDidNotSlept = previousContestantTimesNotSlept.inc())
                 )
-                withContext(dispatcherProvider.main) {
+                withContext(dispatcherProvider.MAIN) {
                     onContestantUpdatedSuccessfully()
                 }
             } catch (e: Exception) {
-                withContext(dispatcherProvider.main) {
+                withContext(dispatcherProvider.MAIN) {
                     onContestantUpdateFailed(e.message!!)
                 }
             }
@@ -57,7 +57,7 @@ class UpdateContestantUseCase(
     }
 
     suspend fun updateContestantTimesFeltTired(contestant: ASMRContestant) {
-        withContext(dispatcherProvider.background) {
+        withContext(dispatcherProvider.BACKGROUND) {
             try {
                 val previousContestantOverallScore = contestant.score
                 val previousContestantTimesFeltTired = contestant.timesFeltTired
@@ -67,11 +67,11 @@ class UpdateContestantUseCase(
                         timesFeltTired = previousContestantTimesFeltTired.inc()
                     )
                 )
-                withContext(dispatcherProvider.main) {
+                withContext(dispatcherProvider.MAIN) {
                     onContestantUpdatedSuccessfully()
                 }
             } catch (e: Exception) {
-                withContext(dispatcherProvider.main) {
+                withContext(dispatcherProvider.MAIN) {
                     onContestantUpdateFailed(e.message!!)
                 }
             }

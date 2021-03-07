@@ -32,19 +32,11 @@ class MainActivityView(layoutInflater: LayoutInflater, parent: ViewGroup?) :
         bottomNavViewApp.setOnNavigationItemSelectedListener { menu ->
             when (menu.itemId) {
                 R.id.bottom_nav_item_contestants_table -> {
-                    NavDestination.CONTESTANTS_TABLE.let {
-                        onBottomNavigationItemClicked(it)
-                        setToolbarMenuBasedOnDestination(it)
-                        setToolbarTitleBasedOnDestination(it)
-                    }
+                    onBottomNavigationItemClicked(NavDestination.CONTESTANTS_TABLE)
                     true
                 }
                 R.id.bottom_nav_item_week_highlights -> {
-                    NavDestination.WEEK_HIGHLIGHTS.let {
-                        onBottomNavigationItemClicked(it)
-                        setToolbarMenuBasedOnDestination(it)
-                        setToolbarTitleBasedOnDestination(it)
-                    }
+                    onBottomNavigationItemClicked(NavDestination.WEEK_HIGHLIGHTS)
                     true
                 }
                 else -> false

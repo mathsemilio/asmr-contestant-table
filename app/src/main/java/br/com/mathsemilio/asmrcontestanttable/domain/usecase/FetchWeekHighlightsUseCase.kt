@@ -4,7 +4,7 @@ import br.com.mathsemilio.asmrcontestanttable.common.observable.BaseObservable
 import br.com.mathsemilio.asmrcontestanttable.data.repository.WeekHighlightsRepository
 import br.com.mathsemilio.asmrcontestanttable.domain.model.OperationResult
 import br.com.mathsemilio.asmrcontestanttable.domain.model.WeekHighlights
-import br.com.mathsemilio.asmrcontestanttable.ui.common.helper.DispatcherProvider
+import br.com.mathsemilio.asmrcontestanttable.common.provider.DispatcherProvider
 import kotlinx.coroutines.withContext
 
 class FetchWeekHighlightsUseCase(
@@ -18,14 +18,14 @@ class FetchWeekHighlightsUseCase(
 
     suspend fun fetchWeekHighlights() {
         onFetchWeekHighlightsStarted()
-        withContext(dispatcherProvider.background) {
+        withContext(dispatcherProvider.BACKGROUND) {
             try {
                 val weekHighlights = weekHighlightsRepository.getAllWeekHighlights()
-                withContext(dispatcherProvider.main) {
+                withContext(dispatcherProvider.MAIN) {
                     onFetchWeekHighlightsCompleted(weekHighlights)
                 }
             } catch (e: Exception) {
-                withContext(dispatcherProvider.main) {
+                withContext(dispatcherProvider.MAIN) {
                     onFetchWeekHighlightsFailed(e.message!!)
                 }
             }

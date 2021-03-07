@@ -4,7 +4,7 @@ import br.com.mathsemilio.asmrcontestanttable.common.observable.BaseObservable
 import br.com.mathsemilio.asmrcontestanttable.data.repository.WeekHighlightsRepository
 import br.com.mathsemilio.asmrcontestanttable.domain.model.OperationResult
 import br.com.mathsemilio.asmrcontestanttable.domain.model.WeekHighlights
-import br.com.mathsemilio.asmrcontestanttable.ui.common.helper.DispatcherProvider
+import br.com.mathsemilio.asmrcontestanttable.common.provider.DispatcherProvider
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -19,7 +19,7 @@ class AddWeekHighlightsUseCase(
 
     suspend fun insertContestant(firstContestantName: String, secondContestantName: String) {
         onAddWeekHighlightsStarted()
-        withContext(dispatcherProvider.background) {
+        withContext(dispatcherProvider.BACKGROUND) {
             try {
                 launch {
                     val weekNumber = getWeekNumber()
@@ -27,11 +27,11 @@ class AddWeekHighlightsUseCase(
                         WeekHighlights(0, weekNumber, firstContestantName, secondContestantName)
                     )
                 }
-                withContext(dispatcherProvider.main) {
+                withContext(dispatcherProvider.MAIN) {
                     onWeekHighlightsAddedSuccessfully()
                 }
             } catch (e: Exception) {
-                withContext(dispatcherProvider.main) {
+                withContext(dispatcherProvider.MAIN) {
                     onAddWeekHighlightsError(e.message!!)
                 }
             }
@@ -39,7 +39,7 @@ class AddWeekHighlightsUseCase(
     }
 
     private suspend fun getWeekNumber(): Int {
-        return withContext(dispatcherProvider.background) {
+        return withContext(dispatcherProvider.BACKGROUND) {
             try {
                 weekHighlightsRepository.getAllWeekHighlights().size + 1
             } catch (e: Exception) {
