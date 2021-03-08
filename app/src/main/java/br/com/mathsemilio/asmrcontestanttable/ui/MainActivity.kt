@@ -28,8 +28,7 @@ class MainActivity : BaseActivity(),
 
         setContentView(view.rootView)
 
-        if (savedInstanceState == null)
-            screensNavigator.navigateToContestantsTableScreen()
+        screensNavigator.navigateToContestantsTableScreen()
     }
 
     override fun onBottomNavigationItemClicked(destination: NavDestination) {

@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.RecyclerView
 import br.com.mathsemilio.asmrcontestanttable.R
 import br.com.mathsemilio.asmrcontestanttable.domain.model.ASMRContestant
@@ -14,14 +15,14 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 class ContestantsTableScreenView(layoutInflater: LayoutInflater, container: ViewGroup?) :
     BaseObservableView<ContestantsTableContract.View.Listener>(),
     ContestantsTableContract.View,
-    ContestantsListAdapter.Listener {
+    ContestantsAdapter.Listener {
 
     private lateinit var buttonAddContestant: FloatingActionButton
     private lateinit var progressBarContestantsTable: ProgressBar
     private lateinit var textViewNoContestantsRegistered: TextView
 
     private lateinit var recyclerViewContestantsTable: RecyclerView
-    private lateinit var contestantsListAdapter: ContestantsListAdapter
+    private lateinit var contestantsAdapter: ContestantsAdapter
 
     init {
         rootView = layoutInflater.inflate(R.layout.contestants_table_screen, container, false)
@@ -38,12 +39,15 @@ class ContestantsTableScreenView(layoutInflater: LayoutInflater, container: View
     }
 
     private fun setupRecyclerView(layoutInflater: LayoutInflater) {
-        contestantsListAdapter = ContestantsListAdapter(layoutInflater, this)
-        recyclerViewContestantsTable.adapter = contestantsListAdapter
+        contestantsAdapter = ContestantsAdapter(layoutInflater, this)
+        recyclerViewContestantsTable.apply {
+            adapter = contestantsAdapter
+            itemAnimator = DefaultItemAnimator()
+        }
     }
 
     override fun bindContestants(contestants: List<ASMRContestant>) {
-        contestantsListAdapter.submitList(contestants)
+        contestantsAdapter.submitData(contestants)
         if (contestants.isEmpty()) {
             recyclerViewContestantsTable.visibility = View.GONE
             textViewNoContestantsRegistered.visibility = View.VISIBLE

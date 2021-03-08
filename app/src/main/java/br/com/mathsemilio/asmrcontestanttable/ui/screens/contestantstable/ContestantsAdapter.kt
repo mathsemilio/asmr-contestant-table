@@ -2,18 +2,27 @@ package br.com.mathsemilio.asmrcontestanttable.ui.screens.contestantstable
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import br.com.mathsemilio.asmrcontestanttable.domain.model.ASMRContestant
 
-class ContestantsListAdapter(
+class ContestantsAdapter(
     private val layoutInflater: LayoutInflater,
     private val listener: Listener
-) : ListAdapter<ASMRContestant, ContestantsListAdapter.ViewHolder>(ContestantsDiffUtilCallback()),
+) : RecyclerView.Adapter<ContestantsAdapter.ViewHolder>(),
     ContestantsTableContract.ListItemView.Listener {
 
     interface Listener {
         fun onContestantClicked(contestant: ASMRContestant)
+    }
+
+    private val contestantsList = mutableListOf<ASMRContestant>()
+
+    fun submitData(data: List<ASMRContestant>) {
+        if (contestantsList.isNotEmpty())
+            contestantsList.clear()
+
+        contestantsList.addAll(data)
+        notifyDataSetChanged()
     }
 
     class ViewHolder(listItemView: ContestantsListItemView) :
@@ -28,7 +37,11 @@ class ContestantsListAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.contestantsListItemView.bindContestant(getItem(position), position + 1)
+        holder.contestantsListItemView.bindContestant(contestantsList[position], position + 1)
+    }
+
+    override fun getItemCount(): Int {
+        return contestantsList.size
     }
 
     override fun onContestantClicked(contestant: ASMRContestant) {
