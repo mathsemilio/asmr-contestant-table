@@ -86,7 +86,7 @@ class ContestantsTableScreen : BaseFragment(),
     }
 
     override fun onContestantsDeletedSuccessfully() {
-        view.hideProgressIndicator()
+        fetchContestants()
         messagesManager.showContestantsDeletedUseCaseSuccessMessage()
     }
 
