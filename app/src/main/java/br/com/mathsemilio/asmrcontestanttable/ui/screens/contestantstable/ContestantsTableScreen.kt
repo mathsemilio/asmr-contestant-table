@@ -4,11 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import br.com.mathsemilio.asmrcontestanttable.common.INVALID_OPERATION
 import br.com.mathsemilio.asmrcontestanttable.domain.model.ASMRContestant
-import br.com.mathsemilio.asmrcontestanttable.domain.model.OperationResult
-import br.com.mathsemilio.asmrcontestanttable.domain.usecase.DeleteContestantsUseCase
-import br.com.mathsemilio.asmrcontestanttable.domain.usecase.FetchContestantsUseCase
+import br.com.mathsemilio.asmrcontestanttable.domain.usecase.contestants.DeleteContestantsUseCase
+import br.com.mathsemilio.asmrcontestanttable.domain.usecase.contestants.FetchContestantsUseCase
 import br.com.mathsemilio.asmrcontestanttable.ui.ToolbarAction
 import br.com.mathsemilio.asmrcontestanttable.ui.common.BaseFragment
 import br.com.mathsemilio.asmrcontestanttable.ui.common.event.DataModifiedEvent
@@ -65,30 +63,8 @@ class ContestantsTableScreen : BaseFragment(),
     }
 
     override fun fetchContestants() {
-        coroutineScope.launch { fetchContestantsUseCase.fetchContestants() }
-    }
-
-    override fun onContestantsFetchStarted() {
         view.showProgressIndicator()
-    }
-
-    override fun onContestantsFetchCompleted(contestants: List<ASMRContestant>) {
-        view.hideProgressIndicator()
-        view.bindContestants(contestants)
-    }
-
-    override fun onContestantsFetchFailed(errorMessage: String) {
-        view.hideProgressIndicator()
-        messagesManager.showFetchContestantsUseCaseErrorMessage(errorMessage)
-    }
-
-    override fun onContestantsDeleteCompleted() {
-        messagesManager.showAllContestantsDeleteUseCaseSuccessMessage()
-        fetchContestants()
-    }
-
-    override fun onContestantsDeleteFailed(errorMessage: String) {
-        messagesManager.showAllContestantsDeletedUseCaseErrorMessage(errorMessage)
+        coroutineScope.launch { fetchContestantsUseCase.fetchContestants() }
     }
 
     override fun onToolbarActionClicked(action: ToolbarAction) {
@@ -100,19 +76,23 @@ class ContestantsTableScreen : BaseFragment(),
     }
 
     override fun onContestantsFetchedSuccessfully(contestants: List<ASMRContestant>) {
-        when (result) {
-            OperationResult.OnStarted -> onContestantsFetchStarted()
-            is OperationResult.OnCompleted -> onContestantsFetchCompleted(result.data!!)
-            is OperationResult.OnError -> onContestantsFetchFailed(result.errorMessage!!)
-        }
+        view.hideProgressIndicator()
+        view.bindContestants(contestants)
     }
 
-    override fun onDeleteContestantsUseCaseEvent(result: OperationResult<Nothing>) {
-        when (result) {
-            is OperationResult.OnCompleted -> onContestantsDeleteCompleted()
-            is OperationResult.OnError -> onContestantsDeleteFailed(result.errorMessage!!)
-            else -> throw IllegalArgumentException(INVALID_OPERATION)
-        }
+    override fun onContestantsFetchFailed(errorMessage: String) {
+        view.hideProgressIndicator()
+        messagesManager.showUseCaseErrorMessage(errorMessage)
+    }
+
+    override fun onContestantsDeletedSuccessfully() {
+        view.hideProgressIndicator()
+        messagesManager.showContestantsDeletedUseCaseSuccessMessage()
+    }
+
+    override fun onContestantsDeleteFailed(errorMessage: String) {
+        view.hideProgressIndicator()
+        messagesManager.showUseCaseErrorMessage(errorMessage)
     }
 
     override fun onEvent(event: Any) {

@@ -1,4 +1,4 @@
-package br.com.mathsemilio.asmrcontestanttable.domain.usecase
+package br.com.mathsemilio.asmrcontestanttable.domain.usecase.contestants
 
 import br.com.mathsemilio.asmrcontestanttable.common.observable.BaseObservable
 import br.com.mathsemilio.asmrcontestanttable.domain.model.ASMRContestant

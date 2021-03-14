@@ -3,7 +3,6 @@ package br.com.mathsemilio.asmrcontestanttable.data.dao
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
-import br.com.mathsemilio.asmrcontestanttable.data.common.BaseDAO
 import br.com.mathsemilio.asmrcontestanttable.domain.model.WeekHighlights
 
 @Dao

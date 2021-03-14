@@ -6,9 +6,9 @@ class ControllerCompositionRoot(private val activityCompositionRoot: ActivityCom
 
     val eventPoster get() = activityCompositionRoot.eventPoster
 
-    val dialogHelper get() = activityCompositionRoot.dialogHelper
+    val dialogHelper get() = activityCompositionRoot.dialogManager
 
-    val messagesHelper get() = activityCompositionRoot.messagesHelper
+    val messagesHelper get() = activityCompositionRoot.messagesManager
 
     val viewFactory get() = activityCompositionRoot.viewFactory
 

@@ -8,16 +8,6 @@ interface ContestantsTableContract {
     interface Screen {
         fun fetchContestants()
 
-        fun onContestantsFetchStarted()
-
-        fun onContestantsFetchCompleted(contestants: List<ASMRContestant>)
-
-        fun onContestantsFetchFailed(errorMessage: String)
-
-        fun onContestantsDeleteCompleted()
-
-        fun onContestantsDeleteFailed(errorMessage: String)
-
         fun onToolbarActionClicked(action: ToolbarAction)
     }
 

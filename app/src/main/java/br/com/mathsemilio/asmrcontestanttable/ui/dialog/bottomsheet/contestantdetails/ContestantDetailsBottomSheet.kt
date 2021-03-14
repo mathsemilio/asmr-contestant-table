@@ -5,10 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import br.com.mathsemilio.asmrcontestanttable.common.ARG_CONTESTANT
-import br.com.mathsemilio.asmrcontestanttable.common.INVALID_OPERATION
 import br.com.mathsemilio.asmrcontestanttable.domain.model.ASMRContestant
-import br.com.mathsemilio.asmrcontestanttable.domain.model.OperationResult
-import br.com.mathsemilio.asmrcontestanttable.domain.usecase.UpdateContestantUseCase
+import br.com.mathsemilio.asmrcontestanttable.domain.usecase.contestants.UpdateContestantUseCase
 import br.com.mathsemilio.asmrcontestanttable.ui.common.event.DataModifiedEvent
 import br.com.mathsemilio.asmrcontestanttable.ui.common.event.poster.EventPoster
 import br.com.mathsemilio.asmrcontestanttable.ui.common.helper.MessagesManager
@@ -90,21 +88,13 @@ class ContestantDetailsBottomSheet : BaseBottomSheetDialogFragment(),
         view.bindContestantsDetails(currentContestant)
     }
 
-    override fun onUpdateContestantCompleted() {
+    override fun onContestantUpdatedSuccessfully() {
         dismiss()
         eventPoster.postEvent(DataModifiedEvent.OnDataModified)
     }
 
-    override fun onUpdateContestantFailed(errorMessage: String) {
-        messagesManager.showContestantUpdateUseCaseErrorMessage(errorMessage)
-    }
-
-    override fun onContestantUpdatedSuccessfully() {
-        when (result) {
-            is OperationResult.OnCompleted -> onUpdateContestantCompleted()
-            is OperationResult.OnError -> onUpdateContestantFailed(result.errorMessage!!)
-            else -> throw IllegalArgumentException(INVALID_OPERATION)
-        }
+    override fun onContestantsUpdateFailed(errorMessage: String) {
+        messagesManager.showUseCaseErrorMessage(errorMessage)
     }
 
     override fun onStart() {

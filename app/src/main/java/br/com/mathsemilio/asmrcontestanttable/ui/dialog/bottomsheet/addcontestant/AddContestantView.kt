@@ -4,6 +4,9 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.EditText
 import br.com.mathsemilio.asmrcontestanttable.R
+import br.com.mathsemilio.asmrcontestanttable.common.setDisabledState
+import br.com.mathsemilio.asmrcontestanttable.common.setEnabledState
+import br.com.mathsemilio.asmrcontestanttable.common.showErrorState
 import br.com.mathsemilio.asmrcontestanttable.ui.common.view.BaseObservableView
 import com.google.android.material.button.MaterialButton
 
@@ -29,10 +32,9 @@ class AddContestantView(layoutInflater: LayoutInflater, container: ViewGroup?) :
             val contestantName = editTextContestantName.text.toString()
 
             if (contestantName.isBlank()) {
-                editTextContestantName.apply {
-                    error = context.getString(R.string.please_enter_contestant_name)
-                    requestFocus()
-                }
+                editTextContestantName.showErrorState(
+                    context.getString(R.string.please_enter_contestant_name)
+                )
                 revertAddButtonState()
                 return@setOnClickListener
             } else {
@@ -42,16 +44,10 @@ class AddContestantView(layoutInflater: LayoutInflater, container: ViewGroup?) :
     }
 
     override fun changeAddButtonState() {
-        buttonAddContestant.apply {
-            isEnabled = false
-            text = context.getString(R.string.adding_contestant)
-        }
+        buttonAddContestant.setDisabledState(context.getString(R.string.adding_contestant))
     }
 
     override fun revertAddButtonState() {
-        buttonAddContestant.apply {
-            isEnabled = true
-            text = context.getString(R.string.add)
-        }
+        buttonAddContestant.setEnabledState(context.getString(R.string.add))
     }
 }

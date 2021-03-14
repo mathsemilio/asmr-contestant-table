@@ -11,7 +11,7 @@ import br.com.mathsemilio.asmrcontestanttable.domain.model.WeekHighlights
 import br.com.mathsemilio.asmrcontestanttable.ui.common.view.BaseObservableView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
-class WeekHighlightsViewView(layoutInflater: LayoutInflater, container: ViewGroup?) :
+class WeekHighlightsView(layoutInflater: LayoutInflater, container: ViewGroup?) :
     BaseObservableView<WeekHighlightsContract.View.Listener>(),
     WeekHighlightsContract.View {
 

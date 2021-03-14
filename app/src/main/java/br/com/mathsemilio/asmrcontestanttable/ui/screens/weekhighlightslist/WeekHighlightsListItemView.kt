@@ -7,8 +7,8 @@ import br.com.mathsemilio.asmrcontestanttable.R
 import br.com.mathsemilio.asmrcontestanttable.domain.model.WeekHighlights
 import br.com.mathsemilio.asmrcontestanttable.ui.common.view.BaseView
 
-class WeekHighlightsListItemView(layoutInflater: LayoutInflater, parent: ViewGroup?) :
-    BaseView(), WeekHighlightsContract.ListItem {
+class WeekHighlightsListItemView(layoutInflater: LayoutInflater, parent: ViewGroup?) : BaseView(),
+    WeekHighlightsContract.ListItem {
 
     private lateinit var textViewWeekHighlightsItemWeekNumber: TextView
     private lateinit var textViewWeekHighlightsItemContestants: TextView

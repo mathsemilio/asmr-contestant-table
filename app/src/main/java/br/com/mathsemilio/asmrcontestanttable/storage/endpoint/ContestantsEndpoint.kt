@@ -2,21 +2,27 @@ package br.com.mathsemilio.asmrcontestanttable.storage.endpoint
 
 import br.com.mathsemilio.asmrcontestanttable.common.provider.DispatcherProvider
 import br.com.mathsemilio.asmrcontestanttable.data.dao.ContestantDAO
+import br.com.mathsemilio.asmrcontestanttable.data.dao.WeekHighlightsDAO
 import br.com.mathsemilio.asmrcontestanttable.domain.model.ASMRContestant
 import br.com.mathsemilio.asmrcontestanttable.domain.model.Result
 import kotlinx.coroutines.withContext
 
 class ContestantsEndpoint(
     private val contestantsDAO: ContestantDAO,
+    private val weekHighlightsDAO: WeekHighlightsDAO,
     private val dispatcherProvider: DispatcherProvider
 ) {
     suspend fun insertContestant(contestant: ASMRContestant): Result<Nothing> {
         return withContext(dispatcherProvider.BACKGROUND) {
             try {
                 contestantsDAO.insertData(contestant)
-                Result.Completed(data = null)
+                return@withContext withContext(dispatcherProvider.MAIN) {
+                    Result.Completed(data = null)
+                }
             } catch (e: Exception) {
-                Result.Failed(errorMessage = e.message!!)
+                return@withContext withContext(dispatcherProvider.MAIN) {
+                    Result.Failed(errorMessage = e.message!!)
+                }
             }
         }
     }
@@ -25,9 +31,13 @@ class ContestantsEndpoint(
         return withContext(dispatcherProvider.BACKGROUND) {
             try {
                 contestantsDAO.updateData(contestant)
-                Result.Completed(data = null)
+                return@withContext withContext(dispatcherProvider.MAIN) {
+                    Result.Completed(data = null)
+                }
             } catch (e: Exception) {
-                Result.Failed(errorMessage = e.message!!)
+                return@withContext withContext(dispatcherProvider.MAIN) {
+                    Result.Failed(errorMessage = e.message!!)
+                }
             }
         }
     }
@@ -35,9 +45,13 @@ class ContestantsEndpoint(
     suspend fun getAllContestants(): Result<List<ASMRContestant>> {
         return withContext(dispatcherProvider.BACKGROUND) {
             try {
-                Result.Completed(data = contestantsDAO.getAllContestants())
+                return@withContext withContext(dispatcherProvider.MAIN) {
+                    Result.Completed(data = contestantsDAO.getAllContestants())
+                }
             } catch (e: Exception) {
-                Result.Failed(errorMessage = e.message!!)
+                return@withContext withContext(dispatcherProvider.MAIN) {
+                    Result.Failed(errorMessage = e.message!!)
+                }
             }
         }
     }
@@ -46,9 +60,14 @@ class ContestantsEndpoint(
         return withContext(dispatcherProvider.BACKGROUND) {
             try {
                 contestantsDAO.deleteAllContestants()
-                Result.Completed(data = null)
+                weekHighlightsDAO.deleteAllWeekHighlights()
+                return@withContext withContext(dispatcherProvider.MAIN) {
+                    Result.Completed(data = null)
+                }
             } catch (e: Exception) {
-                Result.Failed(errorMessage = e.message!!)
+                return@withContext withContext(dispatcherProvider.MAIN) {
+                    Result.Failed(errorMessage = e.message!!)
+                }
             }
         }
     }

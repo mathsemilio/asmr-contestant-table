@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import br.com.mathsemilio.asmrcontestanttable.domain.usecase.AddContestantUseCase
+import br.com.mathsemilio.asmrcontestanttable.domain.usecase.contestants.AddContestantUseCase
 import br.com.mathsemilio.asmrcontestanttable.ui.common.event.DataModifiedEvent
 import br.com.mathsemilio.asmrcontestanttable.ui.common.event.poster.EventPoster
 import br.com.mathsemilio.asmrcontestanttable.ui.common.helper.MessagesManager
@@ -54,7 +54,7 @@ class AddContestantBottomSheet : BaseBottomSheetDialogFragment(),
 
     override fun onContestantAddFailed(errorMessage: String) {
         view.revertAddButtonState()
-        messagesManager.showAddContestantUseCaseErrorMessage(errorMessage)
+        messagesManager.showUseCaseErrorMessage(errorMessage)
     }
 
     override fun onStart() {

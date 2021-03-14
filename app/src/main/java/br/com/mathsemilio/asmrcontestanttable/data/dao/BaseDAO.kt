@@ -1,4 +1,4 @@
-package br.com.mathsemilio.asmrcontestanttable.data.common
+package br.com.mathsemilio.asmrcontestanttable.data.dao
 
 import androidx.room.Dao
 import androidx.room.Insert

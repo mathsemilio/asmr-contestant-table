@@ -6,12 +6,6 @@ interface WeekHighlightsContract {
 
     interface Screen {
         fun fetchWeekHighlights()
-
-        fun onWeekHighlightsFetchStarted()
-
-        fun onWeekHighlightsFetchCompleted(weekHighlights: List<WeekHighlights>)
-
-        fun onWeekHighlightsFetchFailed(errorMessage: String)
     }
 
     interface View {

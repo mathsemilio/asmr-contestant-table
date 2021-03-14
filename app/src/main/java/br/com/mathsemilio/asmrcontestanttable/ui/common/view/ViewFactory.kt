@@ -7,7 +7,7 @@ import br.com.mathsemilio.asmrcontestanttable.ui.dialog.bottomsheet.addcontestan
 import br.com.mathsemilio.asmrcontestanttable.ui.dialog.bottomsheet.addweekhighlights.AddWeekHighlightsView
 import br.com.mathsemilio.asmrcontestanttable.ui.dialog.bottomsheet.contestantdetails.ContestantDetailsView
 import br.com.mathsemilio.asmrcontestanttable.ui.screens.contestantstable.ContestantsTableScreenView
-import br.com.mathsemilio.asmrcontestanttable.ui.screens.weekhighlightslist.WeekHighlightsViewView
+import br.com.mathsemilio.asmrcontestanttable.ui.screens.weekhighlightslist.WeekHighlightsView
 
 class ViewFactory(private val layoutInflater: LayoutInflater) {
 
@@ -18,7 +18,7 @@ class ViewFactory(private val layoutInflater: LayoutInflater) {
         ContestantsTableScreenView(layoutInflater, container)
 
     fun getWeekHighlightsListScreenView(container: ViewGroup?) =
-        WeekHighlightsViewView(layoutInflater, container)
+        WeekHighlightsView(layoutInflater, container)
 
     fun getAddContestView(container: ViewGroup?) =
         AddContestantView(layoutInflater, container)

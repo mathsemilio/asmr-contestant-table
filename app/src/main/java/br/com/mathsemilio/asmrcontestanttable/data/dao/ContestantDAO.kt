@@ -4,7 +4,6 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
-import br.com.mathsemilio.asmrcontestanttable.data.common.BaseDAO
 import br.com.mathsemilio.asmrcontestanttable.domain.model.ASMRContestant
 
 @Dao

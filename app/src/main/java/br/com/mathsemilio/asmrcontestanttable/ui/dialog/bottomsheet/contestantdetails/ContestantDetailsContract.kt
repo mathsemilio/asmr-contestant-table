@@ -8,10 +8,6 @@ interface ContestantDetailsContract {
         fun getContestant(): ASMRContestant
 
         fun bindContestant()
-
-        fun onUpdateContestantCompleted()
-
-        fun onUpdateContestantFailed(errorMessage: String)
     }
 
     interface View {

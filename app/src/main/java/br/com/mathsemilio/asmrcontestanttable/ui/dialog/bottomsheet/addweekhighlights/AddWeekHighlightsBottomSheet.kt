@@ -4,8 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import br.com.mathsemilio.asmrcontestanttable.domain.model.OperationResult
-import br.com.mathsemilio.asmrcontestanttable.domain.usecase.AddWeekHighlightsUseCase
+import br.com.mathsemilio.asmrcontestanttable.domain.usecase.weekhighlights.AddWeekHighlightsUseCase
 import br.com.mathsemilio.asmrcontestanttable.ui.common.event.DataModifiedEvent
 import br.com.mathsemilio.asmrcontestanttable.ui.common.event.poster.EventPoster
 import br.com.mathsemilio.asmrcontestanttable.ui.common.helper.MessagesManager
@@ -16,7 +15,6 @@ import kotlinx.coroutines.launch
 
 class AddWeekHighlightsBottomSheet : BaseBottomSheetDialogFragment(),
     AddWeekHighlightsContract.View.Listener,
-    AddWeekHighlightsContract.BottomSheet,
     AddWeekHighlightsUseCase.Listener {
 
     private lateinit var view: AddWeekHighlightsView
@@ -45,31 +43,20 @@ class AddWeekHighlightsBottomSheet : BaseBottomSheetDialogFragment(),
     }
 
     override fun onAddButtonClicked(firstContestantName: String, secondContestantName: String) {
+        view.changeAddButtonState()
         coroutineScope.launch {
             addWeekHighlightsUseCase.insertWeekHighlights(firstContestantName, secondContestantName)
         }
     }
 
     override fun onWeekHighlightsAddedSuccessfully() {
-        when (result) {
-            OperationResult.OnStarted -> onAddWeekHighlightsStarted()
-            is OperationResult.OnCompleted -> onAddWeekHighlightsCompleted()
-            is OperationResult.OnError -> onAddWeekHighlightsFailed(result.errorMessage!!)
-        }
-    }
-
-    override fun onAddWeekHighlightsStarted() {
-        view.changeAddButtonState()
-    }
-
-    override fun onAddWeekHighlightsCompleted() {
         dismiss()
         eventPoster.postEvent(DataModifiedEvent.OnDataModified)
     }
 
-    override fun onAddWeekHighlightsFailed(errorMessage: String) {
+    override fun onWeekHighlightsAddFailed(errorMessage: String) {
         view.revertAddButtonState()
-        messagesManager.showAddWeekHighlightsUseCaseErrorMessage(errorMessage)
+        messagesManager.showUseCaseErrorMessage(errorMessage)
     }
 
     override fun onStart() {

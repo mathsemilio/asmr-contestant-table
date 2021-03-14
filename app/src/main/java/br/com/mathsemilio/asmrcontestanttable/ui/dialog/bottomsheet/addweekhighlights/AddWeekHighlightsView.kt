@@ -4,6 +4,9 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.EditText
 import br.com.mathsemilio.asmrcontestanttable.R
+import br.com.mathsemilio.asmrcontestanttable.common.setDisabledState
+import br.com.mathsemilio.asmrcontestanttable.common.setEnabledState
+import br.com.mathsemilio.asmrcontestanttable.common.showErrorState
 import br.com.mathsemilio.asmrcontestanttable.ui.common.view.BaseObservableView
 import com.google.android.material.button.MaterialButton
 
@@ -33,12 +36,16 @@ class AddWeekHighlightsView(layoutInflater: LayoutInflater, container: ViewGroup
             val secondContestantName = editTextSecondContestantName.text.toString()
 
             if (firstContestantName.isEmpty()) {
-                showErrorAtEditText(editTextFirstContestantName.id)
+                editTextFirstContestantName.showErrorState(
+                    context.getString(R.string.please_enter_contestant_name)
+                )
                 return@setOnClickListener
             }
 
             if (secondContestantName.isEmpty()) {
-                showErrorAtEditText(editTextSecondContestantName.id)
+                editTextSecondContestantName.showErrorState(
+                    context.getString(R.string.please_enter_contestant_name)
+                )
                 return@setOnClickListener
             }
 
@@ -46,25 +53,11 @@ class AddWeekHighlightsView(layoutInflater: LayoutInflater, container: ViewGroup
         }
     }
 
-    private fun showErrorAtEditText(id: Int) {
-        val editText = findViewById<EditText>(id)
-        editText.apply {
-            error = context.getString(R.string.please_enter_contestant_name)
-            requestFocus()
-        }
-    }
-
     override fun changeAddButtonState() {
-        buttonAddWeekHighlight.apply {
-            isEnabled = false
-            text = context.getText(R.string.adding_week_highlights)
-        }
+        buttonAddWeekHighlight.setDisabledState(context.getString(R.string.adding_week_highlights))
     }
 
     override fun revertAddButtonState() {
-        buttonAddWeekHighlight.apply {
-            isEnabled = true
-            text = context.getText(R.string.add)
-        }
+        buttonAddWeekHighlight.setEnabledState(context.getString(R.string.add))
     }
 }

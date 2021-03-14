@@ -4,9 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import br.com.mathsemilio.asmrcontestanttable.domain.model.OperationResult
 import br.com.mathsemilio.asmrcontestanttable.domain.model.WeekHighlights
-import br.com.mathsemilio.asmrcontestanttable.domain.usecase.FetchWeekHighlightsUseCase
+import br.com.mathsemilio.asmrcontestanttable.domain.usecase.weekhighlights.FetchWeekHighlightsUseCase
 import br.com.mathsemilio.asmrcontestanttable.ui.common.BaseFragment
 import br.com.mathsemilio.asmrcontestanttable.ui.common.event.DataModifiedEvent
 import br.com.mathsemilio.asmrcontestanttable.ui.common.event.poster.EventPoster
@@ -22,7 +21,7 @@ class WeekHighlightsListScreen : BaseFragment(),
     FetchWeekHighlightsUseCase.Listener,
     EventPoster.EventListener {
 
-    private lateinit var view: WeekHighlightsViewView
+    private lateinit var view: WeekHighlightsView
 
     private lateinit var coroutineScope: CoroutineScope
     private lateinit var messagesManager: MessagesManager
@@ -54,29 +53,18 @@ class WeekHighlightsListScreen : BaseFragment(),
     }
 
     override fun fetchWeekHighlights() {
+        view.showProgressIndicator()
         coroutineScope.launch { fetchWeekHighlightsUseCase.fetchWeekHighlights() }
     }
 
-    override fun onWeekHighlightsFetchStarted() {
-        view.showProgressIndicator()
-    }
-
-    override fun onWeekHighlightsFetchCompleted(weekHighlights: List<WeekHighlights>) {
+    override fun onWeekHighlightsFetchedSuccessfully(weekHighlights: List<WeekHighlights>) {
         view.hideProgressIndicator()
         view.bindWeekHighlights(weekHighlights)
     }
 
     override fun onWeekHighlightsFetchFailed(errorMessage: String) {
         view.hideProgressIndicator()
-        messagesManager.showFetchWeekHighlightsUseCaseErrorMessage(errorMessage)
-    }
-
-    override fun onFetchWeekHighlightsUseCaseEvent(result: OperationResult<List<WeekHighlights>>) {
-        when (result) {
-            OperationResult.OnStarted -> onWeekHighlightsFetchStarted()
-            is OperationResult.OnCompleted -> onWeekHighlightsFetchCompleted(result.data!!)
-            is OperationResult.OnError -> onWeekHighlightsFetchFailed(result.errorMessage!!)
-        }
+        messagesManager.showUseCaseErrorMessage(errorMessage)
     }
 
     override fun onEvent(event: Any) {
