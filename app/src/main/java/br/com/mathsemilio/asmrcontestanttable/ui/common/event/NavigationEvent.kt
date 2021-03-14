@@ -2,7 +2,6 @@ package br.com.mathsemilio.asmrcontestanttable.ui.common.event
 
 import br.com.mathsemilio.asmrcontestanttable.ui.NavDestination
 
-class NavigationEvent(private val _destination: NavDestination) {
-
-    val destination get() = _destination
+sealed class NavigationEvent(val destination: NavDestination) {
+    class Navigate(destination: NavDestination) : NavigationEvent(destination)
 }

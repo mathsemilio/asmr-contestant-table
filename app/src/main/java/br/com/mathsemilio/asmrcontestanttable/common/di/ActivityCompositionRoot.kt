@@ -64,7 +64,7 @@ class ActivityCompositionRoot(
     val viewFactory get() = _viewFactory
 
     private val _addContestantUseCase by lazy {
-        AddContestantUseCase(contestantsRepository, dispatcherProvider)
+        AddContestantUseCase(contestantsRepository)
     }
     val addContestantUseCase get() = _addContestantUseCase
 

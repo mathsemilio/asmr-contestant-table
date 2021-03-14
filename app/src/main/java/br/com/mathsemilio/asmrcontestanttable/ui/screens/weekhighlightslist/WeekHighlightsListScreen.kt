@@ -4,14 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import br.com.mathsemilio.asmrcontestanttable.common.INVALID_EVENT
 import br.com.mathsemilio.asmrcontestanttable.domain.model.OperationResult
 import br.com.mathsemilio.asmrcontestanttable.domain.model.WeekHighlights
 import br.com.mathsemilio.asmrcontestanttable.domain.usecase.FetchWeekHighlightsUseCase
 import br.com.mathsemilio.asmrcontestanttable.ui.common.BaseFragment
-import br.com.mathsemilio.asmrcontestanttable.ui.common.event.ModelModifiedEvent
-import br.com.mathsemilio.asmrcontestanttable.ui.common.helper.DialogManager
+import br.com.mathsemilio.asmrcontestanttable.ui.common.event.DataModifiedEvent
 import br.com.mathsemilio.asmrcontestanttable.ui.common.event.poster.EventPoster
+import br.com.mathsemilio.asmrcontestanttable.ui.common.helper.DialogManager
 import br.com.mathsemilio.asmrcontestanttable.ui.common.helper.MessagesManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.cancelChildren
@@ -72,27 +71,17 @@ class WeekHighlightsListScreen : BaseFragment(),
         messagesManager.showFetchWeekHighlightsUseCaseErrorMessage(errorMessage)
     }
 
-    override fun onWeekHighlightsModified(event: ModelModifiedEvent.Event) {
-        when (event) {
-            ModelModifiedEvent.Event.WEEK_HIGHLIGHTS_MODIFIED -> fetchWeekHighlights()
-            else -> throw IllegalArgumentException(INVALID_EVENT)
-        }
-    }
-
     override fun onFetchWeekHighlightsUseCaseEvent(result: OperationResult<List<WeekHighlights>>) {
         when (result) {
-            OperationResult.OnStarted ->
-                onWeekHighlightsFetchStarted()
-            is OperationResult.OnCompleted ->
-                onWeekHighlightsFetchCompleted(result.data ?: throw NullPointerException())
-            is OperationResult.OnError ->
-                onWeekHighlightsFetchFailed(result.errorMessage!!)
+            OperationResult.OnStarted -> onWeekHighlightsFetchStarted()
+            is OperationResult.OnCompleted -> onWeekHighlightsFetchCompleted(result.data!!)
+            is OperationResult.OnError -> onWeekHighlightsFetchFailed(result.errorMessage!!)
         }
     }
 
     override fun onEvent(event: Any) {
         when (event) {
-            is ModelModifiedEvent -> onWeekHighlightsModified(event.modelModifiedEvent)
+            is DataModifiedEvent.OnDataModified -> fetchWeekHighlights()
         }
     }
 

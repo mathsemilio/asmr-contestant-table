@@ -9,7 +9,7 @@ import br.com.mathsemilio.asmrcontestanttable.common.INVALID_OPERATION
 import br.com.mathsemilio.asmrcontestanttable.domain.model.ASMRContestant
 import br.com.mathsemilio.asmrcontestanttable.domain.model.OperationResult
 import br.com.mathsemilio.asmrcontestanttable.domain.usecase.UpdateContestantUseCase
-import br.com.mathsemilio.asmrcontestanttable.ui.common.event.ModelModifiedEvent
+import br.com.mathsemilio.asmrcontestanttable.ui.common.event.DataModifiedEvent
 import br.com.mathsemilio.asmrcontestanttable.ui.common.event.poster.EventPoster
 import br.com.mathsemilio.asmrcontestanttable.ui.common.helper.MessagesManager
 import br.com.mathsemilio.asmrcontestanttable.ui.dialog.bottomsheet.BaseBottomSheetDialogFragment
@@ -92,16 +92,14 @@ class ContestantDetailsBottomSheet : BaseBottomSheetDialogFragment(),
 
     override fun onUpdateContestantCompleted() {
         dismiss()
-        eventPoster.postEvent(
-            ModelModifiedEvent(ModelModifiedEvent.Event.CONTESTANTS_MODIFIED)
-        )
+        eventPoster.postEvent(DataModifiedEvent.OnDataModified)
     }
 
     override fun onUpdateContestantFailed(errorMessage: String) {
         messagesManager.showContestantUpdateUseCaseErrorMessage(errorMessage)
     }
 
-    override fun onUpdateContestantsUseCaseEvent(result: OperationResult<Nothing>) {
+    override fun onContestantUpdatedSuccessfully() {
         when (result) {
             is OperationResult.OnCompleted -> onUpdateContestantCompleted()
             is OperationResult.OnError -> onUpdateContestantFailed(result.errorMessage!!)

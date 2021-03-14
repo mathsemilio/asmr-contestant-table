@@ -3,7 +3,7 @@ package br.com.mathsemilio.asmrcontestanttable.ui
 import android.os.Bundle
 import android.widget.FrameLayout
 import br.com.mathsemilio.asmrcontestanttable.ui.common.event.NavigationEvent
-import br.com.mathsemilio.asmrcontestanttable.ui.common.event.ToolbarEvent
+import br.com.mathsemilio.asmrcontestanttable.ui.common.event.ToolbarActionEvent
 import br.com.mathsemilio.asmrcontestanttable.ui.common.event.poster.EventPoster
 import br.com.mathsemilio.asmrcontestanttable.ui.common.helper.FragmentContainerManager
 import br.com.mathsemilio.asmrcontestanttable.ui.common.helper.ScreensNavigator
@@ -41,21 +41,22 @@ class MainActivity : BaseActivity(),
     }
 
     override fun onToolbarActionResetContestClicked() {
-        eventPoster.postEvent(ToolbarEvent(ToolbarEvent.Event.RESET_CONTEST_ACTION_CLICKED))
+        eventPoster.postEvent(ToolbarActionEvent.OnActionClicked(ToolbarAction.RESET_CONTEST))
     }
 
-    override val fragmentContainer: FrameLayout
-        get() = view.fragmentContainer
+    override fun getFragmentContainer(): FrameLayout {
+        return view.fragmentContainer
+    }
 
     override fun onEvent(event: Any) {
         when (event) {
-            is NavigationEvent -> handleNavigationEvent(event.destination)
+            is NavigationEvent -> onNavigationEvent(event)
         }
     }
 
-    private fun handleNavigationEvent(destination: NavDestination) {
-        view.setToolbarTitleBasedOnDestination(destination)
-        view.setToolbarMenuBasedOnDestination(destination)
+    private fun onNavigationEvent(navigationEvent: NavigationEvent) {
+        view.setToolbarTitleBasedOnDestination(navigationEvent.destination)
+        view.setToolbarMenuBasedOnDestination(navigationEvent.destination)
     }
 
     override fun onStart() {

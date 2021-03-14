@@ -1,46 +1,26 @@
 package br.com.mathsemilio.asmrcontestanttable.domain.usecase
 
 import br.com.mathsemilio.asmrcontestanttable.common.observable.BaseObservable
-import br.com.mathsemilio.asmrcontestanttable.data.repository.ContestantsRepository
 import br.com.mathsemilio.asmrcontestanttable.domain.model.ASMRContestant
-import br.com.mathsemilio.asmrcontestanttable.domain.model.OperationResult
-import br.com.mathsemilio.asmrcontestanttable.common.provider.DispatcherProvider
-import kotlinx.coroutines.withContext
+import br.com.mathsemilio.asmrcontestanttable.domain.model.Result
+import br.com.mathsemilio.asmrcontestanttable.storage.endpoint.ContestantsEndpoint
 
-class AddContestantUseCase(
-    private val contestantsRepository: ContestantsRepository,
-    private val dispatcherProvider: DispatcherProvider
-) : BaseObservable<AddContestantUseCase.Listener>() {
+class AddContestantUseCase(private val contestantsEndpoint: ContestantsEndpoint) :
+    BaseObservable<AddContestantUseCase.Listener>() {
 
     interface Listener {
-        fun onAddContestantUseCaseEvent(result: OperationResult<Nothing>)
+        fun onContestantAddedSuccessfully()
+        fun onContestantAddFailed(errorMessage: String)
     }
 
     suspend fun insertContestant(contestantName: String) {
-        onAddContestantStarted()
-        withContext(dispatcherProvider.BACKGROUND) {
-            try {
-                contestantsRepository.insertData(ASMRContestant(0, contestantName))
-                withContext(dispatcherProvider.MAIN) {
-                    onContestantAddedSuccessfully()
-                }
-            } catch (e: Exception) {
-                withContext(dispatcherProvider.MAIN) {
-                    onAddContestantError(e.message!!)
-                }
+        contestantsEndpoint.insertContestant(ASMRContestant(0, contestantName)).also { result ->
+            when (result) {
+                is Result.Completed ->
+                    listeners.forEach { it.onContestantAddedSuccessfully() }
+                is Result.Failed ->
+                    listeners.forEach { it.onContestantAddFailed(result.errorMessage!!) }
             }
         }
-    }
-
-    private fun onAddContestantStarted() {
-        listeners.forEach { it.onAddContestantUseCaseEvent(OperationResult.OnStarted) }
-    }
-
-    private fun onContestantAddedSuccessfully() {
-        listeners.forEach { it.onAddContestantUseCaseEvent(OperationResult.OnCompleted(null)) }
-    }
-
-    private fun onAddContestantError(errorMessage: String) {
-        listeners.forEach { it.onAddContestantUseCaseEvent(OperationResult.OnError(errorMessage)) }
     }
 }

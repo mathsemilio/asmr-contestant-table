@@ -4,9 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import br.com.mathsemilio.asmrcontestanttable.domain.model.OperationResult
 import br.com.mathsemilio.asmrcontestanttable.domain.usecase.AddContestantUseCase
-import br.com.mathsemilio.asmrcontestanttable.ui.common.event.ModelModifiedEvent
+import br.com.mathsemilio.asmrcontestanttable.ui.common.event.DataModifiedEvent
 import br.com.mathsemilio.asmrcontestanttable.ui.common.event.poster.EventPoster
 import br.com.mathsemilio.asmrcontestanttable.ui.common.helper.MessagesManager
 import br.com.mathsemilio.asmrcontestanttable.ui.dialog.bottomsheet.BaseBottomSheetDialogFragment
@@ -16,7 +15,6 @@ import kotlinx.coroutines.launch
 
 class AddContestantBottomSheet : BaseBottomSheetDialogFragment(),
     AddContestantContract.View.Listener,
-    AddContestantContract.BottomSheet,
     AddContestantUseCase.Listener {
 
     private lateinit var view: AddContestantView
@@ -45,29 +43,18 @@ class AddContestantBottomSheet : BaseBottomSheetDialogFragment(),
     }
 
     override fun onAddButtonClicked(contestantName: String) {
+        view.changeAddButtonState()
         coroutineScope.launch { addContestantUseCase.insertContestant(contestantName) }
     }
 
-    override fun onAddContestantStarted() {
-        view.changeAddButtonState()
-    }
-
-    override fun onAddContestantsCompleted() {
+    override fun onContestantAddedSuccessfully() {
         dismiss()
-        eventPoster.postEvent(ModelModifiedEvent(ModelModifiedEvent.Event.CONTESTANTS_MODIFIED))
+        eventPoster.postEvent(DataModifiedEvent.OnDataModified)
     }
 
-    override fun onAddContestantFailed(errorMessage: String) {
+    override fun onContestantAddFailed(errorMessage: String) {
         view.revertAddButtonState()
         messagesManager.showAddContestantUseCaseErrorMessage(errorMessage)
-    }
-
-    override fun onAddContestantUseCaseEvent(result: OperationResult<Nothing>) {
-        when (result) {
-            OperationResult.OnStarted -> onAddContestantStarted()
-            is OperationResult.OnCompleted -> onAddContestantsCompleted()
-            is OperationResult.OnError -> onAddContestantFailed(result.errorMessage!!)
-        }
     }
 
     override fun onStart() {

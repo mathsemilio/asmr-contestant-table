@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import br.com.mathsemilio.asmrcontestanttable.domain.model.OperationResult
 import br.com.mathsemilio.asmrcontestanttable.domain.usecase.AddWeekHighlightsUseCase
-import br.com.mathsemilio.asmrcontestanttable.ui.common.event.ModelModifiedEvent
+import br.com.mathsemilio.asmrcontestanttable.ui.common.event.DataModifiedEvent
 import br.com.mathsemilio.asmrcontestanttable.ui.common.event.poster.EventPoster
 import br.com.mathsemilio.asmrcontestanttable.ui.common.helper.MessagesManager
 import br.com.mathsemilio.asmrcontestanttable.ui.dialog.bottomsheet.BaseBottomSheetDialogFragment
@@ -46,11 +46,11 @@ class AddWeekHighlightsBottomSheet : BaseBottomSheetDialogFragment(),
 
     override fun onAddButtonClicked(firstContestantName: String, secondContestantName: String) {
         coroutineScope.launch {
-            addWeekHighlightsUseCase.insertContestant(firstContestantName, secondContestantName)
+            addWeekHighlightsUseCase.insertWeekHighlights(firstContestantName, secondContestantName)
         }
     }
 
-    override fun onAddWeekHighlightsUseCaseEvent(result: OperationResult<Nothing>) {
+    override fun onWeekHighlightsAddedSuccessfully() {
         when (result) {
             OperationResult.OnStarted -> onAddWeekHighlightsStarted()
             is OperationResult.OnCompleted -> onAddWeekHighlightsCompleted()
@@ -64,9 +64,7 @@ class AddWeekHighlightsBottomSheet : BaseBottomSheetDialogFragment(),
 
     override fun onAddWeekHighlightsCompleted() {
         dismiss()
-        eventPoster.postEvent(
-            ModelModifiedEvent(ModelModifiedEvent.Event.WEEK_HIGHLIGHTS_MODIFIED)
-        )
+        eventPoster.postEvent(DataModifiedEvent.OnDataModified)
     }
 
     override fun onAddWeekHighlightsFailed(errorMessage: String) {

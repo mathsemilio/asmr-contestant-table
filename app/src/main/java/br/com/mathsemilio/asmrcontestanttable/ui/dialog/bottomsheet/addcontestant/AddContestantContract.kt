@@ -2,14 +2,6 @@ package br.com.mathsemilio.asmrcontestanttable.ui.dialog.bottomsheet.addcontesta
 
 interface AddContestantContract {
 
-    interface BottomSheet {
-        fun onAddContestantStarted()
-
-        fun onAddContestantsCompleted()
-
-        fun onAddContestantFailed(errorMessage: String)
-    }
-
     interface View {
         interface Listener {
             fun onAddButtonClicked(contestantName: String)

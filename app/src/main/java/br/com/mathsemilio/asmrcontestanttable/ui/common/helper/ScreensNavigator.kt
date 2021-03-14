@@ -15,8 +15,8 @@ class ScreensNavigator(
     fun navigateToContestantsTableScreen() {
         fragmentManager.beginTransaction().apply {
             setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
-            replace(fragmentContainerManager.fragmentContainer.id, ContestantsTableScreen())
-            eventPoster.postEvent(NavigationEvent(NavDestination.CONTESTANTS_TABLE))
+            replace(fragmentContainerManager.getFragmentContainer().id, ContestantsTableScreen())
+            eventPoster.postEvent(NavigationEvent.Navigate(NavDestination.CONTESTANTS_TABLE))
             commitNow()
         }
     }
@@ -24,8 +24,8 @@ class ScreensNavigator(
     fun navigateToWeekHighlightsScreen() {
         fragmentManager.beginTransaction().apply {
             setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
-            replace(fragmentContainerManager.fragmentContainer.id, WeekHighlightsListScreen())
-            eventPoster.postEvent(NavigationEvent(NavDestination.WEEK_HIGHLIGHTS))
+            replace(fragmentContainerManager.getFragmentContainer().id, WeekHighlightsListScreen())
+            eventPoster.postEvent(NavigationEvent.Navigate(NavDestination.WEEK_HIGHLIGHTS))
             commitNow()
         }
     }

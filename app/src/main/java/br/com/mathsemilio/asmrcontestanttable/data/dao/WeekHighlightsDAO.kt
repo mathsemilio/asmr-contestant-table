@@ -15,6 +15,6 @@ interface WeekHighlightsDAO : BaseDAO<WeekHighlights> {
     @Query("SELECT * FROM week_highlights_table ORDER BY weekNumber DESC")
     suspend fun getAllWeekHighlights(): List<WeekHighlights>
 
-    @Query("DELETE FROm week_highlights_table")
+    @Query("DELETE FROM week_highlights_table")
     suspend fun deleteAllWeekHighlights()
 }

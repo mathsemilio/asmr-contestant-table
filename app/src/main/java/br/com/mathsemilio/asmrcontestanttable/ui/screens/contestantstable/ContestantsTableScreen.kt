@@ -4,17 +4,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import br.com.mathsemilio.asmrcontestanttable.common.INVALID_EVENT
 import br.com.mathsemilio.asmrcontestanttable.common.INVALID_OPERATION
 import br.com.mathsemilio.asmrcontestanttable.domain.model.ASMRContestant
 import br.com.mathsemilio.asmrcontestanttable.domain.model.OperationResult
 import br.com.mathsemilio.asmrcontestanttable.domain.usecase.DeleteContestantsUseCase
 import br.com.mathsemilio.asmrcontestanttable.domain.usecase.FetchContestantsUseCase
+import br.com.mathsemilio.asmrcontestanttable.ui.ToolbarAction
 import br.com.mathsemilio.asmrcontestanttable.ui.common.BaseFragment
-import br.com.mathsemilio.asmrcontestanttable.ui.common.event.ModelModifiedEvent
-import br.com.mathsemilio.asmrcontestanttable.ui.common.event.ToolbarEvent
-import br.com.mathsemilio.asmrcontestanttable.ui.common.helper.DialogManager
+import br.com.mathsemilio.asmrcontestanttable.ui.common.event.DataModifiedEvent
+import br.com.mathsemilio.asmrcontestanttable.ui.common.event.ToolbarActionEvent
 import br.com.mathsemilio.asmrcontestanttable.ui.common.event.poster.EventPoster
+import br.com.mathsemilio.asmrcontestanttable.ui.common.helper.DialogManager
 import br.com.mathsemilio.asmrcontestanttable.ui.common.helper.MessagesManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.cancelChildren
@@ -91,30 +91,19 @@ class ContestantsTableScreen : BaseFragment(),
         messagesManager.showAllContestantsDeletedUseCaseErrorMessage(errorMessage)
     }
 
-    override fun onContestantModifiedEvent(event: ModelModifiedEvent.Event) {
-        when (event) {
-            ModelModifiedEvent.Event.CONTESTANTS_MODIFIED -> fetchContestants()
-            else -> throw IllegalArgumentException(INVALID_EVENT)
+    override fun onToolbarActionClicked(action: ToolbarAction) {
+        when (action) {
+            ToolbarAction.RESET_CONTEST -> dialogManager.showResetContestDialog {
+                coroutineScope.launch { deleteContestantsUseCase.deleteAllContestants() }
+            }
         }
     }
 
-    override fun onToolbarActionResetContestClicked(event: ToolbarEvent.Event) {
-        when (event) {
-            ToolbarEvent.Event.RESET_CONTEST_ACTION_CLICKED ->
-                dialogManager.showResetContestDialog {
-                    coroutineScope.launch { deleteContestantsUseCase.deleteAllContestants() }
-                }
-        }
-    }
-
-    override fun onFetchContestantsUseCaseEvent(result: OperationResult<List<ASMRContestant>>) {
+    override fun onContestantsFetchedSuccessfully(contestants: List<ASMRContestant>) {
         when (result) {
-            OperationResult.OnStarted ->
-                onContestantsFetchStarted()
-            is OperationResult.OnCompleted ->
-                onContestantsFetchCompleted(result.data ?: throw NullPointerException())
-            is OperationResult.OnError ->
-                onContestantsFetchFailed(result.errorMessage!!)
+            OperationResult.OnStarted -> onContestantsFetchStarted()
+            is OperationResult.OnCompleted -> onContestantsFetchCompleted(result.data!!)
+            is OperationResult.OnError -> onContestantsFetchFailed(result.errorMessage!!)
         }
     }
 
@@ -128,8 +117,8 @@ class ContestantsTableScreen : BaseFragment(),
 
     override fun onEvent(event: Any) {
         when (event) {
-            is ModelModifiedEvent -> onContestantModifiedEvent(event.modelModifiedEvent)
-            is ToolbarEvent -> onToolbarActionResetContestClicked(event.toolbarEvent)
+            is DataModifiedEvent.OnDataModified -> fetchContestants()
+            is ToolbarActionEvent -> onToolbarActionClicked(event.action)
         }
     }
 
