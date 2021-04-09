@@ -6,7 +6,7 @@ This app manages a simple contest for ASMR artists. The user adds contestants an
 updating their attributes based on his experience. It also has a "Week Highlights" section, where
 the user can feature contestants that performed best in a particular week.
 
-**Inportant:**
+**Important:**
 As it stands now, contestants cannot be excluded individually, therefore, if any mistake is made 
 during insertion or while updating a contestant data, the user will only be able to correct their
 mistake by clicking on the "Reset Contest" option in the menu. Rebooting the contest will delete 
