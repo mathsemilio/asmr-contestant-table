@@ -8,18 +8,19 @@ class DeleteContestantsUseCase(private val contestantsEndpoint: ContestantsEndpo
     BaseObservable<DeleteContestantsUseCase.Listener>() {
 
     interface Listener {
-        fun onContestantsDeletedSuccessfully()
-        fun onContestantsDeleteFailed(errorMessage: String)
+        fun onAllContestantsDeletedSuccessfully()
+        fun onDeleteAllContestantsFailed()
     }
 
     suspend fun deleteAllContestants() {
         contestantsEndpoint.deleteAllContestants().also { result ->
             when (result) {
-                is Result.Completed -> {
-                    listeners.forEach { it.onContestantsDeletedSuccessfully() }
+                is Result.Completed -> listeners.forEach { listener ->
+                    listener.onAllContestantsDeletedSuccessfully()
                 }
-                is Result.Failed ->
-                    listeners.forEach { it.onContestantsDeleteFailed(result.errorMessage!!) }
+                is Result.Failed -> listeners.forEach { listener ->
+                    listener.onDeleteAllContestantsFailed()
+                }
             }
         }
     }

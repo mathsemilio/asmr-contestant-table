@@ -2,30 +2,38 @@ package br.com.mathsemilio.asmrcontestanttable.ui.common.view
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import br.com.mathsemilio.asmrcontestanttable.ui.MainActivityView
-import br.com.mathsemilio.asmrcontestanttable.ui.dialog.bottomsheet.addcontestant.AddContestantView
-import br.com.mathsemilio.asmrcontestanttable.ui.dialog.bottomsheet.addweekhighlights.AddWeekHighlightsView
-import br.com.mathsemilio.asmrcontestanttable.ui.dialog.bottomsheet.contestantdetails.ContestantDetailsView
-import br.com.mathsemilio.asmrcontestanttable.ui.screens.contestantstable.ContestantsTableScreenView
-import br.com.mathsemilio.asmrcontestanttable.ui.screens.weekhighlightslist.WeekHighlightsView
+import br.com.mathsemilio.asmrcontestanttable.ui.MainActivityViewImpl
+import br.com.mathsemilio.asmrcontestanttable.ui.dialog.bottomsheet.addcontestant.AddContestantViewImpl
+import br.com.mathsemilio.asmrcontestanttable.ui.dialog.bottomsheet.addweekhighlights.AddWeekHighlightsViewImpl
+import br.com.mathsemilio.asmrcontestanttable.ui.dialog.bottomsheet.contestantdetails.ContestantDetailsViewImpl
+import br.com.mathsemilio.asmrcontestanttable.ui.screens.contestantstable.view.ContestantsListItemViewImpl
+import br.com.mathsemilio.asmrcontestanttable.ui.screens.contestantstable.view.ContestantsTableScreenViewImpl
+import br.com.mathsemilio.asmrcontestanttable.ui.screens.weekhighlightslist.view.WeekHighlightsListItemViewImpl
+import br.com.mathsemilio.asmrcontestanttable.ui.screens.weekhighlightslist.view.WeekHighlightsViewImpl
 
-class ViewFactory(private val layoutInflater: LayoutInflater) {
+class ViewFactory(private val inflater: LayoutInflater) {
 
     fun getMainActivityView(parent: ViewGroup?) =
-        MainActivityView(layoutInflater, parent)
+        MainActivityViewImpl(inflater, parent)
 
     fun getContestantsTableScreenView(container: ViewGroup?) =
-        ContestantsTableScreenView(layoutInflater, container)
+        ContestantsTableScreenViewImpl(inflater, container, this)
+
+    fun getContestantsListItemView(parent: ViewGroup?) =
+        ContestantsListItemViewImpl(inflater, parent)
 
     fun getWeekHighlightsListScreenView(container: ViewGroup?) =
-        WeekHighlightsView(layoutInflater, container)
+        WeekHighlightsViewImpl(inflater, container, this)
+
+    fun getWeekHighlightsListItemView(parent: ViewGroup?) =
+        WeekHighlightsListItemViewImpl(inflater, parent)
 
     fun getAddContestView(container: ViewGroup?) =
-        AddContestantView(layoutInflater, container)
+        AddContestantViewImpl(inflater, container)
 
     fun getAddWeekHighlightsView(container: ViewGroup?) =
-        AddWeekHighlightsView(layoutInflater, container)
+        AddWeekHighlightsViewImpl(inflater, container)
 
     fun getContestantsDetailsView(container: ViewGroup?) =
-        ContestantDetailsView(layoutInflater, container)
+        ContestantDetailsViewImpl(inflater, container)
 }

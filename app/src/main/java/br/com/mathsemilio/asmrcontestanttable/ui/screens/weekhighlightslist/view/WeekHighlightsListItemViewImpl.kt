@@ -1,24 +1,19 @@
-package br.com.mathsemilio.asmrcontestanttable.ui.screens.weekhighlightslist
+package br.com.mathsemilio.asmrcontestanttable.ui.screens.weekhighlightslist.view
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
 import br.com.mathsemilio.asmrcontestanttable.R
 import br.com.mathsemilio.asmrcontestanttable.domain.model.WeekHighlights
-import br.com.mathsemilio.asmrcontestanttable.ui.common.view.BaseView
 
-class WeekHighlightsListItemView(layoutInflater: LayoutInflater, parent: ViewGroup?) : BaseView(),
-    WeekHighlightsContract.ListItem {
+class WeekHighlightsListItemViewImpl(inflater: LayoutInflater, parent: ViewGroup?) :
+    WeekHighlightsListItemView() {
 
-    private lateinit var textViewWeekHighlightsItemWeekNumber: TextView
-    private lateinit var textViewWeekHighlightsItemContestants: TextView
+    private var textViewWeekHighlightsItemWeekNumber: TextView
+    private var textViewWeekHighlightsItemContestants: TextView
 
     init {
-        rootView = layoutInflater.inflate(R.layout.week_highlights_list_item, parent, false)
-        initializeViews()
-    }
-
-    private fun initializeViews() {
+        rootView = inflater.inflate(R.layout.week_highlights_list_item, parent, false)
         textViewWeekHighlightsItemWeekNumber =
             findViewById(R.id.text_view_week_highlights_item_week)
         textViewWeekHighlightsItemContestants =

@@ -21,6 +21,8 @@ abstract class AppDatabase : RoomDatabase() {
     abstract val weekHighlightsDAO: WeekHighlightsDAO
 
     companion object {
+        private val LOCK = Any()
+
         @Volatile
         private var INSTANCE: AppDatabase? = null
 
@@ -30,7 +32,7 @@ abstract class AppDatabase : RoomDatabase() {
             if (tempInstance != null)
                 return tempInstance
 
-            synchronized(this) {
+            synchronized(LOCK) {
                 val databaseInstance = Room.databaseBuilder(
                     context.applicationContext,
                     AppDatabase::class.java,

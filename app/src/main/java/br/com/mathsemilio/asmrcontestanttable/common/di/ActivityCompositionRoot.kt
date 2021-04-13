@@ -10,10 +10,12 @@ import br.com.mathsemilio.asmrcontestanttable.domain.usecase.weekhighlights.Fetc
 import br.com.mathsemilio.asmrcontestanttable.storage.database.AppDatabase
 import br.com.mathsemilio.asmrcontestanttable.storage.endpoint.ContestantsEndpoint
 import br.com.mathsemilio.asmrcontestanttable.storage.endpoint.WeekHighlightsEndpoint
-import br.com.mathsemilio.asmrcontestanttable.ui.common.helper.DialogManager
-import br.com.mathsemilio.asmrcontestanttable.ui.common.helper.FragmentContainerManager
-import br.com.mathsemilio.asmrcontestanttable.ui.common.helper.MessagesManager
-import br.com.mathsemilio.asmrcontestanttable.ui.common.helper.ScreensNavigator
+import br.com.mathsemilio.asmrcontestanttable.ui.common.manager.DialogManager
+import br.com.mathsemilio.asmrcontestanttable.ui.common.manager.FragmentContainerManager
+import br.com.mathsemilio.asmrcontestanttable.ui.common.manager.MessagesManager
+import br.com.mathsemilio.asmrcontestanttable.ui.common.manager.FragmentManager
+import br.com.mathsemilio.asmrcontestanttable.ui.common.navigation.NavigationEventListener
+import br.com.mathsemilio.asmrcontestanttable.ui.common.navigation.ScreensNavigator
 import br.com.mathsemilio.asmrcontestanttable.ui.common.view.ViewFactory
 
 class ActivityCompositionRoot(
@@ -27,11 +29,7 @@ class ActivityCompositionRoot(
     private val weekHighlightsDAO by lazy { database.weekHighlightsDAO }
 
     private val contestantsEndpoint by lazy {
-        ContestantsEndpoint(
-            contestantsDao,
-            weekHighlightsDAO,
-            dispatcherProvider
-        )
+        ContestantsEndpoint(contestantsDao, weekHighlightsDAO, dispatcherProvider)
     }
 
     private val weekHighlightsEndpoint by lazy {
@@ -40,61 +38,73 @@ class ActivityCompositionRoot(
 
     private val dispatcherProvider get() = compositionRoot.dispatcherProvider
 
-    val coroutineScopeProvider get() = compositionRoot.coroutineScopeProvider
-
-    val eventPoster get() = compositionRoot.eventPoster
+    private val fragmentManager by lazy {
+        FragmentManager(activity.supportFragmentManager, activity as FragmentContainerManager)
+    }
 
     private val _dialogManager by lazy {
         DialogManager(activity.supportFragmentManager, activity)
     }
-    val dialogManager get() = _dialogManager
 
     private val _messagesManager by lazy {
         MessagesManager(activity)
     }
-    val messagesManager get() = _messagesManager
 
     private val _screensNavigator by lazy {
-        ScreensNavigator(
-            eventPoster,
-            activity.supportFragmentManager,
-            activity as FragmentContainerManager
-        )
+        ScreensNavigator(fragmentManager, activity as NavigationEventListener)
     }
-    val screensNavigator get() = _screensNavigator
 
     private val _viewFactory by lazy {
         ViewFactory(activity.layoutInflater)
     }
-    val viewFactory get() = _viewFactory
 
     private val _addContestantUseCase by lazy {
         AddContestantUseCase(contestantsEndpoint)
     }
-    val addContestantUseCase get() = _addContestantUseCase
 
     private val _addWeekHighlightsUseCase by lazy {
         AddWeekHighlightsUseCase(weekHighlightsEndpoint)
     }
-    val addWeekHighlightsUseCase get() = _addWeekHighlightsUseCase
 
     private val _updateContestantUseCase by lazy {
         UpdateContestantUseCase(contestantsEndpoint)
     }
-    val updateContestantUseCase get() = _updateContestantUseCase
 
     private val _fetchContestantsUseCase by lazy {
         FetchContestantsUseCase(contestantsEndpoint)
     }
-    val fetchContestantsUseCase get() = _fetchContestantsUseCase
 
     private val _fetchWeekHighlightsUseCase by lazy {
         FetchWeekHighlightsUseCase(weekHighlightsEndpoint)
     }
-    val fetchWeekHighlightsUseCase get() = _fetchWeekHighlightsUseCase
 
     private val _deleteContestantsUseCase by lazy {
         DeleteContestantsUseCase(contestantsEndpoint)
     }
+
+    val coroutineScopeProvider get() = compositionRoot.coroutineScopeProvider
+
+    val dialogManager get() = _dialogManager
+
+    val eventPublisher get() = compositionRoot.eventPublisher
+
+    val eventSubscriber get() = compositionRoot.eventSubscriber
+
+    val messagesManager get() = _messagesManager
+
+    val screensNavigator get() = _screensNavigator
+
+    val viewFactory get() = _viewFactory
+
+    val addContestantUseCase get() = _addContestantUseCase
+
+    val addWeekHighlightsUseCase get() = _addWeekHighlightsUseCase
+
+    val updateContestantUseCase get() = _updateContestantUseCase
+
+    val fetchContestantsUseCase get() = _fetchContestantsUseCase
+
+    val fetchWeekHighlightsUseCase get() = _fetchWeekHighlightsUseCase
+
     val deleteContestantsUseCase get() = _deleteContestantsUseCase
 }

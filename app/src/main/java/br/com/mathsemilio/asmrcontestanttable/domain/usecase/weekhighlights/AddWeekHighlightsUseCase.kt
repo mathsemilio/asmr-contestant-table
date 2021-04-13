@@ -10,7 +10,7 @@ class AddWeekHighlightsUseCase(private val weekHighlightsEndpoint: WeekHighlight
 
     interface Listener {
         fun onWeekHighlightsAddedSuccessfully()
-        fun onWeekHighlightsAddFailed(errorMessage: String)
+        fun onAddWeekHighlightsFailed()
     }
 
     suspend fun insertWeekHighlights(firstContestantName: String, secondContestantName: String) {
@@ -18,10 +18,12 @@ class AddWeekHighlightsUseCase(private val weekHighlightsEndpoint: WeekHighlight
             WeekHighlights(0, getWeekNumber(), firstContestantName, secondContestantName)
         ).also { result ->
             when (result) {
-                is Result.Completed ->
-                    listeners.forEach { it.onWeekHighlightsAddedSuccessfully() }
-                is Result.Failed ->
-                    listeners.forEach { it.onWeekHighlightsAddFailed(result.errorMessage!!) }
+                is Result.Completed -> listeners.forEach { listener ->
+                    listener.onWeekHighlightsAddedSuccessfully()
+                }
+                is Result.Failed -> listeners.forEach { listener ->
+                    listener.onAddWeekHighlightsFailed()
+                }
             }
         }
     }

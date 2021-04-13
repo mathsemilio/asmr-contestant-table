@@ -16,13 +16,9 @@ class ContestantsEndpoint(
         return withContext(dispatcherProvider.BACKGROUND) {
             try {
                 contestantsDAO.insertData(contestant)
-                return@withContext withContext(dispatcherProvider.MAIN) {
-                    Result.Completed(data = null)
-                }
+                return@withContext Result.Completed(data = null)
             } catch (e: Exception) {
-                return@withContext withContext(dispatcherProvider.MAIN) {
-                    Result.Failed(errorMessage = e.message!!)
-                }
+                return@withContext Result.Failed(errorMessage = e.message!!)
             }
         }
     }
@@ -31,13 +27,9 @@ class ContestantsEndpoint(
         return withContext(dispatcherProvider.BACKGROUND) {
             try {
                 contestantsDAO.updateData(contestant)
-                return@withContext withContext(dispatcherProvider.MAIN) {
-                    Result.Completed(data = null)
-                }
+                return@withContext Result.Completed(data = null)
             } catch (e: Exception) {
-                return@withContext withContext(dispatcherProvider.MAIN) {
-                    Result.Failed(errorMessage = e.message!!)
-                }
+                return@withContext Result.Failed(errorMessage = e.message!!)
             }
         }
     }
@@ -45,13 +37,9 @@ class ContestantsEndpoint(
     suspend fun getAllContestants(): Result<List<ASMRContestant>> {
         return withContext(dispatcherProvider.BACKGROUND) {
             try {
-                return@withContext withContext(dispatcherProvider.MAIN) {
-                    Result.Completed(data = contestantsDAO.getAllContestants())
-                }
+                return@withContext Result.Completed(data = contestantsDAO.getAllContestants())
             } catch (e: Exception) {
-                return@withContext withContext(dispatcherProvider.MAIN) {
-                    Result.Failed(errorMessage = e.message!!)
-                }
+                return@withContext Result.Failed(errorMessage = e.message!!)
             }
         }
     }
@@ -61,13 +49,9 @@ class ContestantsEndpoint(
             try {
                 contestantsDAO.deleteAllContestants()
                 weekHighlightsDAO.deleteAllWeekHighlights()
-                return@withContext withContext(dispatcherProvider.MAIN) {
-                    Result.Completed(data = null)
-                }
+                return@withContext Result.Completed(data = null)
             } catch (e: Exception) {
-                return@withContext withContext(dispatcherProvider.MAIN) {
-                    Result.Failed(errorMessage = e.message!!)
-                }
+                return@withContext Result.Failed(errorMessage = e.message!!)
             }
         }
     }

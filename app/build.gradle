@@ -10,8 +10,8 @@ android {
         applicationId "br.com.mathsemilio.asmrcontestanttable"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 3
-        versionName "stable-0.3"
+        versionCode 4
+        versionName "stable-0.4"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }

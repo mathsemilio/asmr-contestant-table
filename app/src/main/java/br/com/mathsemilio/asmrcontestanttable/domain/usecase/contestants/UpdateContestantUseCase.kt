@@ -10,7 +10,7 @@ class UpdateContestantUseCase(private val contestantsEndpoint: ContestantsEndpoi
 
     interface Listener {
         fun onContestantUpdatedSuccessfully()
-        fun onContestantsUpdateFailed(errorMessage: String)
+        fun onUpdateContestantFailed(errorMessage: String)
     }
 
     suspend fun updateContestantTimesSlept(contestant: ASMRContestant) {
@@ -23,10 +23,12 @@ class UpdateContestantUseCase(private val contestantsEndpoint: ContestantsEndpoi
             )
         ).also { result ->
             when (result) {
-                is Result.Completed ->
-                    listeners.forEach { it.onContestantUpdatedSuccessfully() }
-                is Result.Failed ->
-                    listeners.forEach { it.onContestantsUpdateFailed(result.errorMessage!!) }
+                is Result.Completed -> listeners.forEach { listener ->
+                    listener.onContestantUpdatedSuccessfully()
+                }
+                is Result.Failed -> listeners.forEach { listener ->
+                    listener.onUpdateContestantFailed(result.errorMessage!!)
+                }
             }
         }
     }
@@ -37,10 +39,12 @@ class UpdateContestantUseCase(private val contestantsEndpoint: ContestantsEndpoi
             contestant.copy(timesDidNotSlept = previousTimesDidNotSlept.inc())
         ).also { result ->
             when (result) {
-                is Result.Completed ->
-                    listeners.forEach { it.onContestantUpdatedSuccessfully() }
-                is Result.Failed ->
-                    listeners.forEach { it.onContestantsUpdateFailed(result.errorMessage!!) }
+                is Result.Completed -> listeners.forEach { listener ->
+                    listener.onContestantUpdatedSuccessfully()
+                }
+                is Result.Failed -> listeners.forEach { listener ->
+                    listener.onUpdateContestantFailed(result.errorMessage!!)
+                }
             }
         }
     }
@@ -55,10 +59,12 @@ class UpdateContestantUseCase(private val contestantsEndpoint: ContestantsEndpoi
             )
         ).also { result ->
             when (result) {
-                is Result.Completed ->
-                    listeners.forEach { it.onContestantUpdatedSuccessfully() }
-                is Result.Failed ->
-                    listeners.forEach { it.onContestantsUpdateFailed(result.errorMessage!!) }
+                is Result.Completed -> listeners.forEach { listener ->
+                    listener.onContestantUpdatedSuccessfully()
+                }
+                is Result.Failed -> listeners.forEach { listener ->
+                    listener.onUpdateContestantFailed(result.errorMessage!!)
+                }
             }
         }
     }

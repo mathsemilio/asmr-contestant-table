@@ -17,7 +17,7 @@
     <string name="add">Add</string>
     <string name="contestants_table">Contestants Table</string>
     <string name="week_highlights">Week Highlights</string>
-    <string name="reset_contest">Reset Contest</string>
+    <string name="reset_contest">Reset contest</string>
     <string name="contest_details">Contest details</string>
 
     <!-- Toolbar menu items -->
@@ -25,10 +25,10 @@
     <string name="set_contest_deadline">Set contest deadline</string>
 
     <!-- Contestants list screen -->
-    <string name="no_contestants_registered">No Contestants Registered! Click the \"Add\" button to register one.</string>
+    <string name="no_contestants_registered">No Contestants Registered! Click the \"Add\" button to start registering.</string>
 
     <!-- Week highlights list screen -->
-    <string name="no_week_highlights_registered">No Week Highlights registered! Click the \"Add\" button to register one</string>
+    <string name="no_week_highlights_registered">No Week Highlights registered! Click the \"Add\" button to add one.</string>
 
     <!-- Add contestant dialog -->
     <string name="add_contestant">Add Contestant</string>
@@ -57,7 +57,8 @@
     <string name="dialog_positive_button_reset">Reset</string>
 
     <!-- Messages -->
-    <string name="contest_rebooted_successfully">Contest rebooted successfully</string>
+    <string name="message_contest_rebooted_successfully">Contest rebooted successfully</string>
+    <string name="message_unexpected_error_occurred">Unexpected error occurred. Please try again.</string>
 
     <!-- Week highlights list item -->
     <string name="week_highlights_item_week">Week %d</string>

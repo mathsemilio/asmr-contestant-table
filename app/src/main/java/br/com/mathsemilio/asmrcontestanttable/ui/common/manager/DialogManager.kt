@@ -1,4 +1,4 @@
-package br.com.mathsemilio.asmrcontestanttable.ui.common.helper
+package br.com.mathsemilio.asmrcontestanttable.ui.common.manager
 
 import android.content.Context
 import androidx.fragment.app.FragmentManager

@@ -19,32 +19,32 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import br.com.mathsemilio.asmrcontestanttable.common.eventbus.EventPublisher
 import br.com.mathsemilio.asmrcontestanttable.domain.usecase.contestants.AddContestantUseCase
-import br.com.mathsemilio.asmrcontestanttable.ui.common.event.DataModifiedEvent
-import br.com.mathsemilio.asmrcontestanttable.ui.common.event.poster.EventPoster
-import br.com.mathsemilio.asmrcontestanttable.ui.common.helper.MessagesManager
+import br.com.mathsemilio.asmrcontestanttable.ui.common.event.ContestantsModifiedEvent
+import br.com.mathsemilio.asmrcontestanttable.ui.common.manager.MessagesManager
 import br.com.mathsemilio.asmrcontestanttable.ui.dialog.bottomsheet.BaseBottomSheetDialogFragment
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.cancelChildren
 import kotlinx.coroutines.launch
 
 class AddContestantBottomSheet : BaseBottomSheetDialogFragment(),
-    AddContestantContract.View.Listener,
+    AddContestantView.Listener,
     AddContestantUseCase.Listener {
 
     private lateinit var view: AddContestantView
 
-    private lateinit var coroutineScope: CoroutineScope
     private lateinit var messagesManager: MessagesManager
-    private lateinit var eventPoster: EventPoster
+    private lateinit var coroutineScope: CoroutineScope
+    private lateinit var eventPublisher: EventPublisher
 
     private lateinit var addContestantUseCase: AddContestantUseCase
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        coroutineScope = compositionRoot.coroutineScopeProvider.UIBoundScope
         messagesManager = compositionRoot.messagesHelper
-        eventPoster = compositionRoot.eventPoster
+        coroutineScope = compositionRoot.coroutineScopeProvider.UIBoundScope
+        eventPublisher = compositionRoot.eventPublisher
         addContestantUseCase = compositionRoot.addContestantUseCase
     }
 
@@ -58,18 +58,20 @@ class AddContestantBottomSheet : BaseBottomSheetDialogFragment(),
     }
 
     override fun onAddButtonClicked(contestantName: String) {
-        view.changeAddButtonState()
-        coroutineScope.launch { addContestantUseCase.insertContestant(contestantName) }
+        coroutineScope.launch {
+            view.changeAddButtonState()
+            addContestantUseCase.insertContestant(contestantName)
+        }
     }
 
     override fun onContestantAddedSuccessfully() {
         dismiss()
-        eventPoster.postEvent(DataModifiedEvent.OnDataModified)
+        eventPublisher.publish(ContestantsModifiedEvent.OnContestantAdded)
     }
 
-    override fun onContestantAddFailed(errorMessage: String) {
+    override fun onAddContestantFailed() {
         view.revertAddButtonState()
-        messagesManager.showUseCaseErrorMessage(errorMessage)
+        messagesManager.showUnexpectedErrorOccurredMessage()
     }
 
     override fun onStart() {
@@ -81,11 +83,7 @@ class AddContestantBottomSheet : BaseBottomSheetDialogFragment(),
     override fun onStop() {
         view.removeListener(this)
         addContestantUseCase.removeListener(this)
-        super.onStop()
-    }
-
-    override fun onDestroyView() {
         coroutineScope.coroutineContext.cancelChildren()
-        super.onDestroyView()
+        super.onStop()
     }
 }

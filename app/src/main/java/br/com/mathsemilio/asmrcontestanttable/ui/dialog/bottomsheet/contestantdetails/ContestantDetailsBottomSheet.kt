@@ -20,19 +20,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import br.com.mathsemilio.asmrcontestanttable.common.ARG_CONTESTANT
+import br.com.mathsemilio.asmrcontestanttable.common.OUT_STATE_CONTESTANT
+import br.com.mathsemilio.asmrcontestanttable.common.eventbus.EventPublisher
 import br.com.mathsemilio.asmrcontestanttable.domain.model.ASMRContestant
 import br.com.mathsemilio.asmrcontestanttable.domain.usecase.contestants.UpdateContestantUseCase
-import br.com.mathsemilio.asmrcontestanttable.ui.common.event.DataModifiedEvent
-import br.com.mathsemilio.asmrcontestanttable.ui.common.event.poster.EventPoster
-import br.com.mathsemilio.asmrcontestanttable.ui.common.helper.MessagesManager
+import br.com.mathsemilio.asmrcontestanttable.ui.common.event.ContestantsModifiedEvent
+import br.com.mathsemilio.asmrcontestanttable.ui.common.manager.MessagesManager
 import br.com.mathsemilio.asmrcontestanttable.ui.dialog.bottomsheet.BaseBottomSheetDialogFragment
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.cancelChildren
 import kotlinx.coroutines.launch
 
 class ContestantDetailsBottomSheet : BaseBottomSheetDialogFragment(),
-    ContestantDetailsContract.View.Listener,
-    ContestantDetailsContract.BottomSheet,
+    ContestantDetailsView.Listener,
     UpdateContestantUseCase.Listener {
 
     companion object {
@@ -46,9 +46,9 @@ class ContestantDetailsBottomSheet : BaseBottomSheetDialogFragment(),
 
     private lateinit var view: ContestantDetailsView
 
-    private lateinit var coroutineScope: CoroutineScope
     private lateinit var messagesManager: MessagesManager
-    private lateinit var eventPoster: EventPoster
+    private lateinit var eventPublisher: EventPublisher
+    private lateinit var coroutineScope: CoroutineScope
 
     private lateinit var updateContestantUseCase: UpdateContestantUseCase
 
@@ -56,9 +56,9 @@ class ContestantDetailsBottomSheet : BaseBottomSheetDialogFragment(),
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        coroutineScope = compositionRoot.coroutineScopeProvider.UIBoundScope
         messagesManager = compositionRoot.messagesHelper
-        eventPoster = compositionRoot.eventPoster
+        eventPublisher = compositionRoot.eventPublisher
+        coroutineScope = compositionRoot.coroutineScopeProvider.UIBoundScope
         updateContestantUseCase = compositionRoot.updateContestantUseCase
     }
 
@@ -73,7 +73,14 @@ class ContestantDetailsBottomSheet : BaseBottomSheetDialogFragment(),
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        bindContestant()
+        currentContestant = if (savedInstanceState != null)
+            savedInstanceState.getSerializable(OUT_STATE_CONTESTANT) as ASMRContestant
+        else
+            getContestantFromBundle()
+    }
+
+    private fun getContestantFromBundle(): ASMRContestant {
+        return requireArguments().getSerializable(ARG_CONTESTANT) as ASMRContestant
     }
 
     override fun onIncrementTimesSleptButtonClicked() {
@@ -94,38 +101,31 @@ class ContestantDetailsBottomSheet : BaseBottomSheetDialogFragment(),
         }
     }
 
-    override fun getContestant(): ASMRContestant {
-        return arguments?.getSerializable(ARG_CONTESTANT) as ASMRContestant
-    }
-
-    override fun bindContestant() {
-        currentContestant = getContestant()
-        view.bindContestantsDetails(currentContestant)
-    }
-
     override fun onContestantUpdatedSuccessfully() {
         dismiss()
-        eventPoster.postEvent(DataModifiedEvent.OnDataModified)
+        eventPublisher.publish(ContestantsModifiedEvent.OnContestantModified)
     }
 
-    override fun onContestantsUpdateFailed(errorMessage: String) {
+    override fun onUpdateContestantFailed(errorMessage: String) {
         messagesManager.showUseCaseErrorMessage(errorMessage)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putSerializable(OUT_STATE_CONTESTANT, currentContestant)
     }
 
     override fun onStart() {
         view.addListener(this)
         updateContestantUseCase.addListener(this)
+        view.bindContestantsDetails(currentContestant)
         super.onStart()
     }
 
     override fun onStop() {
         view.removeListener(this)
         updateContestantUseCase.removeListener(this)
-        super.onStop()
-    }
-
-    override fun onDestroyView() {
         coroutineScope.coroutineContext.cancelChildren()
-        super.onDestroyView()
+        super.onStop()
     }
 }

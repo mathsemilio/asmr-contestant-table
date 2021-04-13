@@ -19,32 +19,32 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import br.com.mathsemilio.asmrcontestanttable.common.eventbus.EventPublisher
 import br.com.mathsemilio.asmrcontestanttable.domain.usecase.weekhighlights.AddWeekHighlightsUseCase
-import br.com.mathsemilio.asmrcontestanttable.ui.common.event.DataModifiedEvent
-import br.com.mathsemilio.asmrcontestanttable.ui.common.event.poster.EventPoster
-import br.com.mathsemilio.asmrcontestanttable.ui.common.helper.MessagesManager
+import br.com.mathsemilio.asmrcontestanttable.ui.common.event.WeekHighlightsModifiedEvent
+import br.com.mathsemilio.asmrcontestanttable.ui.common.manager.MessagesManager
 import br.com.mathsemilio.asmrcontestanttable.ui.dialog.bottomsheet.BaseBottomSheetDialogFragment
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.cancelChildren
 import kotlinx.coroutines.launch
 
 class AddWeekHighlightsBottomSheet : BaseBottomSheetDialogFragment(),
-    AddWeekHighlightsContract.View.Listener,
+    AddWeekHighlightsView.Listener,
     AddWeekHighlightsUseCase.Listener {
 
     private lateinit var view: AddWeekHighlightsView
 
-    private lateinit var coroutineScope: CoroutineScope
     private lateinit var messagesManager: MessagesManager
-    private lateinit var eventPoster: EventPoster
+    private lateinit var eventPublisher: EventPublisher
+    private lateinit var coroutineScope: CoroutineScope
 
     private lateinit var addWeekHighlightsUseCase: AddWeekHighlightsUseCase
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        coroutineScope = compositionRoot.coroutineScopeProvider.UIBoundScope
         messagesManager = compositionRoot.messagesHelper
-        eventPoster = compositionRoot.eventPoster
+        eventPublisher = compositionRoot.eventPublisher
+        coroutineScope = compositionRoot.coroutineScopeProvider.UIBoundScope
         addWeekHighlightsUseCase = compositionRoot.addWeekHighlightsUseCase
     }
 
@@ -58,20 +58,20 @@ class AddWeekHighlightsBottomSheet : BaseBottomSheetDialogFragment(),
     }
 
     override fun onAddButtonClicked(firstContestantName: String, secondContestantName: String) {
-        view.changeAddButtonState()
         coroutineScope.launch {
+            view.changeAddButtonState()
             addWeekHighlightsUseCase.insertWeekHighlights(firstContestantName, secondContestantName)
         }
     }
 
     override fun onWeekHighlightsAddedSuccessfully() {
         dismiss()
-        eventPoster.postEvent(DataModifiedEvent.OnDataModified)
+        eventPublisher.publish(WeekHighlightsModifiedEvent.OnWeekHighlightAdded)
     }
 
-    override fun onWeekHighlightsAddFailed(errorMessage: String) {
+    override fun onAddWeekHighlightsFailed() {
         view.revertAddButtonState()
-        messagesManager.showUseCaseErrorMessage(errorMessage)
+        messagesManager.showUnexpectedErrorOccurredMessage()
     }
 
     override fun onStart() {
@@ -83,11 +83,7 @@ class AddWeekHighlightsBottomSheet : BaseBottomSheetDialogFragment(),
     override fun onStop() {
         view.removeListener(this)
         addWeekHighlightsUseCase.removeListener(this)
-        super.onStop()
-    }
-
-    override fun onDestroyView() {
         coroutineScope.coroutineContext.cancelChildren()
-        super.onDestroyView()
+        super.onStop()
     }
 }

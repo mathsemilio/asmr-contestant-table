@@ -14,13 +14,9 @@ class WeekHighlightsEndpoint(
         return withContext(dispatcherProvider.BACKGROUND) {
             try {
                 weekHighlightsDAO.insertData(weekHighlights)
-                return@withContext withContext(dispatcherProvider.MAIN) {
-                    Result.Completed(data = null)
-                }
+                return@withContext Result.Completed(data = null)
             } catch (e: Exception) {
-                return@withContext withContext(dispatcherProvider.MAIN) {
-                    Result.Failed(e.message!!)
-                }
+                return@withContext Result.Failed(e.message!!)
             }
         }
     }
@@ -28,13 +24,9 @@ class WeekHighlightsEndpoint(
     suspend fun getAllWeekHighlights(): Result<List<WeekHighlights>> {
         return withContext(dispatcherProvider.BACKGROUND) {
             try {
-                return@withContext withContext(dispatcherProvider.MAIN) {
-                    Result.Completed(data = weekHighlightsDAO.getAllWeekHighlights())
-                }
+                return@withContext Result.Completed(data = weekHighlightsDAO.getAllWeekHighlights())
             } catch (e: Exception) {
-                return@withContext withContext(dispatcherProvider.MAIN) {
-                    Result.Failed(e.message!!)
-                }
+                return@withContext Result.Failed(e.message!!)
             }
         }
     }

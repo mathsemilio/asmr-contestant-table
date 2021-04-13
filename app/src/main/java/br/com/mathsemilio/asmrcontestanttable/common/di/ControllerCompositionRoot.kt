@@ -4,9 +4,11 @@ class ControllerCompositionRoot(private val activityCompositionRoot: ActivityCom
 
     val coroutineScopeProvider get() = activityCompositionRoot.coroutineScopeProvider
 
-    val eventPoster get() = activityCompositionRoot.eventPoster
-
     val dialogHelper get() = activityCompositionRoot.dialogManager
+
+    val eventPublisher get() = activityCompositionRoot.eventPublisher
+
+    val eventSubscriber get() = activityCompositionRoot.eventSubscriber
 
     val messagesHelper get() = activityCompositionRoot.messagesManager
 

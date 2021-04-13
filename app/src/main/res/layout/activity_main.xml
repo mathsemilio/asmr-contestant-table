@@ -18,28 +18,28 @@
             android:id="@+id/material_toolbar_app"
             android:layout_width="match_parent"
             android:layout_height="?actionBarSize"
-            app:menu="@menu/app_toolbar_menu"
-            app:title="@string/contestants_table" />
+            app:title="@string/contestants_table"
+            tools:menu="@menu/contestants_table_screen_toolbar" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
     <FrameLayout
-        android:id="@+id/frame_layout_screen_container"
+        android:id="@+id/frame_layout_fragment_container"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@id/bottom_nav_view_app"
+        app:layout_constraintBottom_toTopOf="@id/bottom_navigation_view_app"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/app_bar_layout_app" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottom_nav_view_app"
+        android:id="@+id/bottom_navigation_view_app"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/frame_layout_screen_container"
-        app:menu="@menu/app_bottom_nav_view_menu" />
+        app:layout_constraintTop_toBottomOf="@id/frame_layout_fragment_container"
+        app:menu="@menu/bottom_nav_view_app" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

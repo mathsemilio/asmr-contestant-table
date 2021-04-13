@@ -10,16 +10,18 @@ class FetchContestantsUseCase(private val contestantsEndpoint: ContestantsEndpoi
 
     interface Listener {
         fun onContestantsFetchedSuccessfully(contestants: List<ASMRContestant>)
-        fun onContestantsFetchFailed(errorMessage: String)
+        fun onContestantsFetchFailed()
     }
 
     suspend fun fetchContestants() {
         contestantsEndpoint.getAllContestants().also { result ->
             when (result) {
-                is Result.Completed ->
-                    listeners.forEach { it.onContestantsFetchedSuccessfully(result.data!!) }
-                is Result.Failed ->
-                    listeners.forEach { it.onContestantsFetchFailed(result.errorMessage!!) }
+                is Result.Completed -> listeners.forEach { listener ->
+                    listener.onContestantsFetchedSuccessfully(result.data!!)
+                }
+                is Result.Failed -> listeners.forEach { listener ->
+                    listener.onContestantsFetchFailed()
+                }
             }
         }
     }

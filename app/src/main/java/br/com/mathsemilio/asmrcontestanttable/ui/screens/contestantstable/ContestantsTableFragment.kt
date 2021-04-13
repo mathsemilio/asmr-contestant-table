@@ -16,46 +16,45 @@ limitations under the License.
 package br.com.mathsemilio.asmrcontestanttable.ui.screens.contestantstable
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import br.com.mathsemilio.asmrcontestanttable.R
+import br.com.mathsemilio.asmrcontestanttable.common.eventbus.EventListener
+import br.com.mathsemilio.asmrcontestanttable.common.eventbus.EventSubscriber
 import br.com.mathsemilio.asmrcontestanttable.domain.model.ASMRContestant
 import br.com.mathsemilio.asmrcontestanttable.domain.usecase.contestants.DeleteContestantsUseCase
 import br.com.mathsemilio.asmrcontestanttable.domain.usecase.contestants.FetchContestantsUseCase
-import br.com.mathsemilio.asmrcontestanttable.ui.ToolbarAction
 import br.com.mathsemilio.asmrcontestanttable.ui.common.BaseFragment
-import br.com.mathsemilio.asmrcontestanttable.ui.common.event.DataModifiedEvent
-import br.com.mathsemilio.asmrcontestanttable.ui.common.event.ToolbarActionEvent
-import br.com.mathsemilio.asmrcontestanttable.ui.common.event.poster.EventPoster
-import br.com.mathsemilio.asmrcontestanttable.ui.common.helper.DialogManager
-import br.com.mathsemilio.asmrcontestanttable.ui.common.helper.MessagesManager
+import br.com.mathsemilio.asmrcontestanttable.ui.common.event.ContestantsModifiedEvent
+import br.com.mathsemilio.asmrcontestanttable.ui.common.manager.DialogManager
+import br.com.mathsemilio.asmrcontestanttable.ui.common.manager.MessagesManager
+import br.com.mathsemilio.asmrcontestanttable.ui.screens.contestantstable.view.ContestantsTableScreenView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.cancelChildren
 import kotlinx.coroutines.launch
 
-class ContestantsTableScreen : BaseFragment(),
-    ContestantsTableContract.View.Listener,
-    ContestantsTableContract.Screen,
+class ContestantsTableFragment : BaseFragment(),
+    ContestantsTableScreenView.Listener,
     FetchContestantsUseCase.Listener,
     DeleteContestantsUseCase.Listener,
-    EventPoster.EventListener {
+    EventListener {
 
     private lateinit var view: ContestantsTableScreenView
 
-    private lateinit var coroutineScope: CoroutineScope
+    private lateinit var eventSubscriber: EventSubscriber
     private lateinit var messagesManager: MessagesManager
+    private lateinit var coroutineScope: CoroutineScope
     private lateinit var dialogManager: DialogManager
-    private lateinit var eventPoster: EventPoster
 
     private lateinit var fetchContestantsUseCase: FetchContestantsUseCase
     private lateinit var deleteContestantsUseCase: DeleteContestantsUseCase
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        coroutineScope = compositionRoot.coroutineScopeProvider.UIBoundScope
+        setHasOptionsMenu(true)
+        eventSubscriber = compositionRoot.eventSubscriber
         messagesManager = compositionRoot.messagesHelper
+        coroutineScope = compositionRoot.coroutineScopeProvider.UIBoundScope
         dialogManager = compositionRoot.dialogHelper
-        eventPoster = compositionRoot.eventPoster
         fetchContestantsUseCase = compositionRoot.fetchContestantsUseCase
         deleteContestantsUseCase = compositionRoot.deleteContestantsUseCase
     }
@@ -69,7 +68,14 @@ class ContestantsTableScreen : BaseFragment(),
         return view.rootView
     }
 
-    override fun onAddButtonClicked() {
+    private fun fetchContestants() {
+        coroutineScope.launch {
+            view.showProgressIndicator()
+            fetchContestantsUseCase.fetchContestants()
+        }
+    }
+
+    override fun onAddContestantButtonClicked() {
         dialogManager.showAddContestantBottomSheet()
     }
 
@@ -77,65 +83,66 @@ class ContestantsTableScreen : BaseFragment(),
         dialogManager.showContestantDetailsBottomSheet(contestant)
     }
 
-    override fun fetchContestants() {
-        view.showProgressIndicator()
-        coroutineScope.launch { fetchContestantsUseCase.fetchContestants() }
-    }
-
-    override fun onToolbarActionClicked(action: ToolbarAction) {
-        when (action) {
-            ToolbarAction.RESET_CONTEST -> dialogManager.showResetContestDialog {
-                coroutineScope.launch { deleteContestantsUseCase.deleteAllContestants() }
-            }
-        }
-    }
-
     override fun onContestantsFetchedSuccessfully(contestants: List<ASMRContestant>) {
         view.hideProgressIndicator()
         view.bindContestants(contestants)
     }
 
-    override fun onContestantsFetchFailed(errorMessage: String) {
+    override fun onContestantsFetchFailed() {
         view.hideProgressIndicator()
-        messagesManager.showUseCaseErrorMessage(errorMessage)
+        messagesManager.showUnexpectedErrorOccurredMessage()
     }
 
-    override fun onContestantsDeletedSuccessfully() {
+    override fun onAllContestantsDeletedSuccessfully() {
         fetchContestants()
-        messagesManager.showContestantsDeletedUseCaseSuccessMessage()
+        messagesManager.showDeleteAllContestantsUseCaseSuccessMessage()
     }
 
-    override fun onContestantsDeleteFailed(errorMessage: String) {
+    override fun onDeleteAllContestantsFailed() {
         view.hideProgressIndicator()
-        messagesManager.showUseCaseErrorMessage(errorMessage)
+        messagesManager.showUnexpectedErrorOccurredMessage()
     }
 
     override fun onEvent(event: Any) {
         when (event) {
-            is DataModifiedEvent.OnDataModified -> fetchContestants()
-            is ToolbarActionEvent -> onToolbarActionClicked(event.action)
+            is ContestantsModifiedEvent.OnContestantAdded -> fetchContestants()
+            is ContestantsModifiedEvent.OnContestantModified -> fetchContestants()
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.contestants_table_screen_toolbar, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.toolbar_action_reset_contest -> {
+                dialogManager.showResetContestDialog { deleteAllContestants() }
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun deleteAllContestants() {
+        coroutineScope.launch { deleteContestantsUseCase.deleteAllContestants() }
     }
 
     override fun onStart() {
         view.addListener(this)
+        eventSubscriber.subscribe(this)
         fetchContestantsUseCase.addListener(this)
         deleteContestantsUseCase.addListener(this)
-        eventPoster.addListener(this)
         fetchContestants()
         super.onStart()
     }
 
     override fun onStop() {
         view.removeListener(this)
+        eventSubscriber.unsubscribe(this)
         fetchContestantsUseCase.removeListener(this)
         deleteContestantsUseCase.removeListener(this)
-        eventPoster.removeListener(this)
-        super.onStop()
-    }
-
-    override fun onDestroyView() {
         coroutineScope.coroutineContext.cancelChildren()
-        super.onDestroyView()
+        super.onStop()
     }
 }

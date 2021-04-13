@@ -1,19 +1,18 @@
 package br.com.mathsemilio.asmrcontestanttable.ui.common.view
 
-import android.content.Context
-import android.view.View
-import br.com.mathsemilio.asmrcontestanttable.common.observable.BaseObservable
+import br.com.mathsemilio.asmrcontestanttable.common.observable.Observable
 
-abstract class BaseObservableView<Listener> : BaseObservable<Listener>(), IView {
+abstract class BaseObservableView<Listener> : Observable<Listener>, BaseView() {
 
-    private lateinit var _rootView: View
-    override var rootView: View
-        get() = _rootView
-        set(value) {
-            _rootView = value
-        }
+    private val listenersSet = mutableSetOf<Listener>()
 
-    protected val context: Context get() = _rootView.context
+    override fun addListener(listener: Listener) {
+        listenersSet.add(listener)
+    }
 
-    protected fun <T: View> findViewById(id: Int) : T = _rootView.findViewById(id)
+    override fun removeListener(listener: Listener) {
+        listenersSet.remove(listener)
+    }
+
+    val listeners get() = listenersSet.toSet()
 }

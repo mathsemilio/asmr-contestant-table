@@ -10,16 +10,18 @@ class AddContestantUseCase(private val contestantsEndpoint: ContestantsEndpoint)
 
     interface Listener {
         fun onContestantAddedSuccessfully()
-        fun onContestantAddFailed(errorMessage: String)
+        fun onAddContestantFailed()
     }
 
     suspend fun insertContestant(contestantName: String) {
         contestantsEndpoint.insertContestant(ASMRContestant(0, contestantName)).also { result ->
             when (result) {
-                is Result.Completed ->
-                    listeners.forEach { it.onContestantAddedSuccessfully() }
-                is Result.Failed ->
-                    listeners.forEach { it.onContestantAddFailed(result.errorMessage!!) }
+                is Result.Completed -> listeners.forEach { listener ->
+                    listener.onContestantAddedSuccessfully()
+                }
+                is Result.Failed -> listeners.forEach { listener ->
+                    listener.onAddContestantFailed()
+                }
             }
         }
     }

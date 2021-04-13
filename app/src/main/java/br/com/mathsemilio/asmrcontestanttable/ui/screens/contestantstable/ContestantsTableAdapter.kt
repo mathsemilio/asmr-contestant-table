@@ -1,15 +1,17 @@
 package br.com.mathsemilio.asmrcontestanttable.ui.screens.contestantstable
 
-import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import br.com.mathsemilio.asmrcontestanttable.domain.model.ASMRContestant
+import br.com.mathsemilio.asmrcontestanttable.ui.common.view.ViewFactory
+import br.com.mathsemilio.asmrcontestanttable.ui.screens.contestantstable.view.ContestantsListItemView
+import br.com.mathsemilio.asmrcontestanttable.ui.screens.contestantstable.view.ContestantsListItemViewImpl
 
-class ContestantsAdapter(
-    private val layoutInflater: LayoutInflater,
-    private val listener: Listener
-) : RecyclerView.Adapter<ContestantsAdapter.ViewHolder>(),
-    ContestantsTableContract.ListItemView.Listener {
+class ContestantsTableAdapter(
+    private val listener: Listener,
+    private val viewFactory: ViewFactory
+) : RecyclerView.Adapter<ContestantsTableAdapter.ViewHolder>(),
+    ContestantsListItemView.Listener {
 
     interface Listener {
         fun onContestantClicked(contestant: ASMRContestant)
@@ -25,19 +27,22 @@ class ContestantsAdapter(
         notifyDataSetChanged()
     }
 
-    class ViewHolder(listItemView: ContestantsListItemView) :
+    class ViewHolder(private val listItemView: ContestantsListItemViewImpl) :
         RecyclerView.ViewHolder(listItemView.rootView) {
-        val contestantsListItemView = listItemView
+
+        fun bind(contestant: ASMRContestant, contestantPosition: Int) {
+            listItemView.bindContestant(contestant, contestantPosition)
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val contestantsListItemView = ContestantsListItemView(layoutInflater, parent)
-        contestantsListItemView.addListener(this)
-        return ViewHolder(contestantsListItemView)
+        return ViewHolder(viewFactory.getContestantsListItemView(parent).also { listItemView ->
+            listItemView.addListener(this)
+        })
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.contestantsListItemView.bindContestant(contestantsList[position], position + 1)
+        holder.bind(contestantsList[position], position.plus(1))
     }
 
     override fun getItemCount(): Int {

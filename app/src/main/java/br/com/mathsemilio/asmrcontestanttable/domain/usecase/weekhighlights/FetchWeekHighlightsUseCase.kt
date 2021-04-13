@@ -10,16 +10,18 @@ class FetchWeekHighlightsUseCase(private val weekHighlightsEndpoint: WeekHighlig
 
     interface Listener {
         fun onWeekHighlightsFetchedSuccessfully(weekHighlights: List<WeekHighlights>)
-        fun onWeekHighlightsFetchFailed(errorMessage: String)
+        fun onWeekHighlightsFetchFailed()
     }
 
     suspend fun fetchWeekHighlights() {
         weekHighlightsEndpoint.getAllWeekHighlights().also { result ->
             when (result) {
-                is Result.Completed ->
-                    listeners.forEach { it.onWeekHighlightsFetchedSuccessfully(result.data!!) }
-                is Result.Failed ->
-                    listeners.forEach { it.onWeekHighlightsFetchFailed(result.errorMessage!!) }
+                is Result.Completed -> listeners.forEach { listener ->
+                    listener.onWeekHighlightsFetchedSuccessfully(result.data!!)
+                }
+                is Result.Failed -> listeners.forEach { listener ->
+                    listener.onWeekHighlightsFetchFailed()
+                }
             }
         }
     }

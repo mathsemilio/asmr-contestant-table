@@ -16,22 +16,20 @@ limitations under the License.
 package br.com.mathsemilio.asmrcontestanttable.ui
 
 import android.os.Bundle
-import android.widget.FrameLayout
-import br.com.mathsemilio.asmrcontestanttable.ui.common.event.NavigationEvent
-import br.com.mathsemilio.asmrcontestanttable.ui.common.event.ToolbarActionEvent
-import br.com.mathsemilio.asmrcontestanttable.ui.common.event.poster.EventPoster
-import br.com.mathsemilio.asmrcontestanttable.ui.common.helper.FragmentContainerManager
-import br.com.mathsemilio.asmrcontestanttable.ui.common.helper.ScreensNavigator
+import br.com.mathsemilio.asmrcontestanttable.ui.common.manager.FragmentContainerManager
+import br.com.mathsemilio.asmrcontestanttable.ui.common.navigation.NavigationEventListener
+import br.com.mathsemilio.asmrcontestanttable.ui.common.navigation.ScreensNavigator
+import br.com.mathsemilio.asmrcontestanttable.ui.common.navigation.destinations.TopDestination
+import br.com.mathsemilio.asmrcontestanttable.ui.common.others.BottomNavigationItem
 
 class MainActivity : BaseActivity(),
-    MainActivityContract.View.Listener,
+    MainActivityView.Listener,
     FragmentContainerManager,
-    EventPoster.EventListener {
+    NavigationEventListener {
 
     private lateinit var view: MainActivityView
 
     private lateinit var screensNavigator: ScreensNavigator
-    private lateinit var eventPoster: EventPoster
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,50 +37,34 @@ class MainActivity : BaseActivity(),
         view = compositionRoot.viewFactory.getMainActivityView(null)
 
         screensNavigator = compositionRoot.screensNavigator
-        eventPoster = compositionRoot.eventPoster
 
         setContentView(view.rootView)
 
-        screensNavigator.navigateToContestantsTableScreen()
+        setSupportActionBar(view.toolbar)
+
+        screensNavigator.toContestantsTableScreen()
     }
 
-    override fun onBottomNavigationItemClicked(destination: NavDestination) {
-        when (destination) {
-            NavDestination.CONTESTANTS_TABLE ->
-                screensNavigator.navigateToContestantsTableScreen()
-            NavDestination.WEEK_HIGHLIGHTS ->
-                screensNavigator.navigateToWeekHighlightsScreen()
+    override fun onBottomNavigationItemClicked(item: BottomNavigationItem) {
+        when (item) {
+            BottomNavigationItem.CONTESTANTS_TABLE -> screensNavigator.toContestantsTableScreen()
+            BottomNavigationItem.WEEK_HIGHLIGHTS -> screensNavigator.toWeekHighlightsScreen()
         }
     }
 
-    override fun onToolbarActionResetContestClicked() {
-        eventPoster.postEvent(ToolbarActionEvent.OnActionClicked(ToolbarAction.RESET_CONTEST))
-    }
+    override val fragmentContainer get() = view.fragmentContainer
 
-    override fun getFragmentContainer(): FrameLayout {
-        return view.fragmentContainer
-    }
-
-    override fun onEvent(event: Any) {
-        when (event) {
-            is NavigationEvent -> onNavigationEvent(event)
-        }
-    }
-
-    private fun onNavigationEvent(navigationEvent: NavigationEvent) {
-        view.setToolbarTitleBasedOnDestination(navigationEvent.destination)
-        view.setToolbarMenuBasedOnDestination(navigationEvent.destination)
+    override fun onNavigateToTopDestination(destination: TopDestination) {
+        view.setToolbarTitleForTopDestination(destination)
     }
 
     override fun onStart() {
         view.addListener(this)
-        eventPoster.addListener(this)
         super.onStart()
     }
 
     override fun onStop() {
         view.removeListener(this)
-        eventPoster.removeListener(this)
         super.onStop()
     }
 }
