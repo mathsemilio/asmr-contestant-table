@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/bottom_nav_item_contestants_table"
-        android:icon="@drawable/ic_baseline_format_list_numbered_24"
+        android:id="@+id/bottom_navigation_item_contestants_table"
+        android:icon="@drawable/ic_format_list_numbered"
         android:title="@string/contestants_table" />
     <item
-        android:id="@+id/bottom_nav_item_week_highlights"
-        android:icon="@drawable/ic_baseline_stars_24"
+        android:id="@+id/bottom_navigation_item_week_highlights"
+        android:icon="@drawable/ic_stars"
         android:title="@string/week_highlights" />
 </menu>

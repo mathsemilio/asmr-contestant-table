@@ -1,42 +1,54 @@
+/*
+Copyright 2021 Matheus Menezes
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+ */
+
 package br.com.mathsemilio.asmrcontestanttable.storage.endpoint
 
-import br.com.mathsemilio.asmrcontestanttable.common.provider.DispatcherProvider
 import br.com.mathsemilio.asmrcontestanttable.data.dao.WeekHighlightsDAO
 import br.com.mathsemilio.asmrcontestanttable.domain.model.Result
 import br.com.mathsemilio.asmrcontestanttable.domain.model.WeekHighlights
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-class WeekHighlightsEndpoint(
-    private val weekHighlightsDAO: WeekHighlightsDAO,
-    private val dispatcherProvider: DispatcherProvider
-) {
+class WeekHighlightsEndpoint(private val weekHighlightsDAO: WeekHighlightsDAO) {
+
     suspend fun insertWeekHighlights(weekHighlights: WeekHighlights): Result<Nothing> {
-        return withContext(dispatcherProvider.BACKGROUND) {
+        return withContext(Dispatchers.IO) {
             try {
                 weekHighlightsDAO.insertData(weekHighlights)
-                return@withContext Result.Completed(data = null)
+                Result.Completed(data = null)
             } catch (e: Exception) {
-                return@withContext Result.Failed(e.message!!)
+                Result.Failed(e.message!!)
             }
         }
     }
 
-    suspend fun getAllWeekHighlights(): Result<List<WeekHighlights>> {
-        return withContext(dispatcherProvider.BACKGROUND) {
+    suspend fun fetchWeekHighlights(): Result<List<WeekHighlights>> {
+        return withContext(Dispatchers.IO) {
             try {
-                return@withContext Result.Completed(data = weekHighlightsDAO.getAllWeekHighlights())
+                Result.Completed(data = weekHighlightsDAO.fetchWeekHighlights())
             } catch (e: Exception) {
-                return@withContext Result.Failed(e.message!!)
+                Result.Failed(e.message!!)
             }
         }
     }
 
     suspend fun getWeekNumber(): Result<Int> {
-        return withContext(dispatcherProvider.BACKGROUND) {
+        return withContext(Dispatchers.IO) {
             try {
-                return@withContext Result.Completed(
-                    data = weekHighlightsDAO.getAllWeekHighlights().size.plus(1)
-                )
+                Result.Completed(data = weekHighlightsDAO.fetchWeekHighlights().size.plus(1))
             } catch (e: Exception) {
                 Result.Failed(e.message!!)
             }

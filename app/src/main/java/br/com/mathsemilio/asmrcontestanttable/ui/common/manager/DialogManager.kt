@@ -1,3 +1,19 @@
+/*
+Copyright 2021 Matheus Menezes
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+ */
+
 package br.com.mathsemilio.asmrcontestanttable.ui.common.manager
 
 import android.content.Context
@@ -7,7 +23,7 @@ import br.com.mathsemilio.asmrcontestanttable.domain.model.ASMRContestant
 import br.com.mathsemilio.asmrcontestanttable.ui.dialog.bottomsheet.addcontestant.AddContestantBottomSheet
 import br.com.mathsemilio.asmrcontestanttable.ui.dialog.bottomsheet.addweekhighlights.AddWeekHighlightsBottomSheet
 import br.com.mathsemilio.asmrcontestanttable.ui.dialog.bottomsheet.contestantdetails.ContestantDetailsBottomSheet
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import br.com.mathsemilio.asmrcontestanttable.ui.dialog.promptdialog.PromptDialog
 
 class DialogManager(private val fragmentManager: FragmentManager, private val context: Context) {
 
@@ -22,20 +38,18 @@ class DialogManager(private val fragmentManager: FragmentManager, private val co
     }
 
     fun showContestantDetailsBottomSheet(contestant: ASMRContestant) {
-        val contestantsDetailsBottomSheet = ContestantDetailsBottomSheet.newInstance(contestant)
+        val contestantsDetailsBottomSheet = ContestantDetailsBottomSheet.withContestant(contestant)
         contestantsDetailsBottomSheet.show(fragmentManager, null)
     }
 
-    fun showResetContestDialog(onPositiveButtonClicked: () -> Unit) {
-        MaterialAlertDialogBuilder(context).apply {
-            setTitle(context.getString(R.string.dialog_title_reset_contest))
-            setMessage(context.getString(R.string.dialog_message_reset_contest))
-            setPositiveButton(context.getString(R.string.dialog_positive_button_reset)) { _, _ ->
-                onPositiveButtonClicked()
-            }
-            setNegativeButton(context.getString(R.string.dialog_negative_button_cancel), null)
-            setCancelable(true)
-            show()
-        }
+    fun showResetContestDialog() {
+        val promptDialog = PromptDialog.newInstance(
+            context.getString(R.string.dialog_title_reset_contest),
+            context.getString(R.string.dialog_message_reset_contest),
+            context.getString(R.string.dialog_positive_button_reset),
+            context.getString(R.string.dialog_negative_button_cancel),
+            isCancelable = true
+        )
+        promptDialog.show(fragmentManager, null)
     }
 }

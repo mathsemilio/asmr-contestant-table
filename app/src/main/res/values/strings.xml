@@ -2,52 +2,49 @@
     <string name="app_name">ASMR Contestant Table</string>
 
     <!-- Content Description -->
-    <string name="content_description_add_contestant">Add Contestant</string>
-    <string name="content_description_add_week_highlights">Add Week Highlights</string>
-    <string name="content_description_week_highlights">Highlights of the Week</string>
-    <string name="content_description_increment_number_of_times_slept">Increment Number of times Slept</string>
-    <string name="content_description_increment_number_os_times_you_did_not_slept">Increment Number os times You Did Not Slept</string>
-    <string name="content_description_increment_number_of_time_you_felt_tired">Increment Number of time you Felt Tired</string>
-    <string name="content_description_decrement_number_of_contestants">Decrement number of contestants</string>
-    <string name="content_description_increment_number_of_contestants">Increment number of contestants</string>
-    <string name="content_description_slider">Slider to close the dialog</string>
+    <string name="content_description_no_contestants_found_illustration">No contestants found illustration</string>
+    <string name="content_description_add_contestant">Add contestant button</string>
+    <string name="content_description_add_week_highlights">Add Week Highlights button</string>
+    <string name="content_description_no_week_highlights_found_illustration">No Week Highlights found illustration</string>
+    <string name="content_description_week_highlights">Highlights of the Week icon</string>
+    <string name="content_description_increment_number_of_times_slept">Increment number of times slept</string>
+    <string name="content_description_increment_number_os_times_you_did_not_slept">Increment number os times you did not slept</string>
+    <string name="content_description_increment_number_of_time_you_felt_tired">Increment number of times you felt tired</string>
+    <string name="content_description_bottom_sheet_slider">Slider to close the dialog</string>
 
     <!-- Common -->
     <string name="name">Name</string>
     <string name="add">Add</string>
-    <string name="contestants_table">Contestants Table</string>
-    <string name="week_highlights">Week Highlights</string>
+    <string name="contestants_table">Contestants table</string>
+    <string name="week_highlights">Week highlights</string>
     <string name="reset_contest">Reset contest</string>
     <string name="contest_details">Contest details</string>
-
-    <!-- Toolbar menu items -->
-    <string name="set_contestants_number">Set contestants number</string>
-    <string name="set_contest_deadline">Set contest deadline</string>
+    <string name="click_on_the_add_button_to_start_registering">Click on the \"Add\" button to start registering.</string>
 
     <!-- Contestants list screen -->
-    <string name="no_contestants_registered">No Contestants Registered! Click the \"Add\" button to start registering.</string>
+    <string name="no_contestants_found">No contestants found</string>
 
     <!-- Week highlights list screen -->
-    <string name="no_week_highlights_registered">No Week Highlights registered! Click the \"Add\" button to add one.</string>
+    <string name="no_week_highlights_found">No Week Highlights found</string>
 
     <!-- Add contestant dialog -->
-    <string name="add_contestant">Add Contestant</string>
-    <string name="adding_contestant">Adding Contestant…</string>
+    <string name="add_contestant">Add contestant</string>
+    <string name="adding_contestant">Adding contestant…</string>
     <string name="please_enter_contestant_name">Please enter the contestant\'s name</string>
 
     <!-- Add Week Highlights dialog -->
-    <string name="add_week_highlights">Add Week Highlight</string>
-    <string name="first_contestant">First Contestant</string>
-    <string name="second_contestant">Second Contestant</string>
+    <string name="add_week_highlights">Add week highlight</string>
+    <string name="first_contestant">First contestant</string>
+    <string name="second_contestant">Second contestant</string>
     <string name="adding_week_highlights">Adding Week Highlights…</string>
 
     <!-- Contestant details dialog -->
-    <string name="felt_tired">Felt Tired</string>
-    <string name="did_not_slept">Did Not Slept</string>
-    <string name="times_slept">Times Slept</string>
+    <string name="felt_tired">Felt tired</string>
+    <string name="did_not_slept">Did not slept</string>
+    <string name="times_slept">Times slept</string>
 
     <!-- Reset Contest Dialog -->
-    <string name="dialog_title_reset_contest">Reset Contest</string>
+    <string name="dialog_title_reset_contest">Reset contest</string>
 
     <!-- Dialog messages -->
     <string name="dialog_message_reset_contest">Are you sure? Resetting the contest will delete all contestants and week highlights.</string>
@@ -61,7 +58,7 @@
     <string name="message_unexpected_error_occurred">Unexpected error occurred. Please try again.</string>
 
     <!-- Week highlights list item -->
-    <string name="week_highlights_item_week">Week %d</string>
-    <string name="week_highlights_item_contestants_name">%1$s &amp; %2$s</string>
+    <string name="week_highlights_item_week_number">Week %d</string>
+    <string name="week_highlights_item_contestants_names">%1$s &amp; %2$s</string>
 
 </resources>

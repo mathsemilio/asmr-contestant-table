@@ -13,13 +13,16 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
  */
+
 package br.com.mathsemilio.asmrcontestanttable.ui
 
 import android.os.Bundle
+import br.com.mathsemilio.asmrcontestanttable.common.OUT_STATE_CURRENT_DESTINATION
+import br.com.mathsemilio.asmrcontestanttable.ui.common.BaseActivity
 import br.com.mathsemilio.asmrcontestanttable.ui.common.manager.FragmentContainerManager
+import br.com.mathsemilio.asmrcontestanttable.ui.common.navigation.Destination
 import br.com.mathsemilio.asmrcontestanttable.ui.common.navigation.NavigationEventListener
 import br.com.mathsemilio.asmrcontestanttable.ui.common.navigation.ScreensNavigator
-import br.com.mathsemilio.asmrcontestanttable.ui.common.navigation.destinations.TopDestination
 import br.com.mathsemilio.asmrcontestanttable.ui.common.others.BottomNavigationItem
 
 class MainActivity : BaseActivity(),
@@ -30,6 +33,8 @@ class MainActivity : BaseActivity(),
     private lateinit var view: MainActivityView
 
     private lateinit var screensNavigator: ScreensNavigator
+
+    private var currentDestination = Destination.CONTESTANTS_TABLE
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,7 +47,20 @@ class MainActivity : BaseActivity(),
 
         setSupportActionBar(view.toolbar)
 
-        screensNavigator.toContestantsTableScreen()
+        if (savedInstanceState == null)
+            screensNavigator.toContestantsTableScreen()
+        else
+            onStateRestored(savedInstanceState)
+    }
+
+    private fun onStateRestored(savedInstanceState: Bundle) {
+        currentDestination = savedInstanceState.getSerializable(
+            OUT_STATE_CURRENT_DESTINATION
+        ) as Destination
+
+        view.setToolbarTitle(currentDestination)
+
+        view.setBottomNavigationHighlightedItem()
     }
 
     override fun onBottomNavigationItemClicked(item: BottomNavigationItem) {
@@ -52,10 +70,16 @@ class MainActivity : BaseActivity(),
         }
     }
 
-    override val fragmentContainer get() = view.fragmentContainer
+    override fun getFragmentContainerId() = view.fragmentContainer.id
 
-    override fun onNavigateToTopDestination(destination: TopDestination) {
-        view.setToolbarTitleForTopDestination(destination)
+    override fun onNavigateTo(destination: Destination) {
+        currentDestination = destination
+        view.setToolbarTitle(destination)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putSerializable(OUT_STATE_CURRENT_DESTINATION, currentDestination)
     }
 
     override fun onStart() {

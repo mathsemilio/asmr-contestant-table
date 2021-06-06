@@ -13,6 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
  */
+
 package br.com.mathsemilio.asmrcontestanttable.ui.screens.contestantstable
 
 import android.os.Bundle
@@ -25,6 +26,7 @@ import br.com.mathsemilio.asmrcontestanttable.domain.usecase.contestants.DeleteC
 import br.com.mathsemilio.asmrcontestanttable.domain.usecase.contestants.FetchContestantsUseCase
 import br.com.mathsemilio.asmrcontestanttable.ui.common.BaseFragment
 import br.com.mathsemilio.asmrcontestanttable.ui.common.event.ContestantsModifiedEvent
+import br.com.mathsemilio.asmrcontestanttable.ui.common.event.PromptDialogEvent
 import br.com.mathsemilio.asmrcontestanttable.ui.common.manager.DialogManager
 import br.com.mathsemilio.asmrcontestanttable.ui.common.manager.MessagesManager
 import br.com.mathsemilio.asmrcontestanttable.ui.screens.contestantstable.view.ContestantsTableScreenView
@@ -42,8 +44,9 @@ class ContestantsTableFragment : BaseFragment(),
 
     private lateinit var eventSubscriber: EventSubscriber
     private lateinit var messagesManager: MessagesManager
-    private lateinit var coroutineScope: CoroutineScope
     private lateinit var dialogManager: DialogManager
+
+    private lateinit var coroutineScope: CoroutineScope
 
     private lateinit var fetchContestantsUseCase: FetchContestantsUseCase
     private lateinit var deleteContestantsUseCase: DeleteContestantsUseCase
@@ -52,9 +55,9 @@ class ContestantsTableFragment : BaseFragment(),
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
         eventSubscriber = compositionRoot.eventSubscriber
-        messagesManager = compositionRoot.messagesHelper
+        messagesManager = compositionRoot.messagesManager
+        dialogManager = compositionRoot.dialogManager
         coroutineScope = compositionRoot.coroutineScopeProvider.UIBoundScope
-        dialogManager = compositionRoot.dialogHelper
         fetchContestantsUseCase = compositionRoot.fetchContestantsUseCase
         deleteContestantsUseCase = compositionRoot.deleteContestantsUseCase
     }
@@ -95,7 +98,7 @@ class ContestantsTableFragment : BaseFragment(),
 
     override fun onAllContestantsDeletedSuccessfully() {
         fetchContestants()
-        messagesManager.showDeleteAllContestantsUseCaseSuccessMessage()
+        messagesManager.showAllContestantsDeletedSuccessfullyMessage()
     }
 
     override fun onDeleteAllContestantsFailed() {
@@ -105,8 +108,18 @@ class ContestantsTableFragment : BaseFragment(),
 
     override fun onEvent(event: Any) {
         when (event) {
-            is ContestantsModifiedEvent.OnContestantAdded -> fetchContestants()
-            is ContestantsModifiedEvent.OnContestantModified -> fetchContestants()
+            is ContestantsModifiedEvent.ContestantAdded -> fetchContestants()
+            is ContestantsModifiedEvent.ContestantModified -> fetchContestants()
+            is PromptDialogEvent -> handlePromptDialogEvent(event)
+        }
+    }
+
+    private fun handlePromptDialogEvent(event: PromptDialogEvent) {
+        when (event) {
+            PromptDialogEvent.PositiveButtonClicked -> coroutineScope.launch {
+                deleteContestantsUseCase.deleteAllContestants()
+            }
+            PromptDialogEvent.NegativeButtonClicked -> { /* no-op - Dialog canceled */ }
         }
     }
 
@@ -117,15 +130,11 @@ class ContestantsTableFragment : BaseFragment(),
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.toolbar_action_reset_contest -> {
-                dialogManager.showResetContestDialog { deleteAllContestants() }
+                dialogManager.showResetContestDialog()
                 true
             }
             else -> super.onOptionsItemSelected(item)
         }
-    }
-
-    private fun deleteAllContestants() {
-        coroutineScope.launch { deleteContestantsUseCase.deleteAllContestants() }
     }
 
     override fun onStart() {

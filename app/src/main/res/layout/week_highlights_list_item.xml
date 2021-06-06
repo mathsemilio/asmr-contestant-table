@@ -19,7 +19,7 @@
             app:layout_constraintBottom_toBottomOf="@id/divider_week_highlights_item"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/divider_week_highlights_item"
-            app:srcCompat="@drawable/ic_baseline_stars_24" />
+            app:srcCompat="@drawable/ic_stars" />
 
         <View
             android:id="@+id/divider_week_highlights_item"
@@ -38,7 +38,7 @@
             android:layout_marginStart="16dp"
             android:ellipsize="end"
             android:maxLines="1"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textAppearance="?textAppearanceHeadline5"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/divider_week_highlights_item"
             app:layout_constraintTop_toTopOf="@id/divider_week_highlights_item"
@@ -48,9 +48,10 @@
             android:id="@+id/text_view_week_highlights_item_contestants"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:maxLines="1"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            android:ellipsize="marquee"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:singleLine="true"
+            android:textAppearance="?textAppearanceBody2"
             app:layout_constraintBottom_toBottomOf="@+id/divider_week_highlights_item"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@id/text_view_week_highlights_item_week"

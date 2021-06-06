@@ -6,43 +6,43 @@
     android:padding="16dp">
 
     <ImageView
-        android:id="@+id/image_view_add_contestant_slider"
+        android:id="@+id/image_view_bottom_sheet_slider"
         android:layout_width="40dp"
         android:layout_height="4dp"
         android:layout_marginTop="8dp"
-        android:contentDescription="@string/content_description_slider"
+        android:contentDescription="@string/content_description_bottom_sheet_slider"
         android:src="@drawable/ic_bottom_sheet_slider"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/text_headline_add_contestant"
+        android:id="@+id/text_view_add_contestant"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:text="@string/add_contestant"
-        android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+        android:textAppearance="?textAppearanceHeadline5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/image_view_add_contestant_slider" />
+        app:layout_constraintTop_toTopOf="@id/image_view_bottom_sheet_slider" />
 
     <EditText
         android:id="@+id/edit_text_contestant_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="24dp"
         android:autofillHints="@string/name"
         android:hint="@string/name"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/text_headline_add_contestant" />
+        app:layout_constraintTop_toBottomOf="@id/text_view_add_contestant" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/button_add_contestant"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="24dp"
         android:text="@string/add"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/edit_text_contestant_name" />

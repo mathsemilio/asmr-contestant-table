@@ -13,6 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
  */
+
 package br.com.mathsemilio.asmrcontestanttable.ui.dialog.bottomsheet.contestantdetails
 
 import android.os.Bundle
@@ -20,13 +21,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import br.com.mathsemilio.asmrcontestanttable.common.ARG_CONTESTANT
-import br.com.mathsemilio.asmrcontestanttable.common.OUT_STATE_CONTESTANT
 import br.com.mathsemilio.asmrcontestanttable.common.eventbus.EventPublisher
 import br.com.mathsemilio.asmrcontestanttable.domain.model.ASMRContestant
 import br.com.mathsemilio.asmrcontestanttable.domain.usecase.contestants.UpdateContestantUseCase
 import br.com.mathsemilio.asmrcontestanttable.ui.common.event.ContestantsModifiedEvent
 import br.com.mathsemilio.asmrcontestanttable.ui.common.manager.MessagesManager
-import br.com.mathsemilio.asmrcontestanttable.ui.dialog.bottomsheet.BaseBottomSheetDialogFragment
+import br.com.mathsemilio.asmrcontestanttable.ui.dialog.BaseBottomSheetDialogFragment
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.cancelChildren
 import kotlinx.coroutines.launch
@@ -36,7 +36,7 @@ class ContestantDetailsBottomSheet : BaseBottomSheetDialogFragment(),
     UpdateContestantUseCase.Listener {
 
     companion object {
-        fun newInstance(contestant: ASMRContestant): ContestantDetailsBottomSheet {
+        fun withContestant(contestant: ASMRContestant): ContestantDetailsBottomSheet {
             val args = Bundle(1).apply { putSerializable(ARG_CONTESTANT, contestant) }
             val contestantDetailsBottomSheet = ContestantDetailsBottomSheet()
             contestantDetailsBottomSheet.arguments = args
@@ -56,7 +56,7 @@ class ContestantDetailsBottomSheet : BaseBottomSheetDialogFragment(),
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        messagesManager = compositionRoot.messagesHelper
+        messagesManager = compositionRoot.messagesManager
         eventPublisher = compositionRoot.eventPublisher
         coroutineScope = compositionRoot.coroutineScopeProvider.UIBoundScope
         updateContestantUseCase = compositionRoot.updateContestantUseCase
@@ -73,10 +73,7 @@ class ContestantDetailsBottomSheet : BaseBottomSheetDialogFragment(),
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        currentContestant = if (savedInstanceState != null)
-            savedInstanceState.getSerializable(OUT_STATE_CONTESTANT) as ASMRContestant
-        else
-            getContestantFromBundle()
+        currentContestant = getContestantFromBundle()
     }
 
     private fun getContestantFromBundle(): ASMRContestant {
@@ -103,22 +100,17 @@ class ContestantDetailsBottomSheet : BaseBottomSheetDialogFragment(),
 
     override fun onContestantUpdatedSuccessfully() {
         dismiss()
-        eventPublisher.publish(ContestantsModifiedEvent.OnContestantModified)
+        eventPublisher.publish(ContestantsModifiedEvent.ContestantModified)
     }
 
-    override fun onUpdateContestantFailed(errorMessage: String) {
-        messagesManager.showUseCaseErrorMessage(errorMessage)
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putSerializable(OUT_STATE_CONTESTANT, currentContestant)
+    override fun onUpdateContestantFailed() {
+        messagesManager.showUnexpectedErrorOccurredMessage()
     }
 
     override fun onStart() {
         view.addListener(this)
         updateContestantUseCase.addListener(this)
-        view.bindContestantsDetails(currentContestant)
+        view.bindContestant(currentContestant)
         super.onStart()
     }
 

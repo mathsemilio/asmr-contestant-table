@@ -13,6 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
  */
+
 package br.com.mathsemilio.asmrcontestanttable.ui.dialog.bottomsheet.addcontestant
 
 import android.os.Bundle
@@ -23,7 +24,7 @@ import br.com.mathsemilio.asmrcontestanttable.common.eventbus.EventPublisher
 import br.com.mathsemilio.asmrcontestanttable.domain.usecase.contestants.AddContestantUseCase
 import br.com.mathsemilio.asmrcontestanttable.ui.common.event.ContestantsModifiedEvent
 import br.com.mathsemilio.asmrcontestanttable.ui.common.manager.MessagesManager
-import br.com.mathsemilio.asmrcontestanttable.ui.dialog.bottomsheet.BaseBottomSheetDialogFragment
+import br.com.mathsemilio.asmrcontestanttable.ui.dialog.BaseBottomSheetDialogFragment
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.cancelChildren
 import kotlinx.coroutines.launch
@@ -42,7 +43,7 @@ class AddContestantBottomSheet : BaseBottomSheetDialogFragment(),
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        messagesManager = compositionRoot.messagesHelper
+        messagesManager = compositionRoot.messagesManager
         coroutineScope = compositionRoot.coroutineScopeProvider.UIBoundScope
         eventPublisher = compositionRoot.eventPublisher
         addContestantUseCase = compositionRoot.addContestantUseCase
@@ -66,7 +67,7 @@ class AddContestantBottomSheet : BaseBottomSheetDialogFragment(),
 
     override fun onContestantAddedSuccessfully() {
         dismiss()
-        eventPublisher.publish(ContestantsModifiedEvent.OnContestantAdded)
+        eventPublisher.publish(ContestantsModifiedEvent.ContestantAdded)
     }
 
     override fun onAddContestantFailed() {

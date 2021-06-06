@@ -13,6 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
  */
+
 package br.com.mathsemilio.asmrcontestanttable.ui.screens.weekhighlightslist
 
 import android.os.Bundle
@@ -41,17 +42,18 @@ class WeekHighlightsFragment : BaseFragment(),
 
     private lateinit var messagesManager: MessagesManager
     private lateinit var eventSubscriber: EventSubscriber
-    private lateinit var coroutineScope: CoroutineScope
     private lateinit var dialogManager: DialogManager
+
+    private lateinit var coroutineScope: CoroutineScope
 
     private lateinit var fetchWeekHighlightsUseCase: FetchWeekHighlightsUseCase
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        messagesManager = compositionRoot.messagesHelper
+        messagesManager = compositionRoot.messagesManager
         eventSubscriber = compositionRoot.eventSubscriber
+        dialogManager = compositionRoot.dialogManager
         coroutineScope = compositionRoot.coroutineScopeProvider.UIBoundScope
-        dialogManager = compositionRoot.dialogHelper
         fetchWeekHighlightsUseCase = compositionRoot.fetchWeekHighlightsUseCase
     }
 
@@ -87,7 +89,7 @@ class WeekHighlightsFragment : BaseFragment(),
 
     override fun onEvent(event: Any) {
         when (event) {
-            is WeekHighlightsModifiedEvent.OnWeekHighlightAdded -> fetchWeekHighlights()
+            is WeekHighlightsModifiedEvent.WeekHighlightAdded -> fetchWeekHighlights()
         }
     }
 

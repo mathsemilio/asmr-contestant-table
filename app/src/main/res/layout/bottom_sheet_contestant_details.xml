@@ -11,7 +11,7 @@
         android:layout_width="40dp"
         android:layout_height="4dp"
         android:layout_marginTop="8dp"
-        android:contentDescription="@string/content_description_slider"
+        android:contentDescription="@string/content_description_bottom_sheet_slider"
         android:src="@drawable/ic_bottom_sheet_slider"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -25,7 +25,7 @@
         android:layout_marginEnd="16dp"
         android:ellipsize="end"
         android:maxLines="1"
-        android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+        android:textAppearance="?textAppearanceHeadline5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/image_view_contestant_details_slider"
         tools:text="Contestant's Name" />
@@ -60,7 +60,7 @@
         android:gravity="center_horizontal"
         android:text="@string/times_slept"
         android:textAlignment="center"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+        android:textAppearance="?textAppearanceBody2"
         app:layout_constraintEnd_toStartOf="@+id/divider_contestants_details_1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/divider_contestants_details_1" />
@@ -87,7 +87,7 @@
         android:gravity="center_horizontal"
         android:text="@string/did_not_slept"
         android:textAlignment="center"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+        android:textAppearance="?textAppearanceBody2"
         app:layout_constraintEnd_toStartOf="@+id/divider_contestant_details_2"
         app:layout_constraintStart_toEndOf="@+id/divider_contestants_details_1"
         app:layout_constraintTop_toTopOf="@id/divider_contestants_details_1" />
@@ -116,7 +116,7 @@
         android:gravity="center_horizontal"
         android:text="@string/felt_tired"
         android:textAlignment="center"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+        android:textAppearance="?textAppearanceBody2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/divider_contestant_details_2"
         app:layout_constraintTop_toTopOf="@id/divider_contestant_details_2" />
@@ -144,7 +144,7 @@
         app:layout_constraintEnd_toEndOf="@+id/text_view_number_times_slept"
         app:layout_constraintStart_toStartOf="@+id/text_view_number_times_slept"
         app:layout_constraintTop_toBottomOf="@+id/text_view_times_slept"
-        app:srcCompat="@drawable/ic_baseline_keyboard_arrow_up_24" />
+        app:srcCompat="@drawable/ic_keyboard_arrow_up" />
 
     <ImageButton
         android:id="@+id/image_button_increment_times_did_not_slept"
@@ -156,7 +156,7 @@
         app:layout_constraintEnd_toEndOf="@+id/text_view_number_times_did_not_slept"
         app:layout_constraintStart_toStartOf="@+id/text_view_number_times_did_not_slept"
         app:layout_constraintTop_toBottomOf="@id/text_view_times_did_not_slept"
-        app:srcCompat="@drawable/ic_baseline_keyboard_arrow_up_24" />
+        app:srcCompat="@drawable/ic_keyboard_arrow_up" />
 
     <ImageButton
         android:id="@+id/image_button_increment_times_felt_tired"
@@ -168,6 +168,6 @@
         app:layout_constraintEnd_toEndOf="@+id/text_view_number_times_felt_tired"
         app:layout_constraintStart_toStartOf="@+id/text_view_number_times_felt_tired"
         app:layout_constraintTop_toBottomOf="@+id/text_view_times_felt_tired"
-        app:srcCompat="@drawable/ic_baseline_keyboard_arrow_up_24" />
+        app:srcCompat="@drawable/ic_keyboard_arrow_up" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
