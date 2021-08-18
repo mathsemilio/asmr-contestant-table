@@ -14,15 +14,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
  */
 
-package br.com.mathsemilio.asmrcontestanttable.domain.usecase.contestants
+package br.com.mathsemilio.asmrcontestanttable.domain.usecase.contestants.fetch
 
 import br.com.mathsemilio.asmrcontestanttable.common.observable.BaseObservable
 import br.com.mathsemilio.asmrcontestanttable.domain.model.ASMRContestant
 import br.com.mathsemilio.asmrcontestanttable.domain.model.Result
 import br.com.mathsemilio.asmrcontestanttable.storage.endpoint.ContestantsEndpoint
 
-class FetchContestantsUseCase(private val endpoint: ContestantsEndpoint) :
-    BaseObservable<FetchContestantsUseCase.Listener>() {
+class FetchContestantsUseCaseImpl(private val endpoint: ContestantsEndpoint) :
+    BaseObservable<FetchContestantsUseCaseImpl.Listener>(),
+    FetchContestantsUseCase {
 
     interface Listener {
         fun onContestantsFetchedSuccessfully(contestants: List<ASMRContestant>)
@@ -30,7 +31,7 @@ class FetchContestantsUseCase(private val endpoint: ContestantsEndpoint) :
         fun onContestantsFetchFailed()
     }
 
-    suspend fun fetchContestants() {
+    override suspend fun fetchContestants() {
         endpoint.fetchContestants().also { result ->
             when (result) {
                 is Result.Completed -> notifyListener {

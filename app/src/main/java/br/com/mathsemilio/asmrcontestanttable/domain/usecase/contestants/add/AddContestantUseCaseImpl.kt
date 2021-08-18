@@ -14,26 +14,29 @@ See the License for the specific language governing permissions and
 limitations under the License.
  */
 
-package br.com.mathsemilio.asmrcontestanttable.domain.usecase.contestants
+package br.com.mathsemilio.asmrcontestanttable.domain.usecase.contestants.add
 
 import br.com.mathsemilio.asmrcontestanttable.common.observable.BaseObservable
+import br.com.mathsemilio.asmrcontestanttable.domain.model.ASMRContestant
 import br.com.mathsemilio.asmrcontestanttable.domain.model.Result
 import br.com.mathsemilio.asmrcontestanttable.storage.endpoint.ContestantsEndpoint
 
-class DeleteContestantsUseCase(private val endpoint: ContestantsEndpoint) :
-    BaseObservable<DeleteContestantsUseCase.Listener>() {
+class AddContestantUseCaseImpl(
+    private val endpoint: ContestantsEndpoint,
+) : BaseObservable<AddContestantUseCaseImpl.Listener>(),
+    AddContestantUseCase {
 
     interface Listener {
-        fun onAllContestantsDeletedSuccessfully()
+        fun onContestantAddedSuccessfully()
 
-        fun onDeleteAllContestantsFailed()
+        fun onAddContestantFailed()
     }
 
-    suspend fun deleteAllContestants() {
-        endpoint.deleteAllContestants().also { result ->
+    override suspend fun addContestant(contestantName: String) {
+        endpoint.insertContestant(ASMRContestant(0, contestantName)).also { result ->
             when (result) {
-                is Result.Completed -> notifyListener { it.onAllContestantsDeletedSuccessfully() }
-                is Result.Failed -> notifyListener { it.onDeleteAllContestantsFailed() }
+                is Result.Completed -> notifyListener { it.onContestantAddedSuccessfully() }
+                is Result.Failed -> notifyListener { it.onAddContestantFailed() }
             }
         }
     }

@@ -21,7 +21,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import br.com.mathsemilio.asmrcontestanttable.common.eventbus.EventPublisher
-import br.com.mathsemilio.asmrcontestanttable.domain.usecase.contestants.AddContestantUseCase
+import br.com.mathsemilio.asmrcontestanttable.domain.usecase.contestants.add.AddContestantUseCaseImpl
 import br.com.mathsemilio.asmrcontestanttable.ui.common.event.ContestantsModifiedEvent
 import br.com.mathsemilio.asmrcontestanttable.ui.common.manager.MessagesManager
 import br.com.mathsemilio.asmrcontestanttable.ui.dialog.BaseBottomSheetDialogFragment
@@ -31,7 +31,7 @@ import kotlinx.coroutines.launch
 
 class AddContestantBottomSheet : BaseBottomSheetDialogFragment(),
     AddContestantView.Listener,
-    AddContestantUseCase.Listener {
+    AddContestantUseCaseImpl.Listener {
 
     private lateinit var view: AddContestantView
 
@@ -39,7 +39,7 @@ class AddContestantBottomSheet : BaseBottomSheetDialogFragment(),
     private lateinit var coroutineScope: CoroutineScope
     private lateinit var eventPublisher: EventPublisher
 
-    private lateinit var addContestantUseCase: AddContestantUseCase
+    private lateinit var addContestantUseCase: AddContestantUseCaseImpl
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,7 +61,7 @@ class AddContestantBottomSheet : BaseBottomSheetDialogFragment(),
     override fun onAddButtonClicked(contestantName: String) {
         coroutineScope.launch {
             view.changeAddButtonState()
-            addContestantUseCase.insertContestant(contestantName)
+            addContestantUseCase.addContestant(contestantName)
         }
     }
 

@@ -16,14 +16,16 @@ limitations under the License.
 
 package br.com.mathsemilio.asmrcontestanttable.common.di
 
-import br.com.mathsemilio.asmrcontestanttable.domain.usecase.contestants.AddContestantUseCase
-import br.com.mathsemilio.asmrcontestanttable.domain.usecase.contestants.DeleteContestantsUseCase
-import br.com.mathsemilio.asmrcontestanttable.domain.usecase.contestants.FetchContestantsUseCase
 import br.com.mathsemilio.asmrcontestanttable.domain.usecase.contestants.UpdateContestantUseCase
+import br.com.mathsemilio.asmrcontestanttable.domain.usecase.contestants.add.AddContestantUseCaseImpl
+import br.com.mathsemilio.asmrcontestanttable.domain.usecase.contestants.delete.DeleteContestantsUseCaseImpl
+import br.com.mathsemilio.asmrcontestanttable.domain.usecase.contestants.fetch.FetchContestantsUseCaseImpl
 import br.com.mathsemilio.asmrcontestanttable.domain.usecase.weekhighlights.AddWeekHighlightsUseCase
 import br.com.mathsemilio.asmrcontestanttable.domain.usecase.weekhighlights.FetchWeekHighlightsUseCase
 import br.com.mathsemilio.asmrcontestanttable.ui.common.manager.DialogManager
 import br.com.mathsemilio.asmrcontestanttable.ui.common.manager.MessagesManager
+import br.com.mathsemilio.asmrcontestanttable.ui.screens.contestantstable.controller.ContestantsTableController
+import br.com.mathsemilio.asmrcontestanttable.ui.screens.weekhighlightslist.controller.WeekHighlightsController
 
 class ControllerCompositionRoot(private val activityCompositionRoot: ActivityCompositionRoot) {
 
@@ -48,7 +50,7 @@ class ControllerCompositionRoot(private val activityCompositionRoot: ActivityCom
     }
 
     val addContestantUseCase by lazy {
-        AddContestantUseCase(activityCompositionRoot.contestantsEndpoint)
+        AddContestantUseCaseImpl(activityCompositionRoot.contestantsEndpoint)
     }
 
     val addWeekHighlightsUseCase by lazy {
@@ -60,7 +62,7 @@ class ControllerCompositionRoot(private val activityCompositionRoot: ActivityCom
     }
 
     val fetchContestantsUseCase by lazy {
-        FetchContestantsUseCase(activityCompositionRoot.contestantsEndpoint)
+        FetchContestantsUseCaseImpl(activityCompositionRoot.contestantsEndpoint)
     }
 
     val fetchWeekHighlightsUseCase by lazy {
@@ -68,6 +70,24 @@ class ControllerCompositionRoot(private val activityCompositionRoot: ActivityCom
     }
 
     val deleteContestantsUseCase by lazy {
-        DeleteContestantsUseCase(activityCompositionRoot.contestantsEndpoint)
+        DeleteContestantsUseCaseImpl(activityCompositionRoot.contestantsEndpoint)
     }
+
+    val contestantsTableController
+        get() = ContestantsTableController(
+            eventSubscriber,
+            messagesManager,
+            dialogManager,
+            fetchContestantsUseCase,
+            deleteContestantsUseCase
+        )
+
+    val weekHighlightsController
+        get() = WeekHighlightsController(
+            messagesManager,
+            eventSubscriber,
+            dialogManager,
+            coroutineScopeProvider.UIBoundScope,
+            fetchWeekHighlightsUseCase
+        )
 }
