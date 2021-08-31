@@ -13,7 +13,8 @@
         android:theme="@style/Theme.ASMRContestantTable">
         <activity
             android:name=".ui.MainActivity"
-            android:configChanges="keyboardHidden">
+            android:configChanges="keyboardHidden"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

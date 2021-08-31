@@ -19,10 +19,10 @@ package br.com.mathsemilio.asmrcontestanttable.ui.common.view
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import br.com.mathsemilio.asmrcontestanttable.ui.MainActivityViewImpl
-import br.com.mathsemilio.asmrcontestanttable.ui.dialog.bottomsheet.addcontestant.AddContestantViewImpl
-import br.com.mathsemilio.asmrcontestanttable.ui.dialog.bottomsheet.addweekhighlights.AddWeekHighlightsViewImpl
-import br.com.mathsemilio.asmrcontestanttable.ui.dialog.bottomsheet.contestantdetails.ContestantDetailsViewImpl
-import br.com.mathsemilio.asmrcontestanttable.ui.dialog.promptdialog.PromptDialogViewImpl
+import br.com.mathsemilio.asmrcontestanttable.ui.dialog.bottomsheet.addcontestant.view.AddContestantViewImpl
+import br.com.mathsemilio.asmrcontestanttable.ui.dialog.bottomsheet.addweekhighlights.view.AddWeekHighlightsViewImpl
+import br.com.mathsemilio.asmrcontestanttable.ui.dialog.bottomsheet.contestantdetails.view.ContestantDetailsViewImpl
+import br.com.mathsemilio.asmrcontestanttable.ui.dialog.promptdialog.view.PromptDialogViewImpl
 import br.com.mathsemilio.asmrcontestanttable.ui.screens.contestantstable.view.ContestantsTableScreenViewImpl
 import br.com.mathsemilio.asmrcontestanttable.ui.screens.contestantstable.view.listitem.ContestantsListItemViewImpl
 import br.com.mathsemilio.asmrcontestanttable.ui.screens.weekhighlightslist.view.WeekHighlightsViewImpl

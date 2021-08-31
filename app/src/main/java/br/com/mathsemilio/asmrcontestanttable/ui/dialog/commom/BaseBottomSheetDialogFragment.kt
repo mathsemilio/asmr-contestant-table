@@ -14,11 +14,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
  */
 
-package br.com.mathsemilio.asmrcontestanttable.common.eventbus
+package br.com.mathsemilio.asmrcontestanttable.ui.dialog.commom
 
-open class EventSubscriber(private val eventBus: EventBus?) {
+import br.com.mathsemilio.asmrcontestanttable.common.di.ControllerCompositionRoot
+import br.com.mathsemilio.asmrcontestanttable.ui.MainActivity
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
-    open fun subscribe(listener: EventListener) = eventBus?.addListener(listener)
+abstract class BaseBottomSheetDialogFragment : BottomSheetDialogFragment() {
 
-    open fun unsubscribe(listener: EventListener) = eventBus?.removeListener(listener)
+    private val _compositionRoot by lazy {
+        ControllerCompositionRoot((requireActivity() as MainActivity).compositionRoot)
+    }
+    val compositionRoot get() = _compositionRoot
 }

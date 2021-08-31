@@ -14,15 +14,23 @@ See the License for the specific language governing permissions and
 limitations under the License.
  */
 
-package br.com.mathsemilio.asmrcontestanttable.common.eventbus
+package br.com.mathsemilio.asmrcontestanttable.ui.dialog.promptdialog.view
 
-import br.com.mathsemilio.asmrcontestanttable.common.observable.BaseObservable
+import br.com.mathsemilio.asmrcontestanttable.ui.common.view.BaseObservableView
 
-class EventBus : BaseObservable<EventListener>() {
+abstract class PromptDialogView : BaseObservableView<PromptDialogView.Listener>() {
 
-    fun postEvent(event: Any) {
-        notifyListener { listener ->
-            listener.onEvent(event)
-        }
+    interface Listener {
+        fun onPositiveButtonClicked()
+
+        fun onNegativeButtonClicked()
     }
+
+    abstract fun setTitle(title: String)
+
+    abstract fun setMessage(message: String)
+
+    abstract fun setPositiveButtonText(positiveButtonText: String)
+
+    abstract fun setNegativeButtonText(negativeButtonText: String?)
 }

@@ -14,31 +14,31 @@ See the License for the specific language governing permissions and
 limitations under the License.
  */
 
-package br.com.mathsemilio.asmrcontestanttable.domain.usecase.weekhighlights
+package br.com.mathsemilio.asmrcontestanttable.domain.usecase.contestants
 
 import br.com.mathsemilio.asmrcontestanttable.common.observable.BaseObservable
+import br.com.mathsemilio.asmrcontestanttable.domain.model.ASMRContestant
 import br.com.mathsemilio.asmrcontestanttable.domain.model.Result
-import br.com.mathsemilio.asmrcontestanttable.domain.model.WeekHighlights
-import br.com.mathsemilio.asmrcontestanttable.storage.endpoint.WeekHighlightsEndpoint
+import br.com.mathsemilio.asmrcontestanttable.storage.endpoint.ContestantsEndpoint
 
-open class FetchWeekHighlightsUseCase(
-    private val endpoint: WeekHighlightsEndpoint?
-) : BaseObservable<FetchWeekHighlightsUseCase.Listener>() {
+open class AddContestantUseCase(
+    private val endpoint: ContestantsEndpoint?
+) : BaseObservable<AddContestantUseCase.Listener>() {
 
     interface Listener {
-        fun onWeekHighlightsFetchedSuccessfully(weekHighlights: List<WeekHighlights>)
+        fun onContestantAddedSuccessfully()
 
-        fun onWeekHighlightsFetchFailed()
+        fun onAddContestantFailed()
     }
 
-    open suspend fun fetchWeekHighlights() {
-        endpoint?.fetchWeekHighlights().also { result ->
+    open suspend fun addContestant(contestantName: String) {
+        endpoint?.insertContestant(ASMRContestant(0, contestantName)).also { result ->
             when (result) {
                 is Result.Completed -> notifyListener { listener ->
-                    listener.onWeekHighlightsFetchedSuccessfully(result.data!!)
+                    listener.onContestantAddedSuccessfully()
                 }
                 is Result.Failed -> notifyListener { listener ->
-                    listener.onWeekHighlightsFetchFailed()
+                    listener.onAddContestantFailed()
                 }
             }
         }

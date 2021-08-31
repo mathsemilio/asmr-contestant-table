@@ -16,14 +16,18 @@ limitations under the License.
 
 package br.com.mathsemilio.asmrcontestanttable.common.di
 
+import br.com.mathsemilio.asmrcontestanttable.domain.usecase.contestants.AddContestantUseCase
+import br.com.mathsemilio.asmrcontestanttable.domain.usecase.contestants.DeleteContestantsUseCase
+import br.com.mathsemilio.asmrcontestanttable.domain.usecase.contestants.FetchContestantsUseCase
 import br.com.mathsemilio.asmrcontestanttable.domain.usecase.contestants.UpdateContestantUseCase
-import br.com.mathsemilio.asmrcontestanttable.domain.usecase.contestants.add.AddContestantUseCaseImpl
-import br.com.mathsemilio.asmrcontestanttable.domain.usecase.contestants.delete.DeleteContestantsUseCaseImpl
-import br.com.mathsemilio.asmrcontestanttable.domain.usecase.contestants.fetch.FetchContestantsUseCaseImpl
 import br.com.mathsemilio.asmrcontestanttable.domain.usecase.weekhighlights.AddWeekHighlightsUseCase
 import br.com.mathsemilio.asmrcontestanttable.domain.usecase.weekhighlights.FetchWeekHighlightsUseCase
-import br.com.mathsemilio.asmrcontestanttable.ui.common.manager.DialogManager
-import br.com.mathsemilio.asmrcontestanttable.ui.common.manager.MessagesManager
+import br.com.mathsemilio.asmrcontestanttable.ui.common.manager.dialogmanager.DialogManagerImpl
+import br.com.mathsemilio.asmrcontestanttable.ui.common.manager.messagesmanager.MessagesManagerImpl
+import br.com.mathsemilio.asmrcontestanttable.ui.dialog.bottomsheet.addcontestant.controller.AddContestantBottomSheetController
+import br.com.mathsemilio.asmrcontestanttable.ui.dialog.bottomsheet.addweekhighlights.controller.AddWeekHighlightsBottomSheetController
+import br.com.mathsemilio.asmrcontestanttable.ui.dialog.bottomsheet.contestantdetails.controller.ContestantsDetailsBottomSheetController
+import br.com.mathsemilio.asmrcontestanttable.ui.dialog.promptdialog.controller.PromptDialogController
 import br.com.mathsemilio.asmrcontestanttable.ui.screens.contestantstable.controller.ContestantsTableController
 import br.com.mathsemilio.asmrcontestanttable.ui.screens.weekhighlightslist.controller.WeekHighlightsController
 
@@ -42,15 +46,15 @@ class ControllerCompositionRoot(private val activityCompositionRoot: ActivityCom
     val viewFactory get() = activityCompositionRoot.viewFactory
 
     val dialogManager by lazy {
-        DialogManager(supportFragmentManager, applicationContext)
+        DialogManagerImpl(supportFragmentManager, applicationContext)
     }
 
     val messagesManager by lazy {
-        MessagesManager(applicationContext)
+        MessagesManagerImpl(applicationContext)
     }
 
     val addContestantUseCase by lazy {
-        AddContestantUseCaseImpl(activityCompositionRoot.contestantsEndpoint)
+        AddContestantUseCase(activityCompositionRoot.contestantsEndpoint)
     }
 
     val addWeekHighlightsUseCase by lazy {
@@ -62,7 +66,7 @@ class ControllerCompositionRoot(private val activityCompositionRoot: ActivityCom
     }
 
     val fetchContestantsUseCase by lazy {
-        FetchContestantsUseCaseImpl(activityCompositionRoot.contestantsEndpoint)
+        FetchContestantsUseCase(activityCompositionRoot.contestantsEndpoint)
     }
 
     val fetchWeekHighlightsUseCase by lazy {
@@ -70,7 +74,7 @@ class ControllerCompositionRoot(private val activityCompositionRoot: ActivityCom
     }
 
     val deleteContestantsUseCase by lazy {
-        DeleteContestantsUseCaseImpl(activityCompositionRoot.contestantsEndpoint)
+        DeleteContestantsUseCase(activityCompositionRoot.contestantsEndpoint)
     }
 
     val contestantsTableController
@@ -78,6 +82,7 @@ class ControllerCompositionRoot(private val activityCompositionRoot: ActivityCom
             eventSubscriber,
             messagesManager,
             dialogManager,
+            coroutineScopeProvider.UIBoundScope,
             fetchContestantsUseCase,
             deleteContestantsUseCase
         )
@@ -90,4 +95,31 @@ class ControllerCompositionRoot(private val activityCompositionRoot: ActivityCom
             coroutineScopeProvider.UIBoundScope,
             fetchWeekHighlightsUseCase
         )
+
+    val addContestantBottomSheetController
+        get() = AddContestantBottomSheetController(
+            messagesManager,
+            coroutineScopeProvider.UIBoundScope,
+            eventPublisher,
+            addContestantUseCase
+        )
+
+    val addWeekHighlightsBottomSheetController
+        get() = AddWeekHighlightsBottomSheetController(
+            messagesManager,
+            eventPublisher,
+            coroutineScopeProvider.UIBoundScope,
+            addWeekHighlightsUseCase
+        )
+
+    val contestantDetailsBottomSheetController
+        get() = ContestantsDetailsBottomSheetController(
+            messagesManager,
+            eventPublisher,
+            coroutineScopeProvider.UIBoundScope,
+            updateContestantUseCase
+        )
+
+    val promptDialogController
+        get() = PromptDialogController(eventPublisher)
 }

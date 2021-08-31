@@ -23,12 +23,12 @@ import br.com.mathsemilio.asmrcontestanttable.R
 import br.com.mathsemilio.asmrcontestanttable.common.eventbus.EventListener
 import br.com.mathsemilio.asmrcontestanttable.common.eventbus.EventSubscriber
 import br.com.mathsemilio.asmrcontestanttable.domain.model.ASMRContestant
-import br.com.mathsemilio.asmrcontestanttable.domain.usecase.contestants.delete.DeleteContestantsUseCaseImpl
-import br.com.mathsemilio.asmrcontestanttable.domain.usecase.contestants.fetch.FetchContestantsUseCaseImpl
+import br.com.mathsemilio.asmrcontestanttable.domain.usecase.contestants.DeleteContestantsUseCase
+import br.com.mathsemilio.asmrcontestanttable.domain.usecase.contestants.FetchContestantsUseCase
 import br.com.mathsemilio.asmrcontestanttable.ui.common.event.ContestantsModifiedEvent
 import br.com.mathsemilio.asmrcontestanttable.ui.common.event.PromptDialogEvent
-import br.com.mathsemilio.asmrcontestanttable.ui.common.manager.DialogManager
-import br.com.mathsemilio.asmrcontestanttable.ui.common.manager.MessagesManager
+import br.com.mathsemilio.asmrcontestanttable.ui.common.manager.dialogmanager.DialogManager
+import br.com.mathsemilio.asmrcontestanttable.ui.common.manager.messagesmanager.MessagesManager
 import br.com.mathsemilio.asmrcontestanttable.ui.screens.contestantstable.view.ContestantsTableScreenView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.cancelChildren
@@ -38,16 +38,15 @@ class ContestantsTableController(
     private val eventSubscriber: EventSubscriber,
     private val messagesManager: MessagesManager,
     private val dialogManager: DialogManager,
-    private val fetchContestantsUseCase: FetchContestantsUseCaseImpl,
-    private val deleteContestantsUseCase: DeleteContestantsUseCaseImpl,
+    private val coroutineScope: CoroutineScope,
+    private val fetchContestantsUseCase: FetchContestantsUseCase,
+    private val deleteContestantsUseCase: DeleteContestantsUseCase,
 ) : ContestantsTableScreenView.Listener,
-    FetchContestantsUseCaseImpl.Listener,
-    DeleteContestantsUseCaseImpl.Listener,
+    FetchContestantsUseCase.Listener,
+    DeleteContestantsUseCase.Listener,
     EventListener {
 
     private lateinit var view: ContestantsTableScreenView
-
-    private lateinit var coroutineScope: CoroutineScope
 
     fun bindView(view: ContestantsTableScreenView) {
         this.view = view

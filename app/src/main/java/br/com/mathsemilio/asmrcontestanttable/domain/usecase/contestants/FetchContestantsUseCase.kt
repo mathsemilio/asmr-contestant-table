@@ -14,31 +14,31 @@ See the License for the specific language governing permissions and
 limitations under the License.
  */
 
-package br.com.mathsemilio.asmrcontestanttable.domain.usecase.weekhighlights
+package br.com.mathsemilio.asmrcontestanttable.domain.usecase.contestants
 
 import br.com.mathsemilio.asmrcontestanttable.common.observable.BaseObservable
+import br.com.mathsemilio.asmrcontestanttable.domain.model.ASMRContestant
 import br.com.mathsemilio.asmrcontestanttable.domain.model.Result
-import br.com.mathsemilio.asmrcontestanttable.domain.model.WeekHighlights
-import br.com.mathsemilio.asmrcontestanttable.storage.endpoint.WeekHighlightsEndpoint
+import br.com.mathsemilio.asmrcontestanttable.storage.endpoint.ContestantsEndpoint
 
-open class FetchWeekHighlightsUseCase(
-    private val endpoint: WeekHighlightsEndpoint?
-) : BaseObservable<FetchWeekHighlightsUseCase.Listener>() {
+open class FetchContestantsUseCase(
+    private val endpoint: ContestantsEndpoint?
+) : BaseObservable<FetchContestantsUseCase.Listener>() {
 
     interface Listener {
-        fun onWeekHighlightsFetchedSuccessfully(weekHighlights: List<WeekHighlights>)
+        fun onContestantsFetchedSuccessfully(contestants: List<ASMRContestant>)
 
-        fun onWeekHighlightsFetchFailed()
+        fun onContestantsFetchFailed()
     }
 
-    open suspend fun fetchWeekHighlights() {
-        endpoint?.fetchWeekHighlights().also { result ->
+    open suspend fun fetchContestants() {
+        endpoint?.fetchContestants().also { result ->
             when (result) {
                 is Result.Completed -> notifyListener { listener ->
-                    listener.onWeekHighlightsFetchedSuccessfully(result.data!!)
+                    listener.onContestantsFetchedSuccessfully(contestants = result.data!!)
                 }
                 is Result.Failed -> notifyListener { listener ->
-                    listener.onWeekHighlightsFetchFailed()
+                    listener.onContestantsFetchFailed()
                 }
             }
         }

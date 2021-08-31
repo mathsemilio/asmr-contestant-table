@@ -21,8 +21,8 @@ import br.com.mathsemilio.asmrcontestanttable.common.eventbus.EventSubscriber
 import br.com.mathsemilio.asmrcontestanttable.domain.model.WeekHighlights
 import br.com.mathsemilio.asmrcontestanttable.domain.usecase.weekhighlights.FetchWeekHighlightsUseCase
 import br.com.mathsemilio.asmrcontestanttable.ui.common.event.WeekHighlightsModifiedEvent
-import br.com.mathsemilio.asmrcontestanttable.ui.common.manager.DialogManager
-import br.com.mathsemilio.asmrcontestanttable.ui.common.manager.MessagesManager
+import br.com.mathsemilio.asmrcontestanttable.ui.common.manager.dialogmanager.DialogManager
+import br.com.mathsemilio.asmrcontestanttable.ui.common.manager.messagesmanager.MessagesManager
 import br.com.mathsemilio.asmrcontestanttable.ui.screens.weekhighlightslist.view.WeekHighlightsView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.cancelChildren

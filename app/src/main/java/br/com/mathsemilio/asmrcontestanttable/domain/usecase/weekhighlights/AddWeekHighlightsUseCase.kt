@@ -21,8 +21,9 @@ import br.com.mathsemilio.asmrcontestanttable.domain.model.Result
 import br.com.mathsemilio.asmrcontestanttable.domain.model.WeekHighlights
 import br.com.mathsemilio.asmrcontestanttable.storage.endpoint.WeekHighlightsEndpoint
 
-class AddWeekHighlightsUseCase(private val endpoint: WeekHighlightsEndpoint) :
-    BaseObservable<AddWeekHighlightsUseCase.Listener>() {
+open class AddWeekHighlightsUseCase(
+    private val endpoint: WeekHighlightsEndpoint?
+) : BaseObservable<AddWeekHighlightsUseCase.Listener>() {
 
     interface Listener {
         fun onWeekHighlightsAddedSuccessfully()
@@ -30,21 +31,28 @@ class AddWeekHighlightsUseCase(private val endpoint: WeekHighlightsEndpoint) :
         fun onAddWeekHighlightsFailed()
     }
 
-    suspend fun insertWeekHighlights(firstContestantName: String, secondContestantName: String) {
-        endpoint.insertWeekHighlights(
+    open suspend fun insertWeekHighlights(
+        firstContestantName: String,
+        secondContestantName: String
+    ) {
+        endpoint?.insertWeekHighlights(
             WeekHighlights(0, getWeekNumber(), firstContestantName, secondContestantName)
         ).also { result ->
             when (result) {
-                is Result.Completed -> notifyListener { it.onWeekHighlightsAddedSuccessfully() }
-                is Result.Failed -> notifyListener { it.onAddWeekHighlightsFailed() }
+                is Result.Completed -> notifyListener { listener ->
+                    listener.onWeekHighlightsAddedSuccessfully()
+                }
+                is Result.Failed -> notifyListener { listener ->
+                    listener.onAddWeekHighlightsFailed()
+                }
             }
         }
     }
 
     private suspend fun getWeekNumber(): Int {
-        var weekNumber: Int
+        var weekNumber = 0
 
-        endpoint.getWeekNumber().also { result ->
+        endpoint?.getWeekNumber().also { result ->
             when (result) {
                 is Result.Completed -> weekNumber = result.data!!
                 is Result.Failed -> throw RuntimeException(result.errorMessage!!)

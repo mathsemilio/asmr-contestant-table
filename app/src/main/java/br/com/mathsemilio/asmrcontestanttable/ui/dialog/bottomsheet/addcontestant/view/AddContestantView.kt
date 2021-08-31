@@ -14,11 +14,17 @@ See the License for the specific language governing permissions and
 limitations under the License.
  */
 
-package br.com.mathsemilio.asmrcontestanttable.common.eventbus
+package br.com.mathsemilio.asmrcontestanttable.ui.dialog.bottomsheet.addcontestant.view
 
-open class EventSubscriber(private val eventBus: EventBus?) {
+import br.com.mathsemilio.asmrcontestanttable.ui.common.view.BaseObservableView
 
-    open fun subscribe(listener: EventListener) = eventBus?.addListener(listener)
+abstract class AddContestantView : BaseObservableView<AddContestantView.Listener>() {
 
-    open fun unsubscribe(listener: EventListener) = eventBus?.removeListener(listener)
+    interface Listener {
+        fun onAddButtonClicked(contestantName: String)
+    }
+
+    abstract fun changeAddButtonState()
+
+    abstract fun revertAddButtonState()
 }

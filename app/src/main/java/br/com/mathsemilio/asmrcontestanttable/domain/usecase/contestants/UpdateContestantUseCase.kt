@@ -21,8 +21,9 @@ import br.com.mathsemilio.asmrcontestanttable.domain.model.ASMRContestant
 import br.com.mathsemilio.asmrcontestanttable.domain.model.Result
 import br.com.mathsemilio.asmrcontestanttable.storage.endpoint.ContestantsEndpoint
 
-class UpdateContestantUseCase(private val endpoint: ContestantsEndpoint) :
-    BaseObservable<UpdateContestantUseCase.Listener>() {
+open class UpdateContestantUseCase(
+    private val endpoint: ContestantsEndpoint?
+) : BaseObservable<UpdateContestantUseCase.Listener>() {
 
     interface Listener {
         fun onContestantUpdatedSuccessfully()
@@ -30,49 +31,53 @@ class UpdateContestantUseCase(private val endpoint: ContestantsEndpoint) :
         fun onUpdateContestantFailed()
     }
 
-    suspend fun updateContestantTimesSlept(contestant: ASMRContestant) {
-        val previousScore = contestant.score
-        val previousTimesSlept = contestant.timesSlept
-
-        endpoint.updateContestant(
+    open suspend fun updateContestantTimesSlept(contestant: ASMRContestant) {
+        endpoint?.updateContestant(
             contestant.copy(
-                score = previousScore.plus(3),
-                timesSlept = previousTimesSlept.inc()
+                score = contestant.score.plus(3),
+                timesSlept = contestant.timesSlept.inc()
             )
         ).also { result ->
             when (result) {
-                is Result.Completed -> notifyListener { it.onContestantUpdatedSuccessfully() }
-                is Result.Failed -> notifyListener { it.onUpdateContestantFailed() }
+                is Result.Completed -> notifyListener { listener ->
+                    listener.onContestantUpdatedSuccessfully()
+                }
+                is Result.Failed -> notifyListener { listener ->
+                    listener.onUpdateContestantFailed()
+                }
             }
         }
     }
 
-    suspend fun updateContestantTimesDidNotSlept(contestant: ASMRContestant) {
-        val previousTimesDidNotSlept = contestant.timesDidNotSlept
-
-        endpoint.updateContestant(
-            contestant.copy(timesDidNotSlept = previousTimesDidNotSlept.inc())
+    open suspend fun updateContestantTimesDidNotSlept(contestant: ASMRContestant) {
+        endpoint?.updateContestant(
+            contestant.copy(timesDidNotSlept = contestant.timesDidNotSlept.inc())
         ).also { result ->
             when (result) {
-                is Result.Completed -> notifyListener { it.onContestantUpdatedSuccessfully() }
-                is Result.Failed -> notifyListener { it.onUpdateContestantFailed() }
+                is Result.Completed -> notifyListener { listener ->
+                    listener.onContestantUpdatedSuccessfully()
+                }
+                is Result.Failed -> notifyListener { listener ->
+                    listener.onUpdateContestantFailed()
+                }
             }
         }
     }
 
-    suspend fun updateContestantTimesFeltTired(contestant: ASMRContestant) {
-        val previousScore = contestant.score
-        val previousTimesFeltTired = contestant.timesFeltTired
-
-        endpoint.updateContestant(
+    open suspend fun updateContestantTimesFeltTired(contestant: ASMRContestant) {
+        endpoint?.updateContestant(
             contestant.copy(
-                score = previousScore.inc(),
-                timesFeltTired = previousTimesFeltTired.inc()
+                score = contestant.score.inc(),
+                timesFeltTired = contestant.timesFeltTired.inc()
             )
         ).also { result ->
             when (result) {
-                is Result.Completed -> notifyListener { it.onContestantUpdatedSuccessfully() }
-                is Result.Failed -> notifyListener { it.onUpdateContestantFailed() }
+                is Result.Completed -> notifyListener { listener ->
+                    listener.onContestantUpdatedSuccessfully()
+                }
+                is Result.Failed -> notifyListener { listener ->
+                    listener.onUpdateContestantFailed()
+                }
             }
         }
     }
