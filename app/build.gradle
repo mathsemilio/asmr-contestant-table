@@ -12,8 +12,8 @@ android {
         applicationId "br.com.mathsemilio.asmrcontestanttable"
         minSdkVersion 21
         targetSdkVersion 31
-        versionCode 5
-        versionName "stable-0.5"
+        versionCode 6
+        versionName "stable-1.0.6"
     }
 
     buildTypes {
