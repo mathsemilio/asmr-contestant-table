@@ -23,14 +23,14 @@ import br.com.mathsemilio.asmrcontestanttable.domain.model.Result
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-class ContestantsEndpoint(
-    private val contestantsDAO: ContestantDAO,
-    private val weekHighlightsDAO: WeekHighlightsDAO
+open class ContestantsEndpoint(
+    private val contestantsDAO: ContestantDAO?,
+    private val weekHighlightsDAO: WeekHighlightsDAO?
 ) {
-    suspend fun insertContestant(contestant: ASMRContestant): Result<Nothing> {
+    open suspend fun insertContestant(contestant: ASMRContestant): Result<Nothing> {
         return withContext(Dispatchers.IO) {
             try {
-                contestantsDAO.insertData(contestant)
+                contestantsDAO?.insertData(contestant)
                 Result.Completed(data = null)
             } catch (e: Exception) {
                 Result.Failed(errorMessage = e.message!!)
@@ -41,7 +41,7 @@ class ContestantsEndpoint(
     suspend fun updateContestant(contestant: ASMRContestant): Result<Nothing> {
         return withContext(Dispatchers.IO) {
             try {
-                contestantsDAO.updateData(contestant)
+                contestantsDAO?.updateData(contestant)
                 Result.Completed(data = null)
             } catch (e: Exception) {
                 Result.Failed(errorMessage = e.message!!)
@@ -52,7 +52,7 @@ class ContestantsEndpoint(
     suspend fun fetchContestants(): Result<List<ASMRContestant>> {
         return withContext(Dispatchers.IO) {
             try {
-                Result.Completed(data = contestantsDAO.fetchContestants())
+                Result.Completed(data = contestantsDAO?.fetchContestants())
             } catch (e: Exception) {
                 Result.Failed(errorMessage = e.message!!)
             }
@@ -62,8 +62,8 @@ class ContestantsEndpoint(
     suspend fun deleteAllContestants(): Result<Nothing> {
         return withContext(Dispatchers.IO) {
             try {
-                contestantsDAO.deleteAllContestants()
-                weekHighlightsDAO.deleteAllWeekHighlights()
+                contestantsDAO?.deleteAllContestants()
+                weekHighlightsDAO?.deleteAllWeekHighlights()
                 Result.Completed(data = null)
             } catch (e: Exception) {
                 Result.Failed(errorMessage = e.message!!)
