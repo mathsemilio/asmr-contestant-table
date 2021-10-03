@@ -59,7 +59,7 @@ open class ContestantsEndpoint(
         }
     }
 
-    suspend fun deleteAllContestants(): Result<Nothing> {
+    open suspend fun deleteAllContestants(): Result<Nothing> {
         return withContext(Dispatchers.IO) {
             try {
                 contestantsDAO?.deleteAllContestants()

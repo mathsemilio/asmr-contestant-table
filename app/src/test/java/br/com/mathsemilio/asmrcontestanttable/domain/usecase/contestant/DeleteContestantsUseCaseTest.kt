@@ -17,14 +17,13 @@ limitations under the License.
 package br.com.mathsemilio.asmrcontestanttable.domain.usecase.contestant
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import br.com.mathsemilio.asmrcontestanttable.domain.model.ASMRContestant
 import br.com.mathsemilio.asmrcontestanttable.domain.model.Result
-import br.com.mathsemilio.asmrcontestanttable.domain.usecase.contestants.AddContestantUseCase
+import br.com.mathsemilio.asmrcontestanttable.domain.usecase.contestants.DeleteContestantsUseCase
 import br.com.mathsemilio.asmrcontestanttable.storage.endpoint.ContestantsEndpoint
-import br.com.mathsemilio.asmrcontestanttable.testdata.ContestantsTestDataProvider
 import br.com.mathsemilio.asmrcontestanttable.util.MainDispatcherCoroutineRule
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -35,83 +34,70 @@ import org.mockito.junit.MockitoJUnitRunner
 
 @ExperimentalCoroutinesApi
 @RunWith(MockitoJUnitRunner::class)
-class AddContestantUseCaseTest {
-
-    companion object {
-        private const val CONTESTANT_NAME = "Sirius Eyes ASMR"
-        private val CONTESTANT = ContestantsTestDataProvider.contestants.first()
-    }
+class DeleteContestantsUseCaseTest {
 
     @get:Rule
     val mainDispatcherCoroutineRule = MainDispatcherCoroutineRule()
+
     @get:Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()
 
     @Mock
-    private lateinit var listenerMock: AddContestantUseCase.Listener
+    private lateinit var listenerMock: DeleteContestantsUseCase.Listener
 
-    private lateinit var endpointTestDouble: ContestantsEndpointTestDouble
+    private lateinit var contestantsEndpointTestDouble: ContestantsEndpointTestDouble
 
-    private lateinit var SUT: AddContestantUseCase
+    private lateinit var SUT: DeleteContestantsUseCase
 
     @Before
     fun setUp() {
-        endpointTestDouble = ContestantsEndpointTestDouble()
+        contestantsEndpointTestDouble = ContestantsEndpointTestDouble()
 
-        SUT = AddContestantUseCase(endpointTestDouble)
+        SUT = DeleteContestantsUseCase(contestantsEndpointTestDouble)
+
         SUT.addListener(listenerMock)
     }
 
     @Test
-    fun addContestant_endpointInvokedWithCorrectParameters() = runBlockingTest {
-        SUT.addContestant(CONTESTANT_NAME)
+    fun deleteAllContestants_endpointInvokedSuccessfully() = runBlockingTest {
+        SUT.deleteAllContestants()
 
-        endpointTestDouble.verifyInteraction(CONTESTANT)
+        assertTrue(contestantsEndpointTestDouble.wasEndpointInvoked())
     }
 
     @Test
-    fun addContestant_success_listenerNotifiedOfSuccessEvent() = runBlockingTest {
-        endpointTestDouble.arrangeSuccess()
+    fun deleteAllContestants_success_listenersNotifiedOfSuccess() = runBlockingTest {
+        contestantsEndpointTestDouble.arrangeSuccess()
 
-        SUT.addContestant(CONTESTANT_NAME)
+        SUT.deleteAllContestants()
 
-        verify(listenerMock).onContestantAddedSuccessfully()
+        verify(listenerMock).onAllContestantsDeletedSuccessfully()
     }
 
     @Test
-    fun addContestant_error_failedResultReturnedByEndpoint() = runBlockingTest {
-        endpointTestDouble.arrangeFailure()
+    fun deleteAllContestants_failed_listenersNotifiedOfFailure() = runBlockingTest {
+        contestantsEndpointTestDouble.arrangeFailure()
 
-        SUT.addContestant(CONTESTANT_NAME)
+        SUT.deleteAllContestants()
 
-        verify(listenerMock).onAddContestantFailed()
+        verify(listenerMock).onDeleteAllContestantsFailed()
     }
 
     private inner class ContestantsEndpointTestDouble : ContestantsEndpoint(
         contestantsDAO = null,
         weekHighlightsDAO = null
     ) {
-        private lateinit var contestant: ASMRContestant
+        private var callCount = 0
 
         private var isSuccessArranged = false
 
-        private var callCount = 0
-
-        override suspend fun insertContestant(contestant: ASMRContestant): Result<Nothing> {
+        override suspend fun deleteAllContestants(): Result<Nothing> {
             ++callCount
-            this.contestant = contestant
 
             return if (isSuccessArranged)
                 Result.Completed(data = null)
             else
-                Result.Failed(errorMessage = null)
-        }
-
-        fun verifyInteraction(contestant: ASMRContestant) {
-            if (callCount == 1 && this.contestant == contestant)
-                return
-            else
-                throw RuntimeException("No interaction with the endpoint")
+                Result.Failed(errorMessage = "Failed to delete all contestants")
         }
 
         fun arrangeSuccess() {
@@ -121,5 +107,7 @@ class AddContestantUseCaseTest {
         fun arrangeFailure() {
             isSuccessArranged = false
         }
+
+        fun wasEndpointInvoked() = callCount >= 1
     }
 }
