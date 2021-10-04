@@ -49,7 +49,7 @@ open class ContestantsEndpoint(
         }
     }
 
-    suspend fun fetchContestants(): Result<List<ASMRContestant>> {
+    open suspend fun fetchContestants(): Result<List<ASMRContestant>> {
         return withContext(Dispatchers.IO) {
             try {
                 Result.Completed(data = contestantsDAO?.fetchContestants())
