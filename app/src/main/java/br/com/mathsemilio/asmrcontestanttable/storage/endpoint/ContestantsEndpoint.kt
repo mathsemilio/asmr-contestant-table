@@ -38,7 +38,7 @@ open class ContestantsEndpoint(
         }
     }
 
-    suspend fun updateContestant(contestant: ASMRContestant): Result<Nothing> {
+    open suspend fun updateContestant(contestant: ASMRContestant): Result<Nothing> {
         return withContext(Dispatchers.IO) {
             try {
                 contestantsDAO?.updateData(contestant)
