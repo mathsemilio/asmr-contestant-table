@@ -22,12 +22,12 @@ import br.com.mathsemilio.asmrcontestanttable.domain.model.WeekHighlights
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-class WeekHighlightsEndpoint(private val weekHighlightsDAO: WeekHighlightsDAO) {
+open class WeekHighlightsEndpoint(private val weekHighlightsDAO: WeekHighlightsDAO?) {
 
-    suspend fun insertWeekHighlights(weekHighlights: WeekHighlights): Result<Nothing> {
+    open suspend fun insertWeekHighlights(weekHighlights: WeekHighlights): Result<Nothing> {
         return withContext(Dispatchers.IO) {
             try {
-                weekHighlightsDAO.insertData(weekHighlights)
+                weekHighlightsDAO?.insertData(weekHighlights)
                 Result.Completed(data = null)
             } catch (e: Exception) {
                 Result.Failed(e.message!!)
@@ -35,20 +35,20 @@ class WeekHighlightsEndpoint(private val weekHighlightsDAO: WeekHighlightsDAO) {
         }
     }
 
-    suspend fun fetchWeekHighlights(): Result<List<WeekHighlights>> {
+    open suspend fun fetchWeekHighlights(): Result<List<WeekHighlights>> {
         return withContext(Dispatchers.IO) {
             try {
-                Result.Completed(data = weekHighlightsDAO.fetchWeekHighlights())
+                Result.Completed(data = weekHighlightsDAO?.fetchWeekHighlights())
             } catch (e: Exception) {
                 Result.Failed(e.message!!)
             }
         }
     }
 
-    suspend fun getWeekNumber(): Result<Int> {
+    open suspend fun getWeekNumber(): Result<Int> {
         return withContext(Dispatchers.IO) {
             try {
-                Result.Completed(data = weekHighlightsDAO.fetchWeekHighlights().size.plus(1))
+                Result.Completed(data = weekHighlightsDAO?.fetchWeekHighlights()?.size?.plus(1))
             } catch (e: Exception) {
                 Result.Failed(e.message!!)
             }
