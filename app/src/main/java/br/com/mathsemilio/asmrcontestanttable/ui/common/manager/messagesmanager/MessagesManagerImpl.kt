@@ -38,8 +38,4 @@ class MessagesManagerImpl(private val context: Context) : MessagesManager {
             context.getString(R.string.message_read_external_storage_permission_denied_permanently)
         )
     }
-
-    override fun showPickImageFailedMessage() {
-        context.showLongToast(context.getString(R.string.pick_image_failed_message))
-    }
 }

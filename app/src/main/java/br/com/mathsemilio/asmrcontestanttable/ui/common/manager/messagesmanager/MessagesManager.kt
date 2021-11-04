@@ -8,6 +8,4 @@ interface MessagesManager {
     fun showReadExternalStoragePermissionDeniedMessage()
 
     fun showReadExternalStoragePermissionDeniedPermanentlyMessage()
-
-    fun showPickImageFailedMessage()
 }

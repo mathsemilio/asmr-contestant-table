@@ -20,6 +20,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import br.com.mathsemilio.asmrcontestanttable.R
@@ -37,6 +38,7 @@ class ContestantsTableScreenViewImpl(
     private lateinit var fabAddContestant: FloatingActionButton
     private lateinit var progressBarContestantsTable: ProgressBar
     private lateinit var linearLayoutNoContestantsFoundState: LinearLayout
+    private lateinit var textViewContestantsAcronymsCaption: TextView
 
     private lateinit var recyclerViewContestantsTable: RecyclerView
     private lateinit var contestantsTableAdapter: ContestantsTableAdapter
@@ -60,6 +62,8 @@ class ContestantsTableScreenViewImpl(
             findViewById(R.id.progress_bar_contestants_table)
         linearLayoutNoContestantsFoundState =
             findViewById(R.id.linear_layout_no_contestants_found_state)
+        textViewContestantsAcronymsCaption =
+            findViewById(R.id.text_view_contestants_acronyms_caption)
         recyclerViewContestantsTable =
             findViewById(R.id.recycler_view_contestant_table)
     }
@@ -75,9 +79,11 @@ class ContestantsTableScreenViewImpl(
         if (contestants.isEmpty()) {
             recyclerViewContestantsTable.isVisible = false
             linearLayoutNoContestantsFoundState.isVisible = true
+            textViewContestantsAcronymsCaption.isVisible = false
         } else {
             recyclerViewContestantsTable.isVisible = true
             linearLayoutNoContestantsFoundState.isVisible = false
+            textViewContestantsAcronymsCaption.isVisible = true
         }
     }
 

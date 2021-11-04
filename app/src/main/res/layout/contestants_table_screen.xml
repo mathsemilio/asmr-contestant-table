@@ -61,18 +61,33 @@
 
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/text_view_contestants_acronyms_caption"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:drawablePadding="8dp"
+        android:gravity="center_vertical"
+        android:text="@string/caption_contestants_acronyms_description"
+        android:textAppearance="?textAppearanceCaption"
+        app:drawableStartCompat="@drawable/ic_info"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view_contestant_table"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:clipToPadding="false"
-        android:paddingTop="4dp"
         android:paddingBottom="4dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/text_view_contestants_acronyms_caption"
         tools:listitem="@layout/contestant_list_item" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

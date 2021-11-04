@@ -60,9 +60,11 @@
     <string name="message_read_external_storage_permission_denied">Please grant access to external storage to use this feature</string>
     <string name="message_read_external_storage_permission_denied_permanently">Please access your device\'s settings and grant access to external storage to use this feature</string>
 
+    <!-- Captions -->
+    <string name="caption_contestants_acronyms_description">TS: Times slept; DNS: Did not slept; FT: Felt tired</string>
+
     <!-- Week highlights list item -->
     <string name="week_highlights_item_week_number">Week %d</string>
     <string name="week_highlights_item_contestants_names">%1$s &amp; %2$s</string>
-    <string name="pick_image_failed_message">Something went wrong...</string>
 
 </resources>
