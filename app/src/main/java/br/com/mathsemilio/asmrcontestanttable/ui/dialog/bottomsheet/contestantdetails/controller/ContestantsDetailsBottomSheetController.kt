@@ -21,7 +21,6 @@ import br.com.mathsemilio.asmrcontestanttable.domain.model.ASMRContestant
 import br.com.mathsemilio.asmrcontestanttable.domain.usecase.contestants.UpdateContestantUseCase
 import br.com.mathsemilio.asmrcontestanttable.ui.common.event.ContestantsModifiedEvent
 import br.com.mathsemilio.asmrcontestanttable.ui.common.manager.messagesmanager.MessagesManager
-import br.com.mathsemilio.asmrcontestanttable.ui.dialog.bottomsheet.addcontestant.controller.ContestantsControllerEventListener
 import br.com.mathsemilio.asmrcontestanttable.ui.dialog.bottomsheet.contestantdetails.view.ContestantDetailsView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.cancelChildren
@@ -39,7 +38,7 @@ class ContestantsDetailsBottomSheetController(
 
     private lateinit var contestant: ASMRContestant
 
-    private lateinit var listener: ContestantsControllerEventListener
+    private lateinit var delegate: ContestantDetailsControllerEventDelegate
 
     override fun onIncrementTimesSleptButtonClicked() {
         coroutineScope.launch {
@@ -60,7 +59,7 @@ class ContestantsDetailsBottomSheetController(
     }
 
     override fun onContestantUpdatedSuccessfully() {
-        listener.onContestantsModified()
+        delegate.onDismissBottomSheetRequested()
         eventPublisher.publish(ContestantsModifiedEvent.ContestantModified)
     }
 
@@ -76,8 +75,8 @@ class ContestantsDetailsBottomSheetController(
         this.contestant = contestant
     }
 
-    fun registerForControllerEvents(listener: ContestantsControllerEventListener) {
-        this.listener = listener
+    fun addEventDelegate(delegate: ContestantDetailsControllerEventDelegate) {
+        this.delegate = delegate
     }
 
     fun onStart() {

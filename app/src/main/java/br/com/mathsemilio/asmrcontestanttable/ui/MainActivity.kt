@@ -19,6 +19,7 @@ package br.com.mathsemilio.asmrcontestanttable.ui
 import android.os.Bundle
 import br.com.mathsemilio.asmrcontestanttable.common.OUT_STATE_CURRENT_DESTINATION
 import br.com.mathsemilio.asmrcontestanttable.ui.common.BaseActivity
+import br.com.mathsemilio.asmrcontestanttable.ui.common.helper.PermissionsHelper
 import br.com.mathsemilio.asmrcontestanttable.ui.common.manager.FragmentContainerManager
 import br.com.mathsemilio.asmrcontestanttable.ui.common.navigation.Destination
 import br.com.mathsemilio.asmrcontestanttable.ui.common.navigation.NavigationEventListener
@@ -32,6 +33,7 @@ class MainActivity : BaseActivity(),
 
     private lateinit var view: MainActivityView
 
+    private lateinit var permissionsHelper: PermissionsHelper
     private lateinit var screensNavigator: ScreensNavigator
 
     private var currentDestination = Destination.CONTESTANTS_TABLE
@@ -41,6 +43,7 @@ class MainActivity : BaseActivity(),
 
         view = compositionRoot.viewFactory.getMainActivityView(null)
 
+        permissionsHelper = compositionRoot.permissionsHelper
         screensNavigator = compositionRoot.screensNavigator
 
         setContentView(view.rootView)
@@ -59,7 +62,6 @@ class MainActivity : BaseActivity(),
         ) as Destination
 
         view.setToolbarTitle(currentDestination)
-
         view.setBottomNavigationHighlightedItem()
     }
 
@@ -75,6 +77,15 @@ class MainActivity : BaseActivity(),
     override fun onNavigateTo(destination: Destination) {
         currentDestination = destination
         view.setToolbarTitle(destination)
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        permissionsHelper.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

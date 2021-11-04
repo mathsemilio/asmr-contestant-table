@@ -14,22 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
  */
 
-package br.com.mathsemilio.asmrcontestanttable.ui.dialog.bottomsheet.addcontestant.view
+package br.com.mathsemilio.asmrcontestanttable.ui.common.helper.imagepicker
 
-import android.net.Uri
-import br.com.mathsemilio.asmrcontestanttable.ui.common.view.BaseObservableView
+import androidx.fragment.app.Fragment
 
-abstract class AddContestantView : BaseObservableView<AddContestantView.Listener>() {
+object ImagePickerHelperProvider {
 
-    interface Listener {
-        fun onAddProfilePictureButtonClicked()
-
-        fun onAddButtonClicked(contestantName: String, profilePictureUri: Uri?)
-    }
-
-    abstract fun bind(profilePictureUri: Uri?)
-
-    abstract fun changeAddButtonState()
-
-    abstract fun revertAddButtonState()
+    fun getImagePickerHelper(fragment: Fragment) = ImagePickerHelper(fragment)
 }

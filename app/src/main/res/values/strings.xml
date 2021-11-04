@@ -11,6 +11,7 @@
     <string name="content_description_increment_number_os_times_you_did_not_slept">Increment number os times you did not slept</string>
     <string name="content_description_increment_number_of_time_you_felt_tired">Increment number of times you felt tired</string>
     <string name="content_description_bottom_sheet_slider">Slider to close the dialog</string>
+    <string name="content_description_add_profile_picture">Add profile picture, illustration</string>
 
     <!-- Common -->
     <string name="name">Name</string>
@@ -56,9 +57,12 @@
     <!-- Messages -->
     <string name="message_contest_rebooted_successfully">Contest rebooted successfully</string>
     <string name="message_unexpected_error_occurred">Unexpected error occurred. Please try again.</string>
+    <string name="message_read_external_storage_permission_denied">Please grant access to external storage to use this feature</string>
+    <string name="message_read_external_storage_permission_denied_permanently">Please access your device\'s settings and grant access to external storage to use this feature</string>
 
     <!-- Week highlights list item -->
     <string name="week_highlights_item_week_number">Week %d</string>
     <string name="week_highlights_item_contestants_names">%1$s &amp; %2$s</string>
+    <string name="pick_image_failed_message">Something went wrong...</string>
 
 </resources>

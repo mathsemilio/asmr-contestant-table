@@ -14,18 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
  */
 
-package br.com.mathsemilio.asmrcontestanttable.ui.common
+package br.com.mathsemilio.asmrcontestanttable.ui.dialog.bottomsheet.contestantdetails.controller
 
-import androidx.appcompat.app.AppCompatActivity
-import br.com.mathsemilio.asmrcontestanttable.ASMRContestantsTableApplication
-import br.com.mathsemilio.asmrcontestanttable.common.di.ActivityCompositionRoot
-
-abstract class BaseActivity : AppCompatActivity() {
-
-    val compositionRoot by lazy {
-        ActivityCompositionRoot(
-            appCompatActivity = this,
-            (application as ASMRContestantsTableApplication).compositionRoot
-        )
-    }
+interface ContestantDetailsControllerEventDelegate {
+    fun onDismissBottomSheetRequested()
 }

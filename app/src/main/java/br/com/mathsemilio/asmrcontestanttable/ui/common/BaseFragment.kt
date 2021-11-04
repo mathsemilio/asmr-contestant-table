@@ -22,8 +22,7 @@ import br.com.mathsemilio.asmrcontestanttable.ui.MainActivity
 
 abstract class BaseFragment : Fragment() {
 
-    private val _compositionRoot by lazy {
+    protected val compositionRoot by lazy {
         ControllerCompositionRoot((requireActivity() as MainActivity).compositionRoot)
     }
-    val compositionRoot get() = _compositionRoot
 }

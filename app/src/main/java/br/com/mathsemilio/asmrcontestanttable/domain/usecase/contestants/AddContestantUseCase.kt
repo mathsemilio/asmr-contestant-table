@@ -16,6 +16,7 @@ limitations under the License.
 
 package br.com.mathsemilio.asmrcontestanttable.domain.usecase.contestants
 
+import android.net.Uri
 import br.com.mathsemilio.asmrcontestanttable.common.observable.BaseObservable
 import br.com.mathsemilio.asmrcontestanttable.domain.model.ASMRContestant
 import br.com.mathsemilio.asmrcontestanttable.domain.model.Result
@@ -31,8 +32,10 @@ open class AddContestantUseCase(
         fun onAddContestantFailed()
     }
 
-    open suspend fun addContestant(contestantName: String) {
-        endpoint?.insertContestant(ASMRContestant(0, contestantName)).also { result ->
+    open suspend fun addContestant(contestantName: String, profilePictureUri: Uri?) {
+        endpoint?.insertContestant(
+            ASMRContestant(0, contestantName, profilePicture = profilePictureUri?.toString() ?: "")
+        ).also { result ->
             when (result) {
                 is Result.Completed -> notifyListener { listener ->
                     listener.onContestantAddedSuccessfully()

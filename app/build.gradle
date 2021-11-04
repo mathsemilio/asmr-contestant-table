@@ -35,6 +35,7 @@ android {
 }
 
 dependencies {
+    def circular_image_view_version = "3.1.0"
     def room_version = "2.4.0-alpha04"
     def coroutines_version = '1.5.1-native-mt'
     def coroutines_test_version = "1.3.2"
@@ -47,6 +48,9 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.3.1'
     implementation 'com.google.android.material:material:1.4.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.0'
+
+    // Circular Image View
+    implementation "de.hdodenhof:circleimageview:$circular_image_view_version"
 
     // Room
     implementation "androidx.room:room-runtime:$room_version"

@@ -7,7 +7,6 @@ import br.com.mathsemilio.asmrcontestanttable.domain.usecase.contestants.UpdateC
 import br.com.mathsemilio.asmrcontestanttable.testdata.ContestantsTestDataProvider
 import br.com.mathsemilio.asmrcontestanttable.ui.common.event.ContestantsModifiedEvent
 import br.com.mathsemilio.asmrcontestanttable.ui.common.manager.messagesmanager.MessagesManager
-import br.com.mathsemilio.asmrcontestanttable.ui.dialog.bottomsheet.addcontestant.controller.ContestantsControllerEventListener
 import br.com.mathsemilio.asmrcontestanttable.ui.dialog.bottomsheet.contestantdetails.view.ContestantDetailsView
 import br.com.mathsemilio.asmrcontestanttable.util.MainDispatcherCoroutineRule
 import kotlinx.coroutines.CoroutineScope
@@ -38,7 +37,7 @@ class ContestantsDetailsBottomSheetControllerTest {
     @Mock
     private lateinit var viewMock: ContestantDetailsView
     @Mock
-    private lateinit var controllerEventListener: ContestantsControllerEventListener
+    private lateinit var eventDelegateMock: ContestantDetailsControllerEventDelegate
 
     private lateinit var coroutineScope: CoroutineScope
 
@@ -63,7 +62,7 @@ class ContestantsDetailsBottomSheetControllerTest {
 
         controller.bindView(viewMock)
         controller.bindContestant(CONTESTANT)
-        controller.registerForControllerEvents(controllerEventListener)
+        controller.addEventDelegate(eventDelegateMock)
     }
 
     @Test
@@ -114,7 +113,7 @@ class ContestantsDetailsBottomSheetControllerTest {
     fun onContestantUpdatedSuccessfully_contestantModifiedEventWasPublished() {
         controller.onContestantUpdatedSuccessfully()
 
-        verify(controllerEventListener).onContestantsModified()
+        verify(eventDelegateMock).onDismissBottomSheetRequested()
         eventPublisherTestDouble.verifyEventWasPublished(ContestantsModifiedEvent.ContestantModified)
     }
 

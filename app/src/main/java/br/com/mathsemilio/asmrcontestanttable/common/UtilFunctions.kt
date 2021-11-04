@@ -17,6 +17,8 @@ limitations under the License.
 package br.com.mathsemilio.asmrcontestanttable.common
 
 import android.content.Context
+import android.text.Editable
+import android.text.TextWatcher
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
@@ -48,4 +50,16 @@ fun EditText.showErrorState(message: String) {
         error = message
         requestFocus()
     }
+}
+
+fun EditText.addOnAfterTextChangedListener(afterTextChanged: (Editable?) -> Unit) {
+    this.addTextChangedListener(object : TextWatcher {
+        override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+
+        override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+
+        override fun afterTextChanged(editable: Editable?) {
+            afterTextChanged(editable)
+        }
+    })
 }

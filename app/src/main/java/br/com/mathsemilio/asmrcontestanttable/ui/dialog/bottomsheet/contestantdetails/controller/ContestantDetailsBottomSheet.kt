@@ -23,9 +23,9 @@ import android.view.ViewGroup
 import br.com.mathsemilio.asmrcontestanttable.common.ARG_CONTESTANT
 import br.com.mathsemilio.asmrcontestanttable.domain.model.ASMRContestant
 import br.com.mathsemilio.asmrcontestanttable.ui.dialog.commom.BaseBottomSheetDialogFragment
-import br.com.mathsemilio.asmrcontestanttable.ui.dialog.bottomsheet.addcontestant.controller.ContestantsControllerEventListener
 
-class ContestantDetailsBottomSheet : BaseBottomSheetDialogFragment(), ContestantsControllerEventListener {
+class ContestantDetailsBottomSheet : BaseBottomSheetDialogFragment(),
+    ContestantDetailsControllerEventDelegate {
 
     companion object {
         fun withContestant(contestant: ASMRContestant) = ContestantDetailsBottomSheet().apply {
@@ -56,16 +56,19 @@ class ContestantDetailsBottomSheet : BaseBottomSheetDialogFragment(), Contestant
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         contestant = getContestantFromBundle()
+
         controller.bindContestant(contestant)
-        controller.registerForControllerEvents(this)
+
+        controller.addEventDelegate(this)
     }
 
     private fun getContestantFromBundle(): ASMRContestant {
         return requireArguments().getSerializable(ARG_CONTESTANT) as ASMRContestant
     }
 
-    override fun onContestantsModified() = dismiss()
+    override fun onDismissBottomSheetRequested() = dismiss()
 
     override fun onStart() {
         super.onStart()

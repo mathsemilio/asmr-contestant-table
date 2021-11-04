@@ -8,6 +8,12 @@
         <item name="colorSecondaryVariant">@color/blue_700</item>
         <item name="colorOnSecondary">@android:color/black</item>
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <item name="shapeAppearanceLargeComponent">@style/ShapeAppearanceOverlay.App</item>
+    </style>
+
+    <style name="ShapeAppearanceOverlay.App" parent="">
+        <item name="cornerSize">8dp</item>
+        <item name="cornerFamily">rounded</item>
     </style>
 
 </resources>

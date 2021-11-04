@@ -21,6 +21,7 @@ import androidx.appcompat.app.AppCompatActivity
 import br.com.mathsemilio.asmrcontestanttable.storage.database.AppDatabase
 import br.com.mathsemilio.asmrcontestanttable.storage.endpoint.ContestantsEndpoint
 import br.com.mathsemilio.asmrcontestanttable.storage.endpoint.WeekHighlightsEndpoint
+import br.com.mathsemilio.asmrcontestanttable.ui.common.helper.PermissionsHelper
 import br.com.mathsemilio.asmrcontestanttable.ui.common.manager.FragmentContainerManager
 import br.com.mathsemilio.asmrcontestanttable.ui.common.manager.FragmentTransactionManager
 import br.com.mathsemilio.asmrcontestanttable.ui.common.navigation.NavigationEventListener
@@ -28,10 +29,10 @@ import br.com.mathsemilio.asmrcontestanttable.ui.common.navigation.ScreensNaviga
 import br.com.mathsemilio.asmrcontestanttable.ui.common.view.ViewFactory
 
 class ActivityCompositionRoot(
-    private val activity: AppCompatActivity,
+    private val appCompatActivity: AppCompatActivity,
     private val compositionRoot: CompositionRoot
 ) {
-    private val database get() = AppDatabase.getDatabase(activity)
+    private val database get() = AppDatabase.getDatabase(appCompatActivity)
 
     private val contestantsDao by lazy {
         database.contestantDAO
@@ -50,18 +51,22 @@ class ActivityCompositionRoot(
     }
 
     private val _fragmentTransactionManager by lazy {
-        FragmentTransactionManager(supportFragmentManager, activity as FragmentContainerManager)
+        FragmentTransactionManager(supportFragmentManager, appCompatActivity as FragmentContainerManager)
     }
 
     private val _screensNavigator by lazy {
-        ScreensNavigator(_fragmentTransactionManager, activity as NavigationEventListener)
+        ScreensNavigator(_fragmentTransactionManager, appCompatActivity as NavigationEventListener)
     }
 
     val viewFactory by lazy {
-        ViewFactory(activity.layoutInflater)
+        ViewFactory(appCompatActivity.layoutInflater)
     }
 
-    val applicationContext: Context get() = activity.applicationContext
+    val permissionsHelper by lazy {
+        PermissionsHelper(appCompatActivity)
+    }
+
+    val applicationContext: Context get() = appCompatActivity.applicationContext
 
     val contestantsEndpoint get() = _contestantsEndpoint
 
@@ -73,7 +78,7 @@ class ActivityCompositionRoot(
 
     val screensNavigator get() = _screensNavigator
 
-    val supportFragmentManager get() = activity.supportFragmentManager
+    val supportFragmentManager get() = appCompatActivity.supportFragmentManager
 
     val weekHighlightsEndpoint get() = _weekHighlightsEndpoint
 }

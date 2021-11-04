@@ -28,7 +28,7 @@ import br.com.mathsemilio.asmrcontestanttable.domain.model.WeekHighlights
 
 @Database(
     entities = [ASMRContestant::class, WeekHighlights::class],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {

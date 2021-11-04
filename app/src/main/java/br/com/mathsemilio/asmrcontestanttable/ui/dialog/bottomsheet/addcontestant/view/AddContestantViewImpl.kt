@@ -16,10 +16,15 @@ limitations under the License.
 
 package br.com.mathsemilio.asmrcontestanttable.ui.dialog.bottomsheet.addcontestant.view
 
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.ImageView
+import android.widget.TextView
+import androidx.core.view.isVisible
 import br.com.mathsemilio.asmrcontestanttable.R
+import br.com.mathsemilio.asmrcontestanttable.common.addOnAfterTextChangedListener
 import br.com.mathsemilio.asmrcontestanttable.common.setDisabledState
 import br.com.mathsemilio.asmrcontestanttable.common.setEnabledState
 import br.com.mathsemilio.asmrcontestanttable.common.showErrorState
@@ -27,26 +32,36 @@ import com.google.android.material.button.MaterialButton
 
 class AddContestantViewImpl(inflater: LayoutInflater, container: ViewGroup?) : AddContestantView() {
 
+    private var imageViewContestantProfilePicture: ImageView
+    private var textViewAddContestantName: TextView
     private var editTextContestantName: EditText
     private var buttonAddContestant: MaterialButton
+
+    private var profilePictureUri: Uri? = null
 
     init {
         rootView = inflater.inflate(R.layout.bottom_sheet_add_contestant, container, false)
 
+        imageViewContestantProfilePicture = findViewById(R.id.image_view_contestant_profile_picture)
+        textViewAddContestantName = findViewById(R.id.text_view_add_contestant_name)
         editTextContestantName = findViewById(R.id.edit_text_contestant_name)
         buttonAddContestant = findViewById(R.id.button_add_contestant)
+
+        attachContestantNameEditTextTextWatcher()
+
+        imageViewContestantProfilePicture.setOnClickListener {
+            onContestantProfilePictureImageViewClicked()
+        }
 
         buttonAddContestant.setOnClickListener {
             onAddContestantButtonClicked()
         }
     }
 
-    override fun changeAddButtonState() {
-        buttonAddContestant.setDisabledState(getString(R.string.adding_contestant))
-    }
-
-    override fun revertAddButtonState() {
-        buttonAddContestant.setEnabledState(getString(R.string.add))
+    private fun onContestantProfilePictureImageViewClicked() {
+        notifyListener { listener ->
+            listener.onAddProfilePictureButtonClicked()
+        }
     }
 
     private fun onAddContestantButtonClicked() {
@@ -57,7 +72,37 @@ class AddContestantViewImpl(inflater: LayoutInflater, container: ViewGroup?) : A
             revertAddButtonState()
             return
         } else {
-            notifyListener { it.onAddButtonClicked(contestantName) }
+            notifyListener { listener ->
+                listener.onAddButtonClicked(contestantName, profilePictureUri)
+            }
         }
+    }
+
+    private fun attachContestantNameEditTextTextWatcher() {
+        editTextContestantName.addOnAfterTextChangedListener { editable ->
+            editable?.let {
+                if (it.isEmpty()) {
+                    textViewAddContestantName.isVisible = false
+                } else {
+                    textViewAddContestantName.apply {
+                        isVisible = true
+                        text = editable.toString()
+                    }
+                }
+            }
+        }
+    }
+
+    override fun bind(profilePictureUri: Uri?) {
+        this.profilePictureUri = profilePictureUri
+        imageViewContestantProfilePicture.setImageURI(profilePictureUri)
+    }
+
+    override fun changeAddButtonState() {
+        buttonAddContestant.setDisabledState(getString(R.string.adding_contestant))
+    }
+
+    override fun revertAddButtonState() {
+        buttonAddContestant.setEnabledState(getString(R.string.add))
     }
 }
