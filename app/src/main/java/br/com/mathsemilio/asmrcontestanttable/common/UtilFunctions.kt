@@ -17,11 +17,18 @@ limitations under the License.
 package br.com.mathsemilio.asmrcontestanttable.common
 
 import android.content.Context
+import android.graphics.drawable.Drawable
 import android.text.Editable
 import android.text.TextWatcher
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import androidx.annotation.DrawableRes
+import androidx.core.content.res.ResourcesCompat
+
+fun Context.getDrawableResource(@DrawableRes id: Int): Drawable? {
+    return ResourcesCompat.getDrawable(this.resources, id, null)
+}
 
 fun Context.showShortToast(message: String) {
     Toast.makeText(this, message, Toast.LENGTH_SHORT).show()

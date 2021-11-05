@@ -20,10 +20,11 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.ProgressBar
-import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import br.com.mathsemilio.asmrcontestanttable.R
+import br.com.mathsemilio.asmrcontestanttable.common.MIN_SCROLL_Y_VALUE
 import br.com.mathsemilio.asmrcontestanttable.domain.model.ASMRContestant
 import br.com.mathsemilio.asmrcontestanttable.ui.common.view.ViewFactory
 import br.com.mathsemilio.asmrcontestanttable.ui.screens.contestantstable.ContestantsTableAdapter
@@ -38,7 +39,7 @@ class ContestantsTableScreenViewImpl(
     private lateinit var fabAddContestant: FloatingActionButton
     private lateinit var progressBarContestantsTable: ProgressBar
     private lateinit var linearLayoutNoContestantsFoundState: LinearLayout
-    private lateinit var textViewContestantsAcronymsCaption: TextView
+    private lateinit var constraintLayoutCellContentDescriptionContainer: ConstraintLayout
 
     private lateinit var recyclerViewContestantsTable: RecyclerView
     private lateinit var contestantsTableAdapter: ContestantsTableAdapter
@@ -49,6 +50,8 @@ class ContestantsTableScreenViewImpl(
         initializeViews()
 
         setupRecyclerView()
+
+        attachRecyclerViewScrollListener()
 
         fabAddContestant.setOnClickListener {
             notifyListener { it.onAddContestantButtonClicked() }
@@ -62,8 +65,8 @@ class ContestantsTableScreenViewImpl(
             findViewById(R.id.progress_bar_contestants_table)
         linearLayoutNoContestantsFoundState =
             findViewById(R.id.linear_layout_no_contestants_found_state)
-        textViewContestantsAcronymsCaption =
-            findViewById(R.id.text_view_contestants_acronyms_caption)
+        constraintLayoutCellContentDescriptionContainer =
+            findViewById(R.id.constraint_layout_cell_content_description_container)
         recyclerViewContestantsTable =
             findViewById(R.id.recycler_view_contestant_table)
     }
@@ -73,17 +76,30 @@ class ContestantsTableScreenViewImpl(
         recyclerViewContestantsTable.adapter = contestantsTableAdapter
     }
 
+    private fun attachRecyclerViewScrollListener() {
+        recyclerViewContestantsTable.addOnScrollListener(
+            object : RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    if (dy >= MIN_SCROLL_Y_VALUE)
+                        fabAddContestant.hide()
+                    else if (dy < 0)
+                        fabAddContestant.show()
+                }
+            }
+        )
+    }
+
     override fun bindContestants(contestants: List<ASMRContestant>) {
         contestantsTableAdapter.submitData(contestants)
 
         if (contestants.isEmpty()) {
             recyclerViewContestantsTable.isVisible = false
             linearLayoutNoContestantsFoundState.isVisible = true
-            textViewContestantsAcronymsCaption.isVisible = false
+            constraintLayoutCellContentDescriptionContainer.isVisible = false
         } else {
             recyclerViewContestantsTable.isVisible = true
             linearLayoutNoContestantsFoundState.isVisible = false
-            textViewContestantsAcronymsCaption.isVisible = true
+            constraintLayoutCellContentDescriptionContainer.isVisible = true
         }
     }
 

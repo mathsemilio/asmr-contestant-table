@@ -1,66 +1,110 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="62dp"
-    android:layout_margin="8dp">
+    android:layout_marginStart="8dp"
+    android:layout_marginEnd="8dp">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="16dp">
+    <FrameLayout
+        android:id="@+id/frame_layout_contestant_position"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="8dp"
+        android:background="@drawable/dr_circle"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <com.google.android.material.textview.MaterialTextView
+        <TextView
             android:id="@+id/text_view_contestant_position"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:textAlignment="center"
-            android:textAppearance="?textAppearanceHeadline5"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            android:layout_gravity="center"
             tools:text="1" />
 
-        <View
-            android:id="@+id/divider_contestant_list_item"
-            android:layout_width="1dp"
-            android:layout_height="0dp"
-            android:layout_marginStart="16dp"
-            android:background="?android:attr/listDivider"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@id/text_view_contestant_position"
-            app:layout_constraintTop_toTopOf="parent" />
+    </FrameLayout>
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/text_view_contestant_name"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginRight="16dp"
-            android:ellipsize="end"
-            android:maxLines="1"
-            android:textAppearance="?textAppearanceHeadline5"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/text_view_contestant_score"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/divider_contestant_list_item"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="Contestant Name" />
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/image_view_contestant_profile_picture"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginStart="16dp"
+        android:importantForAccessibility="no"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/frame_layout_contestant_position"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@drawable/im_pelagea_asmr_profile_picture" />
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/text_view_contestant_score"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?textAppearanceHeadline5"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="26" />
+    <TextView
+        android:id="@+id/text_view_contestant_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textAppearance="?textAppearanceHeadline6"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/text_view_times_slept"
+        app:layout_constraintStart_toEndOf="@+id/image_view_contestant_profile_picture"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Pelagea ASMR" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    <TextView
+        android:id="@+id/text_view_times_slept"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:textAppearance="?textAppearanceBody1"
+        app:layout_constraintBottom_toBottomOf="@+id/text_view_contestant_name"
+        app:layout_constraintEnd_toStartOf="@+id/text_view_times_did_not_slept"
+        app:layout_constraintTop_toTopOf="@+id/text_view_contestant_name"
+        tools:text="0" />
 
-</com.google.android.material.card.MaterialCardView>
+    <TextView
+        android:id="@+id/text_view_times_did_not_slept"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:textAppearance="?textAppearanceBody1"
+        app:layout_constraintBottom_toBottomOf="@+id/text_view_contestant_name"
+        app:layout_constraintEnd_toStartOf="@+id/text_view_times_felt_tired"
+        app:layout_constraintTop_toTopOf="@+id/text_view_contestant_name"
+        tools:text="0" />
+
+    <TextView
+        android:id="@+id/text_view_times_felt_tired"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:textAppearance="?textAppearanceBody1"
+        app:layout_constraintBottom_toBottomOf="@+id/text_view_contestant_name"
+        app:layout_constraintEnd_toStartOf="@+id/text_view_contestant_points"
+        app:layout_constraintTop_toTopOf="@+id/text_view_contestant_name"
+        tools:text="0" />
+
+    <TextView
+        android:id="@+id/text_view_contestant_points"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:textAppearance="?textAppearanceBody2"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/text_view_contestant_name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/text_view_contestant_name"
+        tools:text="56" />
+
+    <View
+        android:id="@+id/view_contestant_list_item"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="?android:listDivider"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
