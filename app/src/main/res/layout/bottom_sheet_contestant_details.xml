@@ -17,157 +17,114 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/image_view_contestant_profile_picture"
+        android:layout_width="96dp"
+        android:layout_height="96dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="24dp"
+        android:contentDescription="@string/content_description_add_profile_picture"
+        android:src="@drawable/dr_contestant_profile_picture"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/image_view_contestant_details_slider" />
+
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/text_view_contestants_details_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginTop="16dp"
         android:ellipsize="end"
         android:maxLines="1"
-        android:textAppearance="?textAppearanceHeadline5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/image_view_contestant_details_slider"
-        tools:text="Contestant's Name" />
+        android:textAppearance="?textAppearanceHeadline6"
+        app:layout_constraintEnd_toEndOf="@+id/view_contestant_details_divider"
+        app:layout_constraintStart_toStartOf="@+id/image_view_contestant_profile_picture"
+        app:layout_constraintTop_toBottomOf="@+id/image_view_contestant_profile_picture"
+        tools:text="Contestant name" />
 
     <View
-        android:id="@+id/divider_contestants_details_1"
-        android:layout_width="0.8dp"
-        android:layout_height="0dp"
+        android:id="@+id/view_contestant_details_divider"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="24dp"
-        android:background="?android:attr/listDivider"
-        app:layout_constraintBottom_toBottomOf="@id/text_view_number_times_did_not_slept"
-        app:layout_constraintEnd_toStartOf="@+id/divider_contestant_details_2"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/text_view_contestants_details_name" />
-
-    <View
-        android:id="@+id/divider_contestant_details_2"
-        android:layout_width="0.8dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="24dp"
-        android:background="?android:attr/listDivider"
-        app:layout_constraintBottom_toBottomOf="@id/text_view_number_times_did_not_slept"
+        android:layout_marginEnd="8dp"
+        android:background="?dividerHorizontal"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/divider_contestants_details_1"
-        app:layout_constraintTop_toBottomOf="@id/text_view_contestants_details_name" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_view_contestants_details_name" />
 
-    <com.google.android.material.textview.MaterialTextView
+    <TextView
+        android:id="@+id/text_view_statistics"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/statistics"
+        android:textAppearance="?textAppearanceCaption"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/view_contestant_details_divider"
+        app:layout_constraintTop_toBottomOf="@+id/view_contestant_details_divider" />
+
+    <TextView
         android:id="@+id/text_view_times_slept"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:gravity="center_horizontal"
-        android:text="@string/times_slept"
-        android:textAlignment="center"
-        android:textAppearance="?textAppearanceBody2"
-        app:layout_constraintEnd_toStartOf="@+id/divider_contestants_details_1"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/divider_contestants_details_1" />
-
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/text_view_number_times_slept"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="8dp"
-        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/divider_contestants_details_1"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/image_button_increment_times_slept"
-        tools:text="6" />
+        android:layout_marginTop="24dp"
+        android:textAppearance="?textAppearanceBody1"
+        app:layout_constraintStart_toStartOf="@+id/text_view_statistics"
+        app:layout_constraintTop_toBottomOf="@+id/text_view_statistics"
+        tools:text="Times slept: 0" />
 
-    <com.google.android.material.textview.MaterialTextView
+    <ImageButton
+        android:id="@+id/button_increment_times_slept"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:importantForAccessibility="no"
+        android:src="@drawable/ic_add"
+        app:layout_constraintBottom_toBottomOf="@+id/text_view_times_slept"
+        app:layout_constraintEnd_toEndOf="@+id/view_contestant_details_divider"
+        app:layout_constraintTop_toTopOf="@+id/text_view_times_slept" />
+
+    <TextView
         android:id="@+id/text_view_times_did_not_slept"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:gravity="center_horizontal"
-        android:text="@string/did_not_slept"
-        android:textAlignment="center"
-        android:textAppearance="?textAppearanceBody2"
-        app:layout_constraintEnd_toStartOf="@+id/divider_contestant_details_2"
-        app:layout_constraintStart_toEndOf="@+id/divider_contestants_details_1"
-        app:layout_constraintTop_toTopOf="@id/divider_contestants_details_1" />
-
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/text_view_number_times_did_not_slept"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginBottom="8dp"
-        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/divider_contestant_details_2"
-        app:layout_constraintStart_toEndOf="@+id/divider_contestants_details_1"
-        app:layout_constraintTop_toBottomOf="@id/image_button_increment_times_did_not_slept"
-        tools:text="0" />
-
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/text_view_times_felt_tired"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:gravity="center_horizontal"
-        android:text="@string/felt_tired"
-        android:textAlignment="center"
-        android:textAppearance="?textAppearanceBody2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/divider_contestant_details_2"
-        app:layout_constraintTop_toTopOf="@id/divider_contestant_details_2" />
-
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/text_view_number_times_felt_tired"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginBottom="8dp"
-        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/divider_contestant_details_2"
-        app:layout_constraintTop_toBottomOf="@+id/image_button_increment_times_felt_tired"
-        tools:text="1" />
-
-    <ImageButton
-        android:id="@+id/image_button_increment_times_slept"
-        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:background="@android:color/transparent"
-        android:contentDescription="@string/content_description_increment_number_of_times_slept"
-        app:layout_constraintEnd_toEndOf="@+id/text_view_number_times_slept"
-        app:layout_constraintStart_toStartOf="@+id/text_view_number_times_slept"
+        android:textAppearance="?textAppearanceBody1"
+        app:layout_constraintStart_toStartOf="@+id/text_view_statistics"
         app:layout_constraintTop_toBottomOf="@+id/text_view_times_slept"
-        app:srcCompat="@drawable/ic_keyboard_arrow_up" />
+        tools:text="Times did not slept: 0" />
 
     <ImageButton
-        android:id="@+id/image_button_increment_times_did_not_slept"
-        android:layout_width="0dp"
+        android:id="@+id/button_increment_times_did_not_slept"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:importantForAccessibility="no"
+        android:src="@drawable/ic_add"
+        app:layout_constraintBottom_toBottomOf="@+id/text_view_times_did_not_slept"
+        app:layout_constraintEnd_toEndOf="@+id/view_contestant_details_divider"
+        app:layout_constraintTop_toTopOf="@+id/text_view_times_did_not_slept" />
+
+    <TextView
+        android:id="@+id/text_view_times_felt_tired"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:background="@android:color/transparent"
-        android:contentDescription="@string/content_description_increment_number_os_times_you_did_not_slept"
-        app:layout_constraintEnd_toEndOf="@+id/text_view_number_times_did_not_slept"
-        app:layout_constraintStart_toStartOf="@+id/text_view_number_times_did_not_slept"
-        app:layout_constraintTop_toBottomOf="@id/text_view_times_did_not_slept"
-        app:srcCompat="@drawable/ic_keyboard_arrow_up" />
+        android:textAppearance="?textAppearanceBody1"
+        app:layout_constraintStart_toStartOf="@+id/text_view_statistics"
+        app:layout_constraintTop_toBottomOf="@+id/text_view_times_did_not_slept"
+        tools:text="Times felt tired: 0" />
 
     <ImageButton
-        android:id="@+id/image_button_increment_times_felt_tired"
-        android:layout_width="0dp"
+        android:id="@+id/button_increment_times_felt_tired"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         android:background="@android:color/transparent"
-        android:contentDescription="@string/content_description_increment_number_of_time_you_felt_tired"
-        app:layout_constraintEnd_toEndOf="@+id/text_view_number_times_felt_tired"
-        app:layout_constraintStart_toStartOf="@+id/text_view_number_times_felt_tired"
-        app:layout_constraintTop_toBottomOf="@+id/text_view_times_felt_tired"
-        app:srcCompat="@drawable/ic_keyboard_arrow_up" />
+        android:importantForAccessibility="no"
+        android:src="@drawable/ic_add"
+        app:layout_constraintBottom_toBottomOf="@+id/text_view_times_felt_tired"
+        app:layout_constraintEnd_toEndOf="@+id/view_contestant_details_divider"
+        app:layout_constraintTop_toTopOf="@+id/text_view_times_felt_tired" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

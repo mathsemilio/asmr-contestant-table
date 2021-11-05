@@ -16,20 +16,24 @@ limitations under the License.
 
 package br.com.mathsemilio.asmrcontestanttable.ui.dialog.bottomsheet.contestantdetails.view
 
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.TextView
 import br.com.mathsemilio.asmrcontestanttable.R
+import br.com.mathsemilio.asmrcontestanttable.common.getDrawableResource
 import br.com.mathsemilio.asmrcontestanttable.domain.model.ASMRContestant
 
 class ContestantDetailsViewImpl(inflater: LayoutInflater, container: ViewGroup?) :
     ContestantDetailsView() {
 
+    private lateinit var imageViewContestantProfilePicture: ImageView
     private lateinit var textViewContestantsDetailsName: TextView
-    private lateinit var textViewNumberTimesSlept: TextView
-    private lateinit var textViewNumberTimesDidNotSlept: TextView
-    private lateinit var textViewNumberTimesFeltTired: TextView
+    private lateinit var textViewTimesSlept: TextView
+    private lateinit var textViewTimesDidNotSlept: TextView
+    private lateinit var textViewTimesFeltTired: TextView
     private lateinit var buttonIncrementTimesSlept: ImageButton
     private lateinit var buttonIncrementTimesDidNotSlept: ImageButton
     private lateinit var buttonIncrementTimesFeltTired: ImageButton
@@ -43,20 +47,14 @@ class ContestantDetailsViewImpl(inflater: LayoutInflater, container: ViewGroup?)
     }
 
     private fun initializeViews() {
-        textViewContestantsDetailsName =
-            findViewById(R.id.text_view_contestants_details_name)
-        textViewNumberTimesSlept =
-            findViewById(R.id.text_view_number_times_slept)
-        textViewNumberTimesDidNotSlept =
-            findViewById(R.id.text_view_number_times_did_not_slept)
-        textViewNumberTimesFeltTired =
-            findViewById(R.id.text_view_number_times_felt_tired)
-        buttonIncrementTimesSlept =
-            findViewById(R.id.image_button_increment_times_slept)
-        buttonIncrementTimesDidNotSlept =
-            findViewById(R.id.image_button_increment_times_did_not_slept)
-        buttonIncrementTimesFeltTired =
-            findViewById(R.id.image_button_increment_times_felt_tired)
+        imageViewContestantProfilePicture = findViewById(R.id.image_view_contestant_profile_picture)
+        textViewContestantsDetailsName = findViewById(R.id.text_view_contestants_details_name)
+        textViewTimesSlept = findViewById(R.id.text_view_times_slept)
+        textViewTimesDidNotSlept = findViewById(R.id.text_view_times_did_not_slept)
+        textViewTimesFeltTired = findViewById(R.id.text_view_times_felt_tired)
+        buttonIncrementTimesSlept = findViewById(R.id.button_increment_times_slept)
+        buttonIncrementTimesDidNotSlept = findViewById(R.id.button_increment_times_did_not_slept)
+        buttonIncrementTimesFeltTired = findViewById(R.id.button_increment_times_felt_tired)
     }
 
     private fun attachClickListeners() {
@@ -72,9 +70,32 @@ class ContestantDetailsViewImpl(inflater: LayoutInflater, container: ViewGroup?)
     }
 
     override fun bindContestant(contestant: ASMRContestant) {
+        bindContestantProfilePicture(contestant.profilePicture)
+
         textViewContestantsDetailsName.text = contestant.name
-        textViewNumberTimesSlept.text = contestant.timesSlept.toString()
-        textViewNumberTimesDidNotSlept.text = contestant.timesDidNotSlept.toString()
-        textViewNumberTimesFeltTired.text = contestant.timesFeltTired.toString()
+
+        textViewTimesSlept.text = context.getString(
+            R.string.contestant_times_slept,
+            contestant.timesSlept
+        )
+
+        textViewTimesDidNotSlept.text = context.getString(
+            R.string.contestant_times_did_not_slept,
+            contestant.timesDidNotSlept
+        )
+
+        textViewTimesFeltTired.text = context.getString(
+            R.string.contestant_times_felt_tired,
+            contestant.timesFeltTired
+        )
+    }
+
+    private fun bindContestantProfilePicture(profilePicture: String) {
+        if (profilePicture != "")
+            imageViewContestantProfilePicture.setImageURI(Uri.parse(profilePicture))
+        else
+            imageViewContestantProfilePicture.setImageDrawable(
+                context.getDrawableResource(R.drawable.dr_contestant_profile_picture)
+            )
     }
 }

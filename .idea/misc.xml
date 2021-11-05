@@ -11,9 +11,9 @@
         <entry key="app/src/main/res/drawable/dr_horizontal_gradient_background_end.xml" value="0.2598958333333333" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.24375" />
         <entry key="app/src/main/res/layout/bottom_sheet_add_contestant.xml" value="0.335" />
-        <entry key="app/src/main/res/layout/bottom_sheet_contestant_details.xml" value="0.24375" />
+        <entry key="app/src/main/res/layout/bottom_sheet_contestant_details.xml" value="0.335" />
         <entry key="app/src/main/res/layout/contestant_list_item.xml" value="0.335" />
-        <entry key="app/src/main/res/layout/contestants_table_screen.xml" value="0.24375" />
+        <entry key="app/src/main/res/layout/contestants_table_screen.xml" value="0.335" />
       </map>
     </option>
   </component>

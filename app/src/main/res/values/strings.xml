@@ -28,7 +28,7 @@
     <string name="cell_acronym_points">PTS</string>
     <string name="cell_acronym_felt_tired">FT</string>
     <string name="cell_acronym_did_not_slept">DNS</string>
-    <string name="cell_acronym_times_slept">TS</string>
+    <string name="cell_acronym_slept">S</string>
 
     <!-- Week highlights list screen -->
     <string name="no_week_highlights_found">No Week Highlights found</string>
@@ -45,9 +45,10 @@
     <string name="adding_week_highlights">Adding Week Highlights…</string>
 
     <!-- Contestant details dialog -->
-    <string name="felt_tired">Felt tired</string>
-    <string name="did_not_slept">Did not slept</string>
-    <string name="times_slept">Times slept</string>
+    <string name="statistics">Statistics</string>
+    <string name="contestant_times_slept">Times slept: %d</string>
+    <string name="contestant_times_did_not_slept">Times did not slept: %d</string>
+    <string name="contestant_times_felt_tired">Times felt tired: %d</string>
 
     <!-- Reset Contest Dialog -->
     <string name="dialog_title_reset_contest">Reset contest</string>
