@@ -40,6 +40,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/frame_layout_fragment_container"
-        app:menu="@menu/bottom_nav_view_app" />
+        app:menu="@menu/bottom_navigation_view_app" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

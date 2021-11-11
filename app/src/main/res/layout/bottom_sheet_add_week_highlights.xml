@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:text="@string/add_week_highlights"
-        android:textAppearance="?textAppearanceHeadline5"
+        android:textAppearance="?textAppearanceTitleLarge"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/image_view_bottom_sheet_slider" />
 

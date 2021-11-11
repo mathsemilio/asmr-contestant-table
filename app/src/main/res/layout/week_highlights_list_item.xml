@@ -19,7 +19,7 @@
             app:layout_constraintBottom_toBottomOf="@id/divider_week_highlights_item"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/divider_week_highlights_item"
-            app:srcCompat="@drawable/ic_stars" />
+            app:srcCompat="@drawable/ic_outline_stars" />
 
         <View
             android:id="@+id/divider_week_highlights_item"
@@ -38,10 +38,12 @@
             android:layout_marginStart="16dp"
             android:ellipsize="end"
             android:maxLines="1"
-            android:textAppearance="?textAppearanceHeadline5"
+            android:textAppearance="?textAppearanceTitleMedium"
+            app:layout_constraintBottom_toTopOf="@+id/text_view_week_highlights_item_contestants"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/divider_week_highlights_item"
-            app:layout_constraintTop_toTopOf="@id/divider_week_highlights_item"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed"
             tools:text="Week 1" />
 
         <com.google.android.material.textview.MaterialTextView
@@ -51,11 +53,11 @@
             android:ellipsize="marquee"
             android:marqueeRepeatLimit="marquee_forever"
             android:singleLine="true"
-            android:textAppearance="?textAppearanceBody2"
-            app:layout_constraintBottom_toBottomOf="@+id/divider_week_highlights_item"
+            android:textAppearance="?textAppearanceBodyMedium"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@id/text_view_week_highlights_item_week"
-            app:layout_constraintTop_toBottomOf="@id/text_view_week_highlights_item_week"
+            app:layout_constraintTop_toBottomOf="@+id/text_view_week_highlights_item_week"
             tools:text="Contestant 1 &amp; Contestant 2" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

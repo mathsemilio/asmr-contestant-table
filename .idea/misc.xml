@@ -9,12 +9,22 @@
         <entry key="app/src/main/res/drawable/dr_contestant_profile_picture.xml" value="0.2111111111111111" />
         <entry key="app/src/main/res/drawable/dr_horizontal_gradient_background.xml" value="0.2074074074074074" />
         <entry key="app/src/main/res/drawable/dr_horizontal_gradient_background_end.xml" value="0.2598958333333333" />
-        <entry key="app/src/main/res/layout-land/contestants_table_screen.xml" value="0.41302083333333334" />
+        <entry key="app/src/main/res/drawable/ic_list_alt.xml" value="0.23055555555555557" />
+        <entry key="app/src/main/res/drawable/ic_outline_stars.xml" value="0.23055555555555557" />
+        <entry key="app/src/main/res/drawable/ic_stars.xml" value="0.13958333333333334" />
+        <entry key="app/src/main/res/layout-land/contestants_table_screen.xml" value="0.19635416666666666" />
+        <entry key="app/src/main/res/layout-land/week_highlights_list_screen.xml" value="0.19635416666666666" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.24375" />
         <entry key="app/src/main/res/layout/bottom_sheet_add_contestant.xml" value="0.335" />
+        <entry key="app/src/main/res/layout/bottom_sheet_add_week_highlights.xml" value="0.23333333333333334" />
         <entry key="app/src/main/res/layout/bottom_sheet_contestant_details.xml" value="0.335" />
         <entry key="app/src/main/res/layout/contestant_list_item.xml" value="0.335" />
-        <entry key="app/src/main/res/layout/contestants_table_screen.xml" value="0.335" />
+        <entry key="app/src/main/res/layout/contestants_table_screen.xml" value="0.24375" />
+        <entry key="app/src/main/res/layout/prompt_dialog.xml" value="0.335" />
+        <entry key="app/src/main/res/layout/week_highlights_list_item.xml" value="0.335" />
+        <entry key="app/src/main/res/layout/week_highlights_list_screen.xml" value="0.335" />
+        <entry key="app/src/main/res/menu/bottom_nav_view_app.xml" value="0.24375" />
+        <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.2598958333333333" />
       </map>
     </option>
   </component>

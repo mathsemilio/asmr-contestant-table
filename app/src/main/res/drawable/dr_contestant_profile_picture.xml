@@ -5,7 +5,7 @@
 
     <item
         android:bottom="16dp"
-        android:drawable="@drawable/ic_person"
+        android:drawable="@drawable/ic_outline_person"
         android:left="16dp"
         android:right="16dp"
         android:top="16dp" />

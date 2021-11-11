@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
+
     <item
         android:id="@+id/bottom_navigation_item_contestants_table"
-        android:icon="@drawable/ic_format_list_numbered"
+        android:icon="@drawable/ic_list_alt"
         android:title="@string/contestants_table" />
+
     <item
         android:id="@+id/bottom_navigation_item_week_highlights"
-        android:icon="@drawable/ic_stars"
+        android:icon="@drawable/ic_outline_stars"
         android:title="@string/week_highlights" />
+
 </menu>
