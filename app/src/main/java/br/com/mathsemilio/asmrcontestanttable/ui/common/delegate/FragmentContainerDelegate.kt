@@ -14,9 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
  */
 
-package br.com.mathsemilio.asmrcontestanttable.ui.common.navigation
+package br.com.mathsemilio.asmrcontestanttable.ui.common.delegate
 
-enum class Destination {
-    CONTESTANTS_TABLE,
-    WEEK_HIGHLIGHTS
+interface FragmentContainerDelegate {
+    val fragmentContainerId: Int
 }

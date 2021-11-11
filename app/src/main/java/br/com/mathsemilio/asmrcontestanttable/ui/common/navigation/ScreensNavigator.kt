@@ -17,20 +17,27 @@ limitations under the License.
 package br.com.mathsemilio.asmrcontestanttable.ui.common.navigation
 
 import br.com.mathsemilio.asmrcontestanttable.ui.common.manager.FragmentTransactionManager
-import br.com.mathsemilio.asmrcontestanttable.ui.screens.contestantstable.ContestantsTableFragment
-import br.com.mathsemilio.asmrcontestanttable.ui.screens.weekhighlightslist.WeekHighlightsFragment
+import br.com.mathsemilio.asmrcontestanttable.ui.common.navigation.destination.Destinations
+import br.com.mathsemilio.asmrcontestanttable.ui.screens.contestantstable.controller.ContestantsTableFragment
+import br.com.mathsemilio.asmrcontestanttable.ui.screens.weekhighlightslist.controller.WeekHighlightsFragment
 
 class ScreensNavigator(
     private val fragmentTransactionManager: FragmentTransactionManager,
     private val navigationEventListener: NavigationEventListener
 ) {
     fun toContestantsTableScreen() {
-        fragmentTransactionManager.replaceFragmentAtContainerWith(ContestantsTableFragment())
-        navigationEventListener.onNavigateTo(Destination.CONTESTANTS_TABLE)
+        fragmentTransactionManager.replaceFragmentAtContainerWith(
+            ContestantsTableFragment.newInstance()
+        )
+
+        navigationEventListener.onNavigateTo(Destinations.CONTESTANTS_TABLE)
     }
 
     fun toWeekHighlightsScreen() {
-        fragmentTransactionManager.replaceFragmentAtContainerWith(WeekHighlightsFragment())
-        navigationEventListener.onNavigateTo(Destination.WEEK_HIGHLIGHTS)
+        fragmentTransactionManager.replaceFragmentAtContainerWith(
+            WeekHighlightsFragment.newInstance()
+        )
+
+        navigationEventListener.onNavigateTo(Destinations.WEEK_HIGHLIGHTS)
     }
 }

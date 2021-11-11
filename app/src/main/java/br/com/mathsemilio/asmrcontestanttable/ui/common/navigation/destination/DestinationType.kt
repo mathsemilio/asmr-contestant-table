@@ -14,11 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
  */
 
-package br.com.mathsemilio.asmrcontestanttable.ui.common.helper.imagepicker
+package br.com.mathsemilio.asmrcontestanttable.ui.common.navigation.destination
 
-import androidx.fragment.app.Fragment
-
-object ImagePickerHelperProvider {
-
-    fun getImagePickerHelper(fragment: Fragment) = ImagePickerHelper(fragment)
+enum class DestinationType {
+    PRIMARY
 }

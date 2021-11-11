@@ -32,7 +32,7 @@ class ImagePickerHelper(
     private val resultLauncher = fragment.registerForActivityResult(
         ActivityResultContracts.GetContent()
     ) { uri: Uri? ->
-        notifyListener { listener ->
+        notify { listener ->
             listener.onImagePickedSuccessfully(uri)
         }
     }

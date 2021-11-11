@@ -24,11 +24,13 @@ import br.com.mathsemilio.asmrcontestanttable.common.eventbus.EventListener
 import br.com.mathsemilio.asmrcontestanttable.common.eventbus.EventSubscriber
 import br.com.mathsemilio.asmrcontestanttable.domain.model.ASMRContestant
 import br.com.mathsemilio.asmrcontestanttable.domain.usecase.contestants.DeleteContestantsUseCase
+import br.com.mathsemilio.asmrcontestanttable.domain.usecase.contestants.DeleteContestantsUseCase.DeleteContestantsResult
 import br.com.mathsemilio.asmrcontestanttable.domain.usecase.contestants.FetchContestantsUseCase
+import br.com.mathsemilio.asmrcontestanttable.domain.usecase.contestants.FetchContestantsUseCase.FetchContestantsResult
 import br.com.mathsemilio.asmrcontestanttable.ui.common.event.ContestantsModifiedEvent
-import br.com.mathsemilio.asmrcontestanttable.ui.common.event.PromptDialogEvent
 import br.com.mathsemilio.asmrcontestanttable.ui.common.manager.dialogmanager.DialogManager
 import br.com.mathsemilio.asmrcontestanttable.ui.common.manager.messagesmanager.MessagesManager
+import br.com.mathsemilio.asmrcontestanttable.ui.dialog.promptdialog.PromptDialogEvent
 import br.com.mathsemilio.asmrcontestanttable.ui.screens.contestantstable.view.ContestantsTableScreenView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.cancelChildren
@@ -42,15 +44,9 @@ class ContestantsTableController(
     private val fetchContestantsUseCase: FetchContestantsUseCase,
     private val deleteContestantsUseCase: DeleteContestantsUseCase,
 ) : ContestantsTableScreenView.Listener,
-    FetchContestantsUseCase.Listener,
-    DeleteContestantsUseCase.Listener,
     EventListener {
 
     private lateinit var view: ContestantsTableScreenView
-
-    fun bindView(view: ContestantsTableScreenView) {
-        this.view = view
-    }
 
     override fun onAddContestantButtonClicked() {
         dialogManager.showAddContestantBottomSheet()
@@ -60,30 +56,12 @@ class ContestantsTableController(
         dialogManager.showContestantDetailsBottomSheet(contestant)
     }
 
-    override fun onContestantsFetchedSuccessfully(contestants: List<ASMRContestant>) {
-        view.hideProgressIndicator()
-        view.bindContestants(contestants)
-    }
-
-    override fun onContestantsFetchFailed() {
-        view.hideProgressIndicator()
-        messagesManager.showUnexpectedErrorOccurredMessage()
-    }
-
-    override fun onAllContestantsDeletedSuccessfully() {
-        fetchContestants()
-        messagesManager.showAllContestantsDeletedSuccessfullyMessage()
-    }
-
     private fun fetchContestants() {
         coroutineScope.launch {
-            fetchContestantsUseCase.fetchContestants()
+            fetchContestantsUseCase.fetchContestants().also { result ->
+                handleFetchContestantsResult(result)
+            }
         }
-    }
-
-    override fun onDeleteAllContestantsFailed() {
-        view.hideProgressIndicator()
-        messagesManager.showUnexpectedErrorOccurredMessage()
     }
 
     override fun onEvent(event: Any) {
@@ -96,11 +74,43 @@ class ContestantsTableController(
 
     private fun handlePromptDialogEvent(event: PromptDialogEvent) {
         when (event) {
-            PromptDialogEvent.PositiveButtonClicked -> coroutineScope.launch {
-                deleteContestantsUseCase.deleteAllContestants()
+            PromptDialogEvent.PositiveButtonClicked -> {
+                coroutineScope.launch {
+                    deleteContestantsUseCase.deleteAllContestants().also { result ->
+                        handleDeleteContestantsUseCaseResult(result)
+                    }
+                }
             }
             PromptDialogEvent.NegativeButtonClicked -> {
                 /* no-op associated with this event */
+            }
+        }
+    }
+
+    private fun handleDeleteContestantsUseCaseResult(result: DeleteContestantsResult) {
+        when (result) {
+            DeleteContestantsResult.Completed -> {
+                fetchContestants()
+                messagesManager.showAllContestantsDeletedSuccessfullyMessage()
+            }
+            DeleteContestantsResult.Failed -> {
+                view.hideProgressIndicator()
+                messagesManager.showUnexpectedErrorOccurredMessage()
+            }
+        }
+    }
+
+    private fun handleFetchContestantsResult(result: FetchContestantsResult) {
+        when (result) {
+            is FetchContestantsResult.Completed -> {
+                result.contestants?.let { contestants ->
+                    view.hideProgressIndicator()
+                    view.bindContestants(contestants)
+                }
+            }
+            FetchContestantsResult.Failed -> {
+                view.hideProgressIndicator()
+                messagesManager.showUnexpectedErrorOccurredMessage()
             }
         }
     }
@@ -119,19 +129,19 @@ class ContestantsTableController(
         }
     }
 
+    fun bindView(view: ContestantsTableScreenView) {
+        this.view = view
+    }
+
     fun onStart() {
         view.addListener(this)
         eventSubscriber.subscribe(this)
-        fetchContestantsUseCase.addListener(this)
-        deleteContestantsUseCase.addListener(this)
         fetchContestants()
     }
 
     fun onStop() {
         view.removeListener(this)
         eventSubscriber.unsubscribe(this)
-        fetchContestantsUseCase.removeListener(this)
-        deleteContestantsUseCase.removeListener(this)
         coroutineScope.coroutineContext.cancelChildren()
     }
 }

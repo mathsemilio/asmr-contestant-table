@@ -14,17 +14,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
  */
 
-package br.com.mathsemilio.asmrcontestanttable.ui.screens.contestantstable
+package br.com.mathsemilio.asmrcontestanttable.ui.screens.contestantstable.controller
 
 import android.os.Bundle
 import android.view.*
 import br.com.mathsemilio.asmrcontestanttable.ui.common.BaseFragment
-import br.com.mathsemilio.asmrcontestanttable.ui.screens.contestantstable.controller.ContestantsTableController
-import br.com.mathsemilio.asmrcontestanttable.ui.screens.contestantstable.view.ContestantsTableScreenView
 
 class ContestantsTableFragment : BaseFragment() {
 
-    private lateinit var view: ContestantsTableScreenView
+    companion object {
+        fun newInstance() = ContestantsTableFragment()
+    }
+
     private lateinit var controller: ContestantsTableController
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,8 +41,10 @@ class ContestantsTableFragment : BaseFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        view = compositionRoot.viewFactory.getContestantsTableScreenView(container)
+        val view = compositionRoot.viewFactory.getContestantsTableScreenView(container)
+
         controller.bindView(view)
+
         return view.rootView
     }
 

@@ -28,31 +28,31 @@ import br.com.mathsemilio.asmrcontestanttable.ui.screens.contestantstable.view.l
 import br.com.mathsemilio.asmrcontestanttable.ui.screens.weekhighlightslist.view.WeekHighlightsViewImpl
 import br.com.mathsemilio.asmrcontestanttable.ui.screens.weekhighlightslist.view.listitem.WeekHighlightsListItemViewImpl
 
-class ViewFactory(private val inflater: LayoutInflater) {
+class ViewFactory(private val layoutInflater: LayoutInflater) {
 
-    val promptDialogView get() = PromptDialogViewImpl(inflater)
+    val promptDialogView get() = PromptDialogViewImpl(layoutInflater)
 
     fun getMainActivityView(parent: ViewGroup?) =
-        MainActivityViewImpl(inflater, parent)
+        MainActivityViewImpl(layoutInflater, parent)
 
     fun getContestantsTableScreenView(container: ViewGroup?) =
-        ContestantsTableScreenViewImpl(inflater, container, this)
+        ContestantsTableScreenViewImpl(layoutInflater, container, this)
 
     fun getContestantsListItemView(parent: ViewGroup?) =
-        ContestantsListItemViewImpl(inflater, parent)
+        ContestantsListItemViewImpl(layoutInflater, parent)
 
     fun getWeekHighlightsListScreenView(container: ViewGroup?) =
-        WeekHighlightsViewImpl(inflater, container, this)
+        WeekHighlightsViewImpl(layoutInflater, container, this)
 
     fun getWeekHighlightsListItemView(parent: ViewGroup?) =
-        WeekHighlightsListItemViewImpl(inflater, parent)
+        WeekHighlightsListItemViewImpl(layoutInflater, parent)
 
     fun getAddContestView(container: ViewGroup?) =
-        AddContestantViewImpl(inflater, container)
+        AddContestantViewImpl(layoutInflater, container)
 
     fun getAddWeekHighlightsView(container: ViewGroup?) =
-        AddWeekHighlightsViewImpl(inflater, container)
+        AddWeekHighlightsViewImpl(layoutInflater, container)
 
     fun getContestantsDetailsView(container: ViewGroup?) =
-        ContestantDetailsViewImpl(inflater, container)
+        ContestantDetailsViewImpl(layoutInflater, container)
 }

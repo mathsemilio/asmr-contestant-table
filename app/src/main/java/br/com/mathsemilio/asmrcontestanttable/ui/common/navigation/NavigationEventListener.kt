@@ -16,6 +16,8 @@ limitations under the License.
 
 package br.com.mathsemilio.asmrcontestanttable.ui.common.navigation
 
+import br.com.mathsemilio.asmrcontestanttable.ui.common.navigation.destination.NavDestination
+
 interface NavigationEventListener {
-    fun onNavigateTo(destination: Destination)
+    fun onNavigateTo(destination: NavDestination)
 }

@@ -16,31 +16,28 @@ limitations under the License.
 
 package br.com.mathsemilio.asmrcontestanttable.domain.usecase.contestants
 
-import br.com.mathsemilio.asmrcontestanttable.common.observable.BaseObservable
 import br.com.mathsemilio.asmrcontestanttable.domain.model.ASMRContestant
 import br.com.mathsemilio.asmrcontestanttable.domain.model.Result
 import br.com.mathsemilio.asmrcontestanttable.storage.endpoint.ContestantsEndpoint
 
-open class FetchContestantsUseCase(
-    private val endpoint: ContestantsEndpoint?
-) : BaseObservable<FetchContestantsUseCase.Listener>() {
+open class FetchContestantsUseCase(private val endpoint: ContestantsEndpoint?) {
 
-    interface Listener {
-        fun onContestantsFetchedSuccessfully(contestants: List<ASMRContestant>)
-
-        fun onContestantsFetchFailed()
+    sealed class FetchContestantsResult {
+        data class Completed(val contestants: List<ASMRContestant>?) : FetchContestantsResult()
+        object Failed : FetchContestantsResult()
     }
 
-    open suspend fun fetchContestants() {
+    open suspend fun fetchContestants(): FetchContestantsResult {
+        var fetchContestantsResult: FetchContestantsResult
+
         endpoint?.fetchContestants().also { result ->
-            when (result) {
-                is Result.Completed -> notifyListener { listener ->
-                    listener.onContestantsFetchedSuccessfully(contestants = result.data!!)
-                }
-                is Result.Failed -> notifyListener { listener ->
-                    listener.onContestantsFetchFailed()
-                }
+            fetchContestantsResult = when (result) {
+                is Result.Completed -> FetchContestantsResult.Completed(contestants = result.data)
+                is Result.Failed -> FetchContestantsResult.Failed
+                null -> FetchContestantsResult.Failed
             }
         }
+
+        return fetchContestantsResult
     }
 }

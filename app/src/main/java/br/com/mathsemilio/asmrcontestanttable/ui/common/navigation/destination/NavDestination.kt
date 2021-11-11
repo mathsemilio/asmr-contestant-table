@@ -14,8 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
  */
 
-package br.com.mathsemilio.asmrcontestanttable.ui.common.manager
+package br.com.mathsemilio.asmrcontestanttable.ui.common.navigation.destination
 
-interface FragmentContainerManager {
-    fun getFragmentContainerId(): Int
-}
+import androidx.annotation.StringRes
+import java.io.Serializable
+
+data class NavDestination(
+    val name: String,
+    val type: DestinationType = DestinationType.PRIMARY,
+    @StringRes val titleId: Int? = null
+) : Serializable

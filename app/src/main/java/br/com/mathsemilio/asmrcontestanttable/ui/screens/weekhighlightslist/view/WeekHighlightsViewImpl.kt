@@ -48,9 +48,7 @@ class WeekHighlightsViewImpl(
 
         setupRecyclerView()
 
-        fabAddWeekHighlights.setOnClickListener {
-            notifyListener { it.onAddWeekHighlightsButtonClicked() }
-        }
+        attachAddWeekHighlightsButtonOnClickListener()
     }
 
     private fun initializeViews() {
@@ -67,6 +65,14 @@ class WeekHighlightsViewImpl(
     private fun setupRecyclerView() {
         weekHighlightsListAdapter = WeekHighlightsListAdapter(viewFactory)
         recyclerViewWeekHighlightsList.adapter = weekHighlightsListAdapter
+    }
+
+    private fun attachAddWeekHighlightsButtonOnClickListener() {
+        fabAddWeekHighlights.setOnClickListener {
+            notify { listener ->
+                listener.onAddWeekHighlightsButtonClicked()
+            }
+        }
     }
 
     override fun bindWeekHighlights(weekHighlights: List<WeekHighlights>) {

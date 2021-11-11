@@ -25,31 +25,29 @@ import br.com.mathsemilio.asmrcontestanttable.common.setEnabledState
 import br.com.mathsemilio.asmrcontestanttable.common.showErrorState
 import com.google.android.material.button.MaterialButton
 
-class AddWeekHighlightsViewImpl(inflater: LayoutInflater, container: ViewGroup?) :
-    AddWeekHighlightsView() {
+class AddWeekHighlightsViewImpl(
+    inflater: LayoutInflater,
+    container: ViewGroup?
+) : AddWeekHighlightsView() {
 
-    private var editTextFirstContestantName: EditText
-    private var editTextSecondContestantName: EditText
-    private var buttonAddWeekHighlight: MaterialButton
+    private lateinit var editTextFirstContestantName: EditText
+    private lateinit var editTextSecondContestantName: EditText
+    private lateinit var buttonAddWeekHighlight: MaterialButton
 
     init {
         rootView = inflater.inflate(R.layout.bottom_sheet_add_week_highlights, container, false)
 
-        editTextFirstContestantName = findViewById(R.id.edit_text_first_contestant_name)
-        editTextSecondContestantName = findViewById(R.id.edit_text_second_contestant_name)
-        buttonAddWeekHighlight = findViewById(R.id.button_add_week_highlight)
+        initializeViews()
 
         buttonAddWeekHighlight.setOnClickListener {
             onAddWeekHighlightButtonClicked()
         }
     }
 
-    override fun changeAddButtonState() {
-        buttonAddWeekHighlight.setDisabledState(getString(R.string.adding_week_highlights))
-    }
-
-    override fun revertAddButtonState() {
-        buttonAddWeekHighlight.setEnabledState(getString(R.string.add))
+    private fun initializeViews() {
+        editTextFirstContestantName = findViewById(R.id.edit_text_first_contestant_name)
+        editTextSecondContestantName = findViewById(R.id.edit_text_second_contestant_name)
+        buttonAddWeekHighlight = findViewById(R.id.button_add_week_highlight)
     }
 
     private fun onAddWeekHighlightButtonClicked() {
@@ -60,6 +58,7 @@ class AddWeekHighlightsViewImpl(inflater: LayoutInflater, container: ViewGroup?)
             editTextFirstContestantName.showErrorState(
                 context.getString(R.string.please_enter_contestant_name)
             )
+
             return
         }
 
@@ -67,9 +66,20 @@ class AddWeekHighlightsViewImpl(inflater: LayoutInflater, container: ViewGroup?)
             editTextSecondContestantName.showErrorState(
                 getString(R.string.please_enter_contestant_name)
             )
+
             return
         }
 
-        notifyListener { it.onAddButtonClicked(firstContestantName, secondContestantName) }
+        notify { listener ->
+            listener.onAddButtonClicked(firstContestantName, secondContestantName)
+        }
+    }
+
+    override fun changeAddButtonState() {
+        buttonAddWeekHighlight.setDisabledState(getString(R.string.adding_week_highlights))
+    }
+
+    override fun revertAddButtonState() {
+        buttonAddWeekHighlight.setEnabledState(getString(R.string.add))
     }
 }

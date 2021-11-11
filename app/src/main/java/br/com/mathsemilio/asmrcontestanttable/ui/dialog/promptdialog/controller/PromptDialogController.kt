@@ -17,7 +17,7 @@ limitations under the License.
 package br.com.mathsemilio.asmrcontestanttable.ui.dialog.promptdialog.controller
 
 import br.com.mathsemilio.asmrcontestanttable.common.eventbus.EventPublisher
-import br.com.mathsemilio.asmrcontestanttable.ui.common.event.PromptDialogEvent
+import br.com.mathsemilio.asmrcontestanttable.ui.dialog.promptdialog.PromptDialogEvent
 import br.com.mathsemilio.asmrcontestanttable.ui.dialog.promptdialog.view.PromptDialogView
 
 class PromptDialogController(
@@ -26,15 +26,15 @@ class PromptDialogController(
 
     private lateinit var view: PromptDialogView
 
-    private lateinit var listener: PromptDialogControllerEventListener
+    lateinit var delegate: PromptDialogControllerEventDelegate
 
     override fun onPositiveButtonClicked() {
-        listener.onPromptDialogButtonClicked()
+        delegate.onPromptDialogButtonClicked()
         eventPublisher.publish(PromptDialogEvent.PositiveButtonClicked)
     }
 
     override fun onNegativeButtonClicked() {
-        listener.onPromptDialogButtonClicked()
+        delegate.onPromptDialogButtonClicked()
         eventPublisher.publish(PromptDialogEvent.NegativeButtonClicked)
     }
 
@@ -56,10 +56,6 @@ class PromptDialogController(
 
     fun bindNegativeButtonText(negativeButtonText: String?) {
         view.setNegativeButtonText(negativeButtonText)
-    }
-
-    fun registerForControllerEvents(listener: PromptDialogControllerEventListener) {
-        this.listener = listener
     }
 
     fun onStart() {

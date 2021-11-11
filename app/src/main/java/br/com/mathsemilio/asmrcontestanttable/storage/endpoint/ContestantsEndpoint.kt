@@ -27,13 +27,13 @@ open class ContestantsEndpoint(
     private val contestantsDAO: ContestantDAO?,
     private val weekHighlightsDAO: WeekHighlightsDAO?
 ) {
-    open suspend fun insertContestant(contestant: ASMRContestant): Result<Nothing> {
+    open suspend fun addContestant(contestant: ASMRContestant): Result<Nothing> {
         return withContext(Dispatchers.IO) {
             try {
                 contestantsDAO?.insertData(contestant)
                 Result.Completed(data = null)
-            } catch (e: Exception) {
-                Result.Failed(errorMessage = e.message!!)
+            } catch (exception: Exception) {
+                Result.Failed(exception = exception)
             }
         }
     }
@@ -43,8 +43,8 @@ open class ContestantsEndpoint(
             try {
                 contestantsDAO?.updateData(contestant)
                 Result.Completed(data = null)
-            } catch (e: Exception) {
-                Result.Failed(errorMessage = e.message!!)
+            } catch (exception: Exception) {
+                Result.Failed(exception = exception)
             }
         }
     }
@@ -53,8 +53,8 @@ open class ContestantsEndpoint(
         return withContext(Dispatchers.IO) {
             try {
                 Result.Completed(data = contestantsDAO?.fetchContestants())
-            } catch (e: Exception) {
-                Result.Failed(errorMessage = e.message!!)
+            } catch (exception: Exception) {
+                Result.Failed(exception = exception)
             }
         }
     }
@@ -65,8 +65,8 @@ open class ContestantsEndpoint(
                 contestantsDAO?.deleteAllContestants()
                 weekHighlightsDAO?.deleteAllWeekHighlights()
                 Result.Completed(data = null)
-            } catch (e: Exception) {
-                Result.Failed(errorMessage = e.message!!)
+            } catch (exception: Exception) {
+                Result.Failed(exception = exception)
             }
         }
     }

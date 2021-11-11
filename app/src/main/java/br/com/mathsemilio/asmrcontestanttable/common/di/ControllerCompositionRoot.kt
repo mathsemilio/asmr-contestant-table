@@ -19,10 +19,11 @@ package br.com.mathsemilio.asmrcontestanttable.common.di
 import br.com.mathsemilio.asmrcontestanttable.domain.usecase.contestants.AddContestantUseCase
 import br.com.mathsemilio.asmrcontestanttable.domain.usecase.contestants.DeleteContestantsUseCase
 import br.com.mathsemilio.asmrcontestanttable.domain.usecase.contestants.FetchContestantsUseCase
-import br.com.mathsemilio.asmrcontestanttable.domain.usecase.contestants.UpdateContestantUseCase
+import br.com.mathsemilio.asmrcontestanttable.domain.usecase.contestants.update.UpdateContestantTimesDidNotSleptUseCase
+import br.com.mathsemilio.asmrcontestanttable.domain.usecase.contestants.update.UpdateContestantTimesFeltTiredUseCase
+import br.com.mathsemilio.asmrcontestanttable.domain.usecase.contestants.update.UpdateContestantTimesSleptUseCase
 import br.com.mathsemilio.asmrcontestanttable.domain.usecase.weekhighlights.AddWeekHighlightsUseCase
 import br.com.mathsemilio.asmrcontestanttable.domain.usecase.weekhighlights.FetchWeekHighlightsUseCase
-import br.com.mathsemilio.asmrcontestanttable.ui.common.helper.imagepicker.ImagePickerHelperProvider
 import br.com.mathsemilio.asmrcontestanttable.ui.common.manager.dialogmanager.DialogManagerImpl
 import br.com.mathsemilio.asmrcontestanttable.ui.common.manager.messagesmanager.MessagesManagerImpl
 import br.com.mathsemilio.asmrcontestanttable.ui.dialog.bottomsheet.addcontestant.controller.AddContestantBottomSheetController
@@ -34,60 +35,57 @@ import br.com.mathsemilio.asmrcontestanttable.ui.screens.weekhighlightslist.cont
 
 class ControllerCompositionRoot(private val activityCompositionRoot: ActivityCompositionRoot) {
 
-    private val supportFragmentManager get() = activityCompositionRoot.supportFragmentManager
+    private val dialogManager
+        get() = DialogManagerImpl(
+            activityCompositionRoot.supportFragmentManager,
+            activityCompositionRoot.application
+        )
 
-    private val applicationContext get() = activityCompositionRoot.applicationContext
+    private val messagesManager
+        get() = MessagesManagerImpl(activityCompositionRoot.application)
 
-    private val coroutineScopeProvider get() = activityCompositionRoot.coroutineScopeProvider
+    private val addContestantUseCase
+        get() = AddContestantUseCase(activityCompositionRoot.contestantsEndpoint)
 
-    private val eventSubscriber get() = activityCompositionRoot.eventSubscriber
+    private val addWeekHighlightsUseCase
+        get() = AddWeekHighlightsUseCase(activityCompositionRoot.weekHighlightsEndpoint)
 
-    private val permissionsHelper get() = activityCompositionRoot.permissionsHelper
+    private val deleteContestantsUseCase
+        get() = DeleteContestantsUseCase(activityCompositionRoot.contestantsEndpoint)
 
-    val eventPublisher get() = activityCompositionRoot.eventPublisher
+    private val fetchContestantsUseCase
+        get() = FetchContestantsUseCase(activityCompositionRoot.contestantsEndpoint)
 
-    val imagePickerHelperProvider get() = ImagePickerHelperProvider
+    private val fetchWeekHighlightsUseCase
+        get() = FetchWeekHighlightsUseCase(activityCompositionRoot.weekHighlightsEndpoint)
 
-    val viewFactory get() = activityCompositionRoot.viewFactory
+    private val updateContestantTimesSleptUseCase
+        get() = UpdateContestantTimesSleptUseCase(activityCompositionRoot.contestantsEndpoint)
 
-    private val dialogManager by lazy {
-        DialogManagerImpl(supportFragmentManager, applicationContext)
-    }
+    private val updateContestantTimesDidNotSleptUseCase
+        get() = UpdateContestantTimesDidNotSleptUseCase(activityCompositionRoot.contestantsEndpoint)
 
-    val messagesManager by lazy {
-        MessagesManagerImpl(applicationContext)
-    }
+    private val updateContestantTimesFeltTiredUseCase
+        get() = UpdateContestantTimesFeltTiredUseCase(activityCompositionRoot.contestantsEndpoint)
 
-    private val addContestantUseCase by lazy {
-        AddContestantUseCase(activityCompositionRoot.contestantsEndpoint)
-    }
+    val viewFactory
+        get() = activityCompositionRoot.viewFactory
 
-    private val addWeekHighlightsUseCase by lazy {
-        AddWeekHighlightsUseCase(activityCompositionRoot.weekHighlightsEndpoint)
-    }
-
-    private val updateContestantUseCase by lazy {
-        UpdateContestantUseCase(activityCompositionRoot.contestantsEndpoint)
-    }
-
-    private val fetchContestantsUseCase by lazy {
-        FetchContestantsUseCase(activityCompositionRoot.contestantsEndpoint)
-    }
-
-    private val fetchWeekHighlightsUseCase by lazy {
-        FetchWeekHighlightsUseCase(activityCompositionRoot.weekHighlightsEndpoint)
-    }
-
-    private val deleteContestantsUseCase by lazy {
-        DeleteContestantsUseCase(activityCompositionRoot.contestantsEndpoint)
-    }
+    val addContestantBottomSheetController
+        get() = AddContestantBottomSheetController(
+            activityCompositionRoot.permissionsHelper,
+            messagesManager,
+            activityCompositionRoot.coroutineScopeProvider.UIBoundScope,
+            activityCompositionRoot.eventPublisher,
+            addContestantUseCase
+        )
 
     val contestantsTableController
         get() = ContestantsTableController(
-            eventSubscriber,
+            activityCompositionRoot.eventSubscriber,
             messagesManager,
             dialogManager,
-            coroutineScopeProvider.UIBoundScope,
+            activityCompositionRoot.coroutineScopeProvider.UIBoundScope,
             fetchContestantsUseCase,
             deleteContestantsUseCase
         )
@@ -95,37 +93,30 @@ class ControllerCompositionRoot(private val activityCompositionRoot: ActivityCom
     val weekHighlightsController
         get() = WeekHighlightsController(
             messagesManager,
-            eventSubscriber,
+            activityCompositionRoot.eventSubscriber,
             dialogManager,
-            coroutineScopeProvider.UIBoundScope,
+            activityCompositionRoot.coroutineScopeProvider.UIBoundScope,
             fetchWeekHighlightsUseCase
-        )
-
-    val addContestantBottomSheetController
-        get() = AddContestantBottomSheetController(
-            permissionsHelper,
-            messagesManager,
-            coroutineScopeProvider.UIBoundScope,
-            eventPublisher,
-            addContestantUseCase
         )
 
     val addWeekHighlightsBottomSheetController
         get() = AddWeekHighlightsBottomSheetController(
             messagesManager,
-            eventPublisher,
-            coroutineScopeProvider.UIBoundScope,
+            activityCompositionRoot.eventPublisher,
+            activityCompositionRoot.coroutineScopeProvider.UIBoundScope,
             addWeekHighlightsUseCase
         )
 
     val contestantDetailsBottomSheetController
         get() = ContestantsDetailsBottomSheetController(
             messagesManager,
-            eventPublisher,
-            coroutineScopeProvider.UIBoundScope,
-            updateContestantUseCase
+            activityCompositionRoot.eventPublisher,
+            activityCompositionRoot.coroutineScopeProvider.UIBoundScope,
+            updateContestantTimesSleptUseCase,
+            updateContestantTimesDidNotSleptUseCase,
+            updateContestantTimesFeltTiredUseCase
         )
 
     val promptDialogController
-        get() = PromptDialogController(eventPublisher)
+        get() = PromptDialogController(activityCompositionRoot.eventPublisher)
 }

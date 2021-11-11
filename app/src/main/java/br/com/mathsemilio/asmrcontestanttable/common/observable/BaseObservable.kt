@@ -19,7 +19,9 @@ package br.com.mathsemilio.asmrcontestanttable.common.observable
 abstract class BaseObservable<Listener> : Observable<Listener> {
 
     private val _listeners = mutableSetOf<Listener>()
-    protected val listeners get() = _listeners.toSet()
+
+    protected val listeners
+        get() = _listeners.toSet()
 
     override fun addListener(listener: Listener) {
         _listeners.add(listener)
@@ -29,11 +31,11 @@ abstract class BaseObservable<Listener> : Observable<Listener> {
         _listeners.remove(listener)
     }
 
-    protected inline fun BaseObservable<Listener>.notifyListener(
-        onNotifyListener: (Listener) -> Unit
+    protected inline fun BaseObservable<Listener>.notify(
+        crossinline notificationBody: (Listener) -> Unit
     ) {
         this@BaseObservable.listeners.forEach { listener ->
-            onNotifyListener(listener)
+            notificationBody(listener)
         }
     }
 }

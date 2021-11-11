@@ -18,11 +18,10 @@ package br.com.mathsemilio.asmrcontestanttable.ui.common
 
 import androidx.fragment.app.Fragment
 import br.com.mathsemilio.asmrcontestanttable.common.di.ControllerCompositionRoot
-import br.com.mathsemilio.asmrcontestanttable.ui.MainActivity
 
 abstract class BaseFragment : Fragment() {
 
     protected val compositionRoot by lazy {
-        ControllerCompositionRoot((requireActivity() as MainActivity).compositionRoot)
+        ControllerCompositionRoot((requireActivity() as BaseActivity).compositionRoot)
     }
 }

@@ -21,7 +21,9 @@ import br.com.mathsemilio.asmrcontestanttable.common.observable.Observable
 abstract class BaseObservableView<Listener> : Observable<Listener>, BaseView() {
 
     private val _listeners = mutableSetOf<Listener>()
-    protected val listeners get() = _listeners.toSet()
+
+    protected val listeners
+        get() = _listeners.toSet()
 
     override fun addListener(listener: Listener) {
         _listeners.add(listener)
@@ -31,11 +33,11 @@ abstract class BaseObservableView<Listener> : Observable<Listener>, BaseView() {
         _listeners.remove(listener)
     }
 
-    protected inline fun BaseObservableView<Listener>.notifyListener(
-        onNotifyListener: (Listener) -> Unit
+    protected inline fun BaseObservableView<Listener>.notify(
+        crossinline notificationBody: (Listener) -> Unit
     ) {
         this@BaseObservableView.listeners.forEach { listener ->
-            onNotifyListener(listener)
+            notificationBody(listener)
         }
     }
 }

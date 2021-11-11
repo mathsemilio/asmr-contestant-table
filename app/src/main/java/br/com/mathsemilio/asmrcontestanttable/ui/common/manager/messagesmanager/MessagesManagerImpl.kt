@@ -23,11 +23,13 @@ import br.com.mathsemilio.asmrcontestanttable.common.showShortToast
 
 class MessagesManagerImpl(private val context: Context) : MessagesManager {
 
-    override fun showAllContestantsDeletedSuccessfullyMessage() =
+    override fun showAllContestantsDeletedSuccessfullyMessage() {
         context.showShortToast(context.getString(R.string.message_contest_rebooted_successfully))
+    }
 
-    override fun showUnexpectedErrorOccurredMessage() =
+    override fun showUnexpectedErrorOccurredMessage() {
         context.showLongToast(context.getString(R.string.message_unexpected_error_occurred))
+    }
 
     override fun showReadExternalStoragePermissionDeniedMessage() {
         context.showLongToast(context.getString(R.string.message_read_external_storage_permission_denied))

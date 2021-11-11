@@ -18,8 +18,9 @@ package br.com.mathsemilio.asmrcontestanttable.ui.dialog.bottomsheet.addweekhigh
 
 import br.com.mathsemilio.asmrcontestanttable.common.eventbus.EventPublisher
 import br.com.mathsemilio.asmrcontestanttable.domain.usecase.weekhighlights.AddWeekHighlightsUseCase
-import br.com.mathsemilio.asmrcontestanttable.ui.common.event.WeekHighlightsModifiedEvent
+import br.com.mathsemilio.asmrcontestanttable.domain.usecase.weekhighlights.AddWeekHighlightsUseCase.AddWeekHighlightsResult
 import br.com.mathsemilio.asmrcontestanttable.ui.common.manager.messagesmanager.MessagesManager
+import br.com.mathsemilio.asmrcontestanttable.ui.dialog.bottomsheet.addweekhighlights.WeekHighlightsModifiedEvent
 import br.com.mathsemilio.asmrcontestanttable.ui.dialog.bottomsheet.addweekhighlights.view.AddWeekHighlightsView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.cancelChildren
@@ -30,46 +31,48 @@ class AddWeekHighlightsBottomSheetController(
     private val eventPublisher: EventPublisher,
     private val coroutineScope: CoroutineScope,
     private val addWeekHighlightsUseCase: AddWeekHighlightsUseCase
-) : AddWeekHighlightsView.Listener,
-    AddWeekHighlightsUseCase.Listener {
+) : AddWeekHighlightsView.Listener {
 
     private lateinit var view: AddWeekHighlightsView
 
-    private lateinit var listener: WeekHighlightsControllerEventListener
+    lateinit var delegate: WeekHighlightsControllerEventDelegate
 
     override fun onAddButtonClicked(firstContestantName: String, secondContestantName: String) {
         coroutineScope.launch {
             view.changeAddButtonState()
-            addWeekHighlightsUseCase.insertWeekHighlights(firstContestantName, secondContestantName)
+
+            addWeekHighlightsUseCase.addWeekHighlights(
+                firstContestantName,
+                secondContestantName
+            ).also { result ->
+                handleAddHighlightsUseCaseResult(result)
+            }
         }
     }
 
-    override fun onWeekHighlightsAddedSuccessfully() {
-        listener.onWeekHighlightsModified()
-        eventPublisher.publish(WeekHighlightsModifiedEvent.WeekHighlightAdded)
-    }
-
-    override fun onAddWeekHighlightsFailed() {
-        view.revertAddButtonState()
-        messagesManager.showUnexpectedErrorOccurredMessage()
+    private fun handleAddHighlightsUseCaseResult(result: AddWeekHighlightsResult) {
+        when (result) {
+            AddWeekHighlightsResult.Completed -> {
+                delegate.onDismissBottomSheetRequested()
+                eventPublisher.publish(WeekHighlightsModifiedEvent.WeekHighlightAdded)
+            }
+            AddWeekHighlightsResult.Failed -> {
+                view.revertAddButtonState()
+                messagesManager.showUnexpectedErrorOccurredMessage()
+            }
+        }
     }
 
     fun bindView(view: AddWeekHighlightsView) {
         this.view = view
     }
 
-    fun registerForControllerEvents(listener: WeekHighlightsControllerEventListener) {
-        this.listener = listener
-    }
-
     fun onStart() {
         view.addListener(this)
-        addWeekHighlightsUseCase.addListener(this)
     }
 
     fun onStop() {
         view.removeListener(this)
-        addWeekHighlightsUseCase.removeListener(this)
         coroutineScope.coroutineContext.cancelChildren()
     }
 }

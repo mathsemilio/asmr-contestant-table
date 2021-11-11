@@ -14,8 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
  */
 
-package br.com.mathsemilio.asmrcontestanttable.ui.common.event
+package br.com.mathsemilio.asmrcontestanttable.ui.common.helper.imagepicker
 
-sealed class WeekHighlightsModifiedEvent {
-    object WeekHighlightAdded : WeekHighlightsModifiedEvent()
+import androidx.fragment.app.Fragment
+
+object ImagePickerHelperFactory {
+
+    fun getImagePickerHelper(fragment: Fragment) = ImagePickerHelper(fragment)
 }

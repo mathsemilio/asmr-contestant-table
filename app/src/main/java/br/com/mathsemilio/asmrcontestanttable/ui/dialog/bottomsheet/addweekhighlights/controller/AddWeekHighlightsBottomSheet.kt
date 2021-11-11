@@ -22,7 +22,8 @@ import android.view.View
 import android.view.ViewGroup
 import br.com.mathsemilio.asmrcontestanttable.ui.dialog.commom.BaseBottomSheetDialogFragment
 
-class AddWeekHighlightsBottomSheet : BaseBottomSheetDialogFragment(), WeekHighlightsControllerEventListener {
+class AddWeekHighlightsBottomSheet : BaseBottomSheetDialogFragment(),
+    WeekHighlightsControllerEventDelegate {
 
     private lateinit var controller: AddWeekHighlightsBottomSheetController
 
@@ -37,16 +38,19 @@ class AddWeekHighlightsBottomSheet : BaseBottomSheetDialogFragment(), WeekHighli
         savedInstanceState: Bundle?
     ): View {
         val view = compositionRoot.viewFactory.getAddWeekHighlightsView(container)
+
         controller.bindView(view)
+
         return view.rootView
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        controller.registerForControllerEvents(this)
+
+        controller.delegate = this
     }
 
-    override fun onWeekHighlightsModified() {
+    override fun onDismissBottomSheetRequested() {
         dismiss()
     }
 

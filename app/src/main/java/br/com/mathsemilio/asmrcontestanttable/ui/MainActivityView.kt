@@ -17,7 +17,7 @@ limitations under the License.
 package br.com.mathsemilio.asmrcontestanttable.ui
 
 import android.widget.FrameLayout
-import br.com.mathsemilio.asmrcontestanttable.ui.common.navigation.Destination
+import androidx.annotation.StringRes
 import br.com.mathsemilio.asmrcontestanttable.ui.common.others.BottomNavigationItem
 import br.com.mathsemilio.asmrcontestanttable.ui.common.view.BaseObservableView
 import com.google.android.material.appbar.MaterialToolbar
@@ -32,7 +32,7 @@ abstract class MainActivityView : BaseObservableView<MainActivityView.Listener>(
 
     abstract val fragmentContainer: FrameLayout
 
-    abstract fun setToolbarTitle(destination: Destination)
+    abstract fun setToolbarTitle(@StringRes titleId: Int?)
 
-    abstract fun setBottomNavigationHighlightedItem()
+    abstract fun setBottomNavigationHighlightedItemBasedOn(destinationName: String)
 }

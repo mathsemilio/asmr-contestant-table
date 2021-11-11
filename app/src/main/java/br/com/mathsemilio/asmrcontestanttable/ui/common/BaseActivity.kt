@@ -24,7 +24,7 @@ abstract class BaseActivity : AppCompatActivity() {
 
     val compositionRoot by lazy {
         ActivityCompositionRoot(
-            appCompatActivity = this,
+            activity = this,
             (application as ASMRContestantsTableApplication).compositionRoot
         )
     }

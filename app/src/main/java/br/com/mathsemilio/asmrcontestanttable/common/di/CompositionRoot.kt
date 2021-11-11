@@ -16,12 +16,13 @@ limitations under the License.
 
 package br.com.mathsemilio.asmrcontestanttable.common.di
 
+import android.app.Application
 import br.com.mathsemilio.asmrcontestanttable.common.eventbus.EventBus
 import br.com.mathsemilio.asmrcontestanttable.common.eventbus.EventPublisher
 import br.com.mathsemilio.asmrcontestanttable.common.eventbus.EventSubscriber
 import br.com.mathsemilio.asmrcontestanttable.common.provider.CoroutineScopeProvider
 
-class CompositionRoot {
+class CompositionRoot(val application: Application) {
 
     val coroutineScopeProvider get() = CoroutineScopeProvider
 
@@ -29,15 +30,11 @@ class CompositionRoot {
         EventBus()
     }
 
-    private val _eventPublisher by lazy {
+    val eventPublisher by lazy {
         EventPublisher(eventBus)
     }
 
-    private val _eventSubscriber by lazy {
+    val eventSubscriber by lazy {
         EventSubscriber(eventBus)
     }
-
-    val eventPublisher get() = _eventPublisher
-
-    val eventSubscriber get() = _eventSubscriber
 }

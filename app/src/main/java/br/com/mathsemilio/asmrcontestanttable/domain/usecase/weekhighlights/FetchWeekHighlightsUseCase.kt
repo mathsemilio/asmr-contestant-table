@@ -16,31 +16,28 @@ limitations under the License.
 
 package br.com.mathsemilio.asmrcontestanttable.domain.usecase.weekhighlights
 
-import br.com.mathsemilio.asmrcontestanttable.common.observable.BaseObservable
 import br.com.mathsemilio.asmrcontestanttable.domain.model.Result
 import br.com.mathsemilio.asmrcontestanttable.domain.model.WeekHighlights
 import br.com.mathsemilio.asmrcontestanttable.storage.endpoint.WeekHighlightsEndpoint
 
-open class FetchWeekHighlightsUseCase(
-    private val endpoint: WeekHighlightsEndpoint?
-) : BaseObservable<FetchWeekHighlightsUseCase.Listener>() {
+open class FetchWeekHighlightsUseCase(private val endpoint: WeekHighlightsEndpoint?) {
 
-    interface Listener {
-        fun onWeekHighlightsFetchedSuccessfully(weekHighlights: List<WeekHighlights>)
-
-        fun onWeekHighlightsFetchFailed()
+    sealed class FetchWeekHighlightsResult {
+        data class Completed(val weekHighlights: List<WeekHighlights>?) : FetchWeekHighlightsResult()
+        object Failed : FetchWeekHighlightsResult()
     }
 
-    open suspend fun fetchWeekHighlights() {
+    open suspend fun fetchWeekHighlights(): FetchWeekHighlightsResult {
+        var fetchWeekHighlightsResult: FetchWeekHighlightsResult
+
         endpoint?.fetchWeekHighlights().also { result ->
-            when (result) {
-                is Result.Completed -> notifyListener { listener ->
-                    listener.onWeekHighlightsFetchedSuccessfully(result.data!!)
-                }
-                is Result.Failed -> notifyListener { listener ->
-                    listener.onWeekHighlightsFetchFailed()
-                }
+            fetchWeekHighlightsResult = when (result) {
+                is Result.Completed -> FetchWeekHighlightsResult.Completed(weekHighlights = result.data)
+                is Result.Failed -> FetchWeekHighlightsResult.Failed
+                null -> FetchWeekHighlightsResult.Failed
             }
         }
+
+        return fetchWeekHighlightsResult
     }
 }

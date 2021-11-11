@@ -18,7 +18,12 @@ package br.com.mathsemilio.asmrcontestanttable.ui.dialog.bottomsheet.contestantd
 
 import br.com.mathsemilio.asmrcontestanttable.common.eventbus.EventPublisher
 import br.com.mathsemilio.asmrcontestanttable.domain.model.ASMRContestant
-import br.com.mathsemilio.asmrcontestanttable.domain.usecase.contestants.UpdateContestantUseCase
+import br.com.mathsemilio.asmrcontestanttable.domain.usecase.contestants.update.UpdateContestantTimesDidNotSleptUseCase
+import br.com.mathsemilio.asmrcontestanttable.domain.usecase.contestants.update.UpdateContestantTimesDidNotSleptUseCase.UpdateContestantTimesDidNotSleptResult
+import br.com.mathsemilio.asmrcontestanttable.domain.usecase.contestants.update.UpdateContestantTimesFeltTiredUseCase
+import br.com.mathsemilio.asmrcontestanttable.domain.usecase.contestants.update.UpdateContestantTimesFeltTiredUseCase.UpdateContestantTimesFeltTiredResult
+import br.com.mathsemilio.asmrcontestanttable.domain.usecase.contestants.update.UpdateContestantTimesSleptUseCase
+import br.com.mathsemilio.asmrcontestanttable.domain.usecase.contestants.update.UpdateContestantTimesSleptUseCase.UpdateContestantTimesSleptResult
 import br.com.mathsemilio.asmrcontestanttable.ui.common.event.ContestantsModifiedEvent
 import br.com.mathsemilio.asmrcontestanttable.ui.common.manager.messagesmanager.MessagesManager
 import br.com.mathsemilio.asmrcontestanttable.ui.dialog.bottomsheet.contestantdetails.view.ContestantDetailsView
@@ -30,41 +35,81 @@ class ContestantsDetailsBottomSheetController(
     private val messagesManager: MessagesManager,
     private val eventPublisher: EventPublisher,
     private val coroutineScope: CoroutineScope,
-    private val updateContestantUseCase: UpdateContestantUseCase
-) : ContestantDetailsView.Listener,
-    UpdateContestantUseCase.Listener {
+    private val updateContestantTimesSleptUseCase: UpdateContestantTimesSleptUseCase,
+    private val updateContestantTimesDidNotSleptUseCase: UpdateContestantTimesDidNotSleptUseCase,
+    private val updateContestantTimesFeltTiredUseCase: UpdateContestantTimesFeltTiredUseCase
+) : ContestantDetailsView.Listener {
 
     private lateinit var view: ContestantDetailsView
 
     private lateinit var contestant: ASMRContestant
 
-    private lateinit var delegate: ContestantDetailsControllerEventDelegate
+    lateinit var delegate: ContestantDetailsControllerEventDelegate
 
     override fun onIncrementTimesSleptButtonClicked() {
         coroutineScope.launch {
-            updateContestantUseCase.updateContestantTimesSlept(contestant)
+            updateContestantTimesSleptUseCase.updateContestantTimesSlept(
+                contestant
+            ).also { result ->
+                handleUpdateContestantTimesSleptUseCaseResult(result)
+            }
         }
+    }
+
+    private fun handleUpdateContestantTimesSleptUseCaseResult(
+        result: UpdateContestantTimesSleptResult
+    ) {
+        when (result) {
+            UpdateContestantTimesSleptResult.Completed -> onContestantUpdatedSuccessfully()
+            UpdateContestantTimesSleptResult.Failed -> onUpdateContestantFailed()
+        }
+    }
+
+    private fun onContestantUpdatedSuccessfully() {
+        delegate.onDismissBottomSheetRequested()
+        eventPublisher.publish(ContestantsModifiedEvent.ContestantModified)
+    }
+
+    private fun onUpdateContestantFailed() {
+        messagesManager.showUnexpectedErrorOccurredMessage()
     }
 
     override fun onIncrementTimesDidNotSleptButtonClicked() {
         coroutineScope.launch {
-            updateContestantUseCase.updateContestantTimesDidNotSlept(contestant)
+            updateContestantTimesDidNotSleptUseCase.updateContestantTimesDidNotSlept(
+                contestant
+            ).also { result ->
+                handleUpdateContestantTimesDidSleptUseCaseResult(result)
+            }
+        }
+    }
+
+    private fun handleUpdateContestantTimesDidSleptUseCaseResult(
+        result: UpdateContestantTimesDidNotSleptResult
+    ) {
+        when (result) {
+            UpdateContestantTimesDidNotSleptResult.Completed -> onContestantUpdatedSuccessfully()
+            UpdateContestantTimesDidNotSleptResult.Failed -> onUpdateContestantFailed()
         }
     }
 
     override fun onIncrementTimesFeltTiredButtonClicked() {
         coroutineScope.launch {
-            updateContestantUseCase.updateContestantTimesFeltTired(contestant)
+            updateContestantTimesFeltTiredUseCase.updateContestantTimesFeltTired(
+                contestant
+            ).also { result ->
+                handleUpdateContestantTimesFeltTiredUseCaseResult(result)
+            }
         }
     }
 
-    override fun onContestantUpdatedSuccessfully() {
-        delegate.onDismissBottomSheetRequested()
-        eventPublisher.publish(ContestantsModifiedEvent.ContestantModified)
-    }
-
-    override fun onUpdateContestantFailed() {
-        messagesManager.showUnexpectedErrorOccurredMessage()
+    private fun handleUpdateContestantTimesFeltTiredUseCaseResult(
+        result: UpdateContestantTimesFeltTiredResult
+    ) {
+        when (result) {
+            UpdateContestantTimesFeltTiredResult.Completed -> onContestantUpdatedSuccessfully()
+            UpdateContestantTimesFeltTiredResult.Failed -> onUpdateContestantFailed()
+        }
     }
 
     fun bindView(view: ContestantDetailsView) {
@@ -75,19 +120,13 @@ class ContestantsDetailsBottomSheetController(
         this.contestant = contestant
     }
 
-    fun addEventDelegate(delegate: ContestantDetailsControllerEventDelegate) {
-        this.delegate = delegate
-    }
-
     fun onStart() {
         view.addListener(this)
-        updateContestantUseCase.addListener(this)
         view.bindContestant(contestant)
     }
 
     fun onStop() {
         view.removeListener(this)
-        updateContestantUseCase.removeListener(this)
         coroutineScope.coroutineContext.cancelChildren()
     }
 }

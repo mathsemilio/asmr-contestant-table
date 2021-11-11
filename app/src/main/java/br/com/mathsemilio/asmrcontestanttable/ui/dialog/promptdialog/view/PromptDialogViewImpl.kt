@@ -49,7 +49,7 @@ class PromptDialogViewImpl(inflater: LayoutInflater) : PromptDialogView() {
     override fun setPositiveButtonText(positiveButtonText: String) {
         buttonPromptDialogPositive.apply {
             text = positiveButtonText
-            setOnClickListener { notifyListener { it.onPositiveButtonClicked() } }
+            setOnClickListener { notify { it.onPositiveButtonClicked() } }
         }
     }
 
@@ -57,7 +57,7 @@ class PromptDialogViewImpl(inflater: LayoutInflater) : PromptDialogView() {
         if (negativeButtonText != null)
             buttonPromptDialogNegative.apply {
                 text = negativeButtonText
-                setOnClickListener { notifyListener { it.onNegativeButtonClicked() } }
+                setOnClickListener { notify { it.onNegativeButtonClicked() } }
             }
         else
             buttonPromptDialogNegative.isVisible = false

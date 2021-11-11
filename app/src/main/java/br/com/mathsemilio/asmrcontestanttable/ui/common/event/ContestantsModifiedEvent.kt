@@ -18,5 +18,6 @@ package br.com.mathsemilio.asmrcontestanttable.ui.common.event
 
 sealed class ContestantsModifiedEvent {
     object ContestantAdded : ContestantsModifiedEvent()
+
     object ContestantModified : ContestantsModifiedEvent()
 }

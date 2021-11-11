@@ -18,15 +18,16 @@ package br.com.mathsemilio.asmrcontestanttable.ui.common.manager
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import br.com.mathsemilio.asmrcontestanttable.ui.common.delegate.FragmentContainerDelegate
 
 class FragmentTransactionManager(
     private val fragmentManager: FragmentManager,
-    private val fragmentContainerManager: FragmentContainerManager
+    private val fragmentContainerDelegate: FragmentContainerDelegate
 ) {
     fun replaceFragmentAtContainerWith(fragment: Fragment) {
         fragmentManager.beginTransaction().apply {
             setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
-            replace(fragmentContainerManager.getFragmentContainerId(), fragment)
+            replace(fragmentContainerDelegate.fragmentContainerId, fragment)
             commitNow()
         }
     }

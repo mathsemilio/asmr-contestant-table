@@ -16,69 +16,69 @@ limitations under the License.
 
 package br.com.mathsemilio.asmrcontestanttable.common.di
 
-import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import br.com.mathsemilio.asmrcontestanttable.storage.database.AppDatabase
 import br.com.mathsemilio.asmrcontestanttable.storage.endpoint.ContestantsEndpoint
 import br.com.mathsemilio.asmrcontestanttable.storage.endpoint.WeekHighlightsEndpoint
 import br.com.mathsemilio.asmrcontestanttable.ui.common.helper.PermissionsHelper
-import br.com.mathsemilio.asmrcontestanttable.ui.common.manager.FragmentContainerManager
+import br.com.mathsemilio.asmrcontestanttable.ui.common.delegate.FragmentContainerDelegate
 import br.com.mathsemilio.asmrcontestanttable.ui.common.manager.FragmentTransactionManager
 import br.com.mathsemilio.asmrcontestanttable.ui.common.navigation.NavigationEventListener
 import br.com.mathsemilio.asmrcontestanttable.ui.common.navigation.ScreensNavigator
 import br.com.mathsemilio.asmrcontestanttable.ui.common.view.ViewFactory
 
 class ActivityCompositionRoot(
-    private val appCompatActivity: AppCompatActivity,
+    private val activity: AppCompatActivity,
     private val compositionRoot: CompositionRoot
 ) {
-    private val database get() = AppDatabase.getDatabase(appCompatActivity)
+    private val database
+        get() = AppDatabase.getDatabase(activity)
 
-    private val contestantsDao by lazy {
-        database.contestantDAO
-    }
+    private val contestantsDao
+        get() = database.contestantDAO
 
-    private val weekHighlightsDAO by lazy {
-        database.weekHighlightsDAO
-    }
+    private val weekHighlightsDAO
+        get() = database.weekHighlightsDAO
 
-    private val _contestantsEndpoint by lazy {
-        ContestantsEndpoint(contestantsDao, weekHighlightsDAO)
-    }
+    private val fragmentTransactionManager
+        get() = FragmentTransactionManager(
+            supportFragmentManager,
+            activity as FragmentContainerDelegate
+        )
 
-    private val _weekHighlightsEndpoint by lazy {
-        WeekHighlightsEndpoint(weekHighlightsDAO)
-    }
-
-    private val _fragmentTransactionManager by lazy {
-        FragmentTransactionManager(supportFragmentManager, appCompatActivity as FragmentContainerManager)
-    }
-
-    private val _screensNavigator by lazy {
-        ScreensNavigator(_fragmentTransactionManager, appCompatActivity as NavigationEventListener)
+    val screensNavigator by lazy {
+        ScreensNavigator(
+            fragmentTransactionManager,
+            activity as NavigationEventListener
+        )
     }
 
     val viewFactory by lazy {
-        ViewFactory(appCompatActivity.layoutInflater)
+        ViewFactory(activity.layoutInflater)
     }
 
     val permissionsHelper by lazy {
-        PermissionsHelper(appCompatActivity)
+        PermissionsHelper(activity)
     }
 
-    val applicationContext: Context get() = appCompatActivity.applicationContext
+    val application
+        get() = compositionRoot.application
 
-    val contestantsEndpoint get() = _contestantsEndpoint
+    val coroutineScopeProvider
+        get() = compositionRoot.coroutineScopeProvider
 
-    val coroutineScopeProvider get() = compositionRoot.coroutineScopeProvider
+    val contestantsEndpoint
+        get() = ContestantsEndpoint(contestantsDao, weekHighlightsDAO)
 
-    val eventPublisher get() = compositionRoot.eventPublisher
+    val eventPublisher
+        get() = compositionRoot.eventPublisher
 
-    val eventSubscriber get() = compositionRoot.eventSubscriber
+    val eventSubscriber
+        get() = compositionRoot.eventSubscriber
 
-    val screensNavigator get() = _screensNavigator
+    val supportFragmentManager
+        get() = activity.supportFragmentManager
 
-    val supportFragmentManager get() = appCompatActivity.supportFragmentManager
-
-    val weekHighlightsEndpoint get() = _weekHighlightsEndpoint
+    val weekHighlightsEndpoint
+        get() = WeekHighlightsEndpoint(weekHighlightsDAO)
 }

@@ -14,19 +14,20 @@ See the License for the specific language governing permissions and
 limitations under the License.
  */
 
-package br.com.mathsemilio.asmrcontestanttable.ui.screens.weekhighlightslist
+package br.com.mathsemilio.asmrcontestanttable.ui.screens.weekhighlightslist.controller
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import br.com.mathsemilio.asmrcontestanttable.ui.common.BaseFragment
-import br.com.mathsemilio.asmrcontestanttable.ui.screens.weekhighlightslist.controller.WeekHighlightsController
-import br.com.mathsemilio.asmrcontestanttable.ui.screens.weekhighlightslist.view.WeekHighlightsView
 
 class WeekHighlightsFragment : BaseFragment() {
 
-    private lateinit var view: WeekHighlightsView
+    companion object {
+        fun newInstance() = WeekHighlightsFragment()
+    }
+
     private lateinit var controller: WeekHighlightsController
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,8 +40,10 @@ class WeekHighlightsFragment : BaseFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        view = compositionRoot.viewFactory.getWeekHighlightsListScreenView(container)
+        val view = compositionRoot.viewFactory.getWeekHighlightsListScreenView(container)
+
         controller.bindView(view)
+
         return view.rootView
     }
 

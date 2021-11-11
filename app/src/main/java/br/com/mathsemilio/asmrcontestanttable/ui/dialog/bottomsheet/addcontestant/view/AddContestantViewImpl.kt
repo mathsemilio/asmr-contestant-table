@@ -24,28 +24,28 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.view.isVisible
 import br.com.mathsemilio.asmrcontestanttable.R
-import br.com.mathsemilio.asmrcontestanttable.common.addOnAfterTextChangedListener
+import br.com.mathsemilio.asmrcontestanttable.common.onAfterTextChangedListener
 import br.com.mathsemilio.asmrcontestanttable.common.setDisabledState
 import br.com.mathsemilio.asmrcontestanttable.common.setEnabledState
 import br.com.mathsemilio.asmrcontestanttable.common.showErrorState
 import com.google.android.material.button.MaterialButton
 
-class AddContestantViewImpl(inflater: LayoutInflater, container: ViewGroup?) : AddContestantView() {
+class AddContestantViewImpl(
+    inflater: LayoutInflater,
+    container: ViewGroup?
+) : AddContestantView() {
 
-    private var imageViewContestantProfilePicture: ImageView
-    private var textViewAddContestantName: TextView
-    private var editTextContestantName: EditText
-    private var buttonAddContestant: MaterialButton
+    private lateinit var imageViewContestantProfilePicture: ImageView
+    private lateinit var textViewAddContestantName: TextView
+    private lateinit var editTextContestantName: EditText
+    private lateinit var buttonAddContestant: MaterialButton
 
     private var profilePictureUri: Uri? = null
 
     init {
         rootView = inflater.inflate(R.layout.bottom_sheet_add_contestant, container, false)
 
-        imageViewContestantProfilePicture = findViewById(R.id.image_view_contestant_profile_picture)
-        textViewAddContestantName = findViewById(R.id.text_view_add_contestant_name)
-        editTextContestantName = findViewById(R.id.edit_text_contestant_name)
-        buttonAddContestant = findViewById(R.id.button_add_contestant)
+        initializeViews()
 
         attachContestantNameEditTextTextWatcher()
 
@@ -58,8 +58,15 @@ class AddContestantViewImpl(inflater: LayoutInflater, container: ViewGroup?) : A
         }
     }
 
+    private fun initializeViews() {
+        imageViewContestantProfilePicture = findViewById(R.id.image_view_contestant_profile_picture)
+        textViewAddContestantName = findViewById(R.id.text_view_add_contestant_name)
+        editTextContestantName = findViewById(R.id.edit_text_contestant_name)
+        buttonAddContestant = findViewById(R.id.button_add_contestant)
+    }
+
     private fun onContestantProfilePictureImageViewClicked() {
-        notifyListener { listener ->
+        notify { listener ->
             listener.onAddProfilePictureButtonClicked()
         }
     }
@@ -72,14 +79,14 @@ class AddContestantViewImpl(inflater: LayoutInflater, container: ViewGroup?) : A
             revertAddButtonState()
             return
         } else {
-            notifyListener { listener ->
+            notify { listener ->
                 listener.onAddButtonClicked(contestantName, profilePictureUri)
             }
         }
     }
 
     private fun attachContestantNameEditTextTextWatcher() {
-        editTextContestantName.addOnAfterTextChangedListener { editable ->
+        editTextContestantName.onAfterTextChangedListener { editable ->
             editable?.let {
                 if (it.isEmpty()) {
                     textViewAddContestantName.isVisible = false

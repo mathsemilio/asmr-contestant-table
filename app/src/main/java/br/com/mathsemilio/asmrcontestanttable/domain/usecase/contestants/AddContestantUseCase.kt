@@ -17,33 +17,37 @@ limitations under the License.
 package br.com.mathsemilio.asmrcontestanttable.domain.usecase.contestants
 
 import android.net.Uri
-import br.com.mathsemilio.asmrcontestanttable.common.observable.BaseObservable
 import br.com.mathsemilio.asmrcontestanttable.domain.model.ASMRContestant
 import br.com.mathsemilio.asmrcontestanttable.domain.model.Result
 import br.com.mathsemilio.asmrcontestanttable.storage.endpoint.ContestantsEndpoint
 
-open class AddContestantUseCase(
-    private val endpoint: ContestantsEndpoint?
-) : BaseObservable<AddContestantUseCase.Listener>() {
+open class AddContestantUseCase(private val endpoint: ContestantsEndpoint?) {
 
-    interface Listener {
-        fun onContestantAddedSuccessfully()
-
-        fun onAddContestantFailed()
+    sealed class AddContestantResult {
+        object Completed : AddContestantResult()
+        object Failed : AddContestantResult()
     }
 
-    open suspend fun addContestant(contestantName: String, profilePictureUri: Uri?) {
-        endpoint?.insertContestant(
-            ASMRContestant(0, contestantName, profilePicture = profilePictureUri?.toString() ?: "")
-        ).also { result ->
-            when (result) {
-                is Result.Completed -> notifyListener { listener ->
-                    listener.onContestantAddedSuccessfully()
-                }
-                is Result.Failed -> notifyListener { listener ->
-                    listener.onAddContestantFailed()
-                }
+    open suspend fun addContestant(
+        contestantName: String,
+        profilePictureUri: Uri?
+    ): AddContestantResult {
+        var addContestantResult: AddContestantResult
+
+        val contestant = ASMRContestant(
+            id = 0,
+            name = contestantName,
+            profilePicture = profilePictureUri?.toString() ?: ""
+        )
+
+        endpoint?.addContestant(contestant).also { result ->
+            addContestantResult = when (result) {
+                is Result.Completed -> AddContestantResult.Completed
+                is Result.Failed -> AddContestantResult.Failed
+                null -> AddContestantResult.Failed
             }
         }
+
+        return addContestantResult
     }
 }

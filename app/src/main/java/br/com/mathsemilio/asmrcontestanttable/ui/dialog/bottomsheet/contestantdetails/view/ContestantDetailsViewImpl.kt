@@ -26,8 +26,10 @@ import br.com.mathsemilio.asmrcontestanttable.R
 import br.com.mathsemilio.asmrcontestanttable.common.getDrawableResource
 import br.com.mathsemilio.asmrcontestanttable.domain.model.ASMRContestant
 
-class ContestantDetailsViewImpl(inflater: LayoutInflater, container: ViewGroup?) :
-    ContestantDetailsView() {
+class ContestantDetailsViewImpl(
+    inflater: LayoutInflater,
+    container: ViewGroup?
+) : ContestantDetailsView() {
 
     private lateinit var imageViewContestantProfilePicture: ImageView
     private lateinit var textViewContestantsDetailsName: TextView
@@ -59,13 +61,19 @@ class ContestantDetailsViewImpl(inflater: LayoutInflater, container: ViewGroup?)
 
     private fun attachClickListeners() {
         buttonIncrementTimesSlept.setOnClickListener {
-            notifyListener { it.onIncrementTimesSleptButtonClicked() }
+            notify { listener ->
+                listener.onIncrementTimesSleptButtonClicked()
+            }
         }
         buttonIncrementTimesDidNotSlept.setOnClickListener {
-            notifyListener { it.onIncrementTimesDidNotSleptButtonClicked() }
+            notify { listener ->
+                listener.onIncrementTimesDidNotSleptButtonClicked()
+            }
         }
         buttonIncrementTimesFeltTired.setOnClickListener {
-            notifyListener { it.onIncrementTimesFeltTiredButtonClicked() }
+            notify { listener ->
+                listener.onIncrementTimesFeltTiredButtonClicked()
+            }
         }
     }
 

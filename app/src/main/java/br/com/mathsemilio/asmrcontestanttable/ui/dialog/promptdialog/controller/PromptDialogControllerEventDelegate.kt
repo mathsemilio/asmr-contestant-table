@@ -14,15 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
  */
 
-package br.com.mathsemilio.asmrcontestanttable.common.eventbus
+package br.com.mathsemilio.asmrcontestanttable.ui.dialog.promptdialog.controller
 
-import br.com.mathsemilio.asmrcontestanttable.common.observable.BaseObservable
-
-class EventBus : BaseObservable<EventListener>() {
-
-    fun post(event: Any) {
-        notify { listener ->
-            listener.onEvent(event)
-        }
-    }
+interface PromptDialogControllerEventDelegate {
+    fun onPromptDialogButtonClicked()
 }

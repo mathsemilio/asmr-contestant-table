@@ -1,29 +1,26 @@
 package br.com.mathsemilio.asmrcontestanttable.domain.usecase.contestants
 
-import br.com.mathsemilio.asmrcontestanttable.common.observable.BaseObservable
 import br.com.mathsemilio.asmrcontestanttable.domain.model.Result
 import br.com.mathsemilio.asmrcontestanttable.storage.endpoint.ContestantsEndpoint
 
-open class DeleteContestantsUseCase(
-    private val endpoint: ContestantsEndpoint?
-) : BaseObservable<DeleteContestantsUseCase.Listener>() {
+open class DeleteContestantsUseCase(private val endpoint: ContestantsEndpoint?) {
 
-    interface Listener {
-        fun onAllContestantsDeletedSuccessfully()
-
-        fun onDeleteAllContestantsFailed()
+    sealed class DeleteContestantsResult {
+        object Completed : DeleteContestantsResult()
+        object Failed : DeleteContestantsResult()
     }
 
-    suspend fun deleteAllContestants() {
+    suspend fun deleteAllContestants(): DeleteContestantsResult {
+        var deleteContestantsResult: DeleteContestantsResult
+
         endpoint?.deleteAllContestants().also { result ->
-            when (result) {
-                is Result.Completed -> notifyListener { listener ->
-                    listener.onAllContestantsDeletedSuccessfully()
-                }
-                is Result.Failed -> notifyListener { listener ->
-                    listener.onDeleteAllContestantsFailed()
-                }
+            deleteContestantsResult = when (result) {
+                is Result.Completed -> DeleteContestantsResult.Completed
+                is Result.Failed -> DeleteContestantsResult.Failed
+                null -> DeleteContestantsResult.Failed
             }
         }
+
+        return deleteContestantsResult
     }
 }

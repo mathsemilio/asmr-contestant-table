@@ -17,13 +17,12 @@ limitations under the License.
 package br.com.mathsemilio.asmrcontestanttable.ui.dialog.commom
 
 import br.com.mathsemilio.asmrcontestanttable.common.di.ControllerCompositionRoot
-import br.com.mathsemilio.asmrcontestanttable.ui.MainActivity
+import br.com.mathsemilio.asmrcontestanttable.ui.common.BaseActivity
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 abstract class BaseBottomSheetDialogFragment : BottomSheetDialogFragment() {
 
-    private val _compositionRoot by lazy {
-        ControllerCompositionRoot((requireActivity() as MainActivity).compositionRoot)
+    protected val compositionRoot by lazy {
+        ControllerCompositionRoot((requireActivity() as BaseActivity).compositionRoot)
     }
-    val compositionRoot get() = _compositionRoot
 }

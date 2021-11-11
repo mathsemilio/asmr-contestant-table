@@ -22,15 +22,13 @@ import kotlinx.coroutines.IO_PARALLELISM_PROPERTY_NAME
 
 class ASMRContestantsTableApplication : Application() {
 
-    private lateinit var _compositionRoot: CompositionRoot
-    val compositionRoot get() = _compositionRoot
+    lateinit var compositionRoot: CompositionRoot
 
     override fun onCreate() {
         super.onCreate()
 
-        // Removes Dispatchers.IO parallelism level limitation (Number of CPU cores or 64 threads)
         System.setProperty(IO_PARALLELISM_PROPERTY_NAME, Int.MAX_VALUE.toString())
 
-        _compositionRoot = CompositionRoot()
+        compositionRoot = CompositionRoot(this)
     }
 }

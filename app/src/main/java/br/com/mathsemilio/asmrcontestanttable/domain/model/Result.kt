@@ -18,8 +18,9 @@ package br.com.mathsemilio.asmrcontestanttable.domain.model
 
 sealed class Result<out T>(
     val data: T? = null,
-    val errorMessage: String? = null
+    val exception: Exception? = null
 ) {
     class Completed<T>(data: T?) : Result<T>(data)
-    class Failed<T>(errorMessage: String?) : Result<T>(errorMessage = errorMessage)
+
+    class Failed<T>(exception: Exception?) : Result<T>(exception = exception)
 }

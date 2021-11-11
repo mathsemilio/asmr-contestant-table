@@ -25,22 +25,32 @@ import br.com.mathsemilio.asmrcontestanttable.R
 import br.com.mathsemilio.asmrcontestanttable.common.getDrawableResource
 import br.com.mathsemilio.asmrcontestanttable.domain.model.ASMRContestant
 
-class ContestantsListItemViewImpl(inflater: LayoutInflater, parent: ViewGroup?) :
-    ContestantsListItemView() {
+class ContestantsListItemViewImpl(
+    inflater: LayoutInflater,
+    parent: ViewGroup?
+) : ContestantsListItemView() {
 
-    private var imageViewContestantProfilePicture: ImageView
-    private var textViewContestantPosition: TextView
-    private var textViewContestantName: TextView
-    private var textViewTimesSlept: TextView
-    private var textViewTimesDidNotSlept: TextView
-    private var textViewTimesFeltTired: TextView
-    private var textViewContestantPoints: TextView
+    private lateinit var imageViewContestantProfilePicture: ImageView
+    private lateinit var textViewContestantPosition: TextView
+    private lateinit var textViewContestantName: TextView
+    private lateinit var textViewTimesSlept: TextView
+    private lateinit var textViewTimesDidNotSlept: TextView
+    private lateinit var textViewTimesFeltTired: TextView
+    private lateinit var textViewContestantPoints: TextView
 
-    private lateinit var currentContestant: ASMRContestant
+    private lateinit var contestant: ASMRContestant
 
     init {
         rootView = inflater.inflate(R.layout.contestant_list_item, parent, false)
 
+        initializeViews()
+
+        rootView.setOnClickListener {
+            onContestantListItemClicked(contestant)
+        }
+    }
+
+    private fun initializeViews() {
         imageViewContestantProfilePicture = findViewById(R.id.image_view_contestant_profile_picture)
         textViewContestantPosition = findViewById(R.id.text_view_contestant_position)
         textViewContestantName = findViewById(R.id.text_view_contestant_name)
@@ -48,27 +58,19 @@ class ContestantsListItemViewImpl(inflater: LayoutInflater, parent: ViewGroup?) 
         textViewTimesDidNotSlept = findViewById(R.id.text_view_times_did_not_slept)
         textViewTimesFeltTired = findViewById(R.id.text_view_times_felt_tired)
         textViewContestantPoints = findViewById(R.id.text_view_contestant_points)
-
-        rootView.setOnClickListener {
-            onContestantListItemClicked(currentContestant)
-        }
     }
 
     override fun bindContestant(contestant: ASMRContestant, position: Int) {
-        currentContestant = contestant
+        this.contestant = contestant
 
         textViewContestantPosition.text = position.toString()
 
         bindContestantProfilePicture(contestant.profilePicture)
 
         textViewContestantName.text = contestant.name
-
         textViewTimesSlept.text = contestant.timesSlept.toString()
-
         textViewTimesDidNotSlept.text = contestant.timesDidNotSlept.toString()
-
         textViewTimesFeltTired.text = contestant.timesFeltTired.toString()
-
         textViewContestantPoints.text = contestant.score.toString()
     }
 
@@ -82,6 +84,8 @@ class ContestantsListItemViewImpl(inflater: LayoutInflater, parent: ViewGroup?) 
     }
 
     private fun onContestantListItemClicked(contestant: ASMRContestant) {
-        notifyListener { it.onContestantClicked(contestant) }
+        notify { listener ->
+            listener.onContestantClicked(contestant)
+        }
     }
 }

@@ -31,7 +31,9 @@ class WeekHighlightsListAdapter(
     class ViewHolder(private val listItemView: WeekHighlightsListItemViewImpl) :
         RecyclerView.ViewHolder(listItemView.rootView) {
 
-        fun bind(weekHighlight: WeekHighlights) = listItemView.bindWeekHighlight(weekHighlight)
+        fun bind(weekHighlight: WeekHighlights) {
+            listItemView.bindWeekHighlight(weekHighlight)
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

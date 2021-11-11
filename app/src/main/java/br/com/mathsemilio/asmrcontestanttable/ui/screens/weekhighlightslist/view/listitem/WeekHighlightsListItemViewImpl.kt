@@ -22,15 +22,21 @@ import android.widget.TextView
 import br.com.mathsemilio.asmrcontestanttable.R
 import br.com.mathsemilio.asmrcontestanttable.domain.model.WeekHighlights
 
-class WeekHighlightsListItemViewImpl(inflater: LayoutInflater, parent: ViewGroup?) :
-    WeekHighlightsListItemView() {
+class WeekHighlightsListItemViewImpl(
+    inflater: LayoutInflater,
+    parent: ViewGroup?
+) : WeekHighlightsListItemView() {
 
-    private var textViewWeekHighlightsItemWeekNumber: TextView
-    private var textViewWeekHighlightsItemContestants: TextView
+    private lateinit var textViewWeekHighlightsItemWeekNumber: TextView
+    private lateinit var textViewWeekHighlightsItemContestants: TextView
 
     init {
         rootView = inflater.inflate(R.layout.week_highlights_list_item, parent, false)
 
+        initiializeViews()
+    }
+
+    private fun initiializeViews() {
         textViewWeekHighlightsItemWeekNumber =
             findViewById(R.id.text_view_week_highlights_item_week)
         textViewWeekHighlightsItemContestants =

@@ -22,7 +22,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import br.com.mathsemilio.asmrcontestanttable.ui.common.helper.imagepicker.ImagePickerHelper
-import br.com.mathsemilio.asmrcontestanttable.ui.common.helper.imagepicker.ImagePickerHelperProvider
+import br.com.mathsemilio.asmrcontestanttable.ui.common.helper.imagepicker.ImagePickerHelperFactory
 import br.com.mathsemilio.asmrcontestanttable.ui.dialog.commom.BaseBottomSheetDialogFragment
 
 class AddContestantBottomSheet : BaseBottomSheetDialogFragment(),
@@ -32,12 +32,12 @@ class AddContestantBottomSheet : BaseBottomSheetDialogFragment(),
     private lateinit var controller: AddContestantBottomSheetController
 
     private lateinit var imagePickerHelper: ImagePickerHelper
-    private lateinit var imagePickerHelperProvider: ImagePickerHelperProvider
+    private lateinit var imagePickerHelperProvider: ImagePickerHelperFactory
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         controller = compositionRoot.addContestantBottomSheetController
-        imagePickerHelperProvider = compositionRoot.imagePickerHelperProvider
+        imagePickerHelperProvider = ImagePickerHelperFactory
     }
 
     override fun onCreateView(
@@ -46,21 +46,27 @@ class AddContestantBottomSheet : BaseBottomSheetDialogFragment(),
         savedInstanceState: Bundle?
     ): View {
         val view = compositionRoot.viewFactory.getAddContestView(container)
+
         controller.bindView(view)
+
         return view.rootView
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        controller.addEventDelegate(this)
+        controller.delegate = this
 
         imagePickerHelper = imagePickerHelperProvider.getImagePickerHelper(this)
     }
 
-    override fun onDismissBottomSheetRequested() = dismiss()
+    override fun onDismissBottomSheetRequested() {
+        dismiss()
+    }
 
-    override fun onLaunchImagePickerRequested() = imagePickerHelper.launchImagePicker()
+    override fun onLaunchImagePickerRequested() {
+        imagePickerHelper.launchImagePicker()
+    }
 
     override fun onImagePickedSuccessfully(imageUri: Uri?) {
         controller.bindImageUri(imageUri)

@@ -59,14 +59,16 @@ fun EditText.showErrorState(message: String) {
     }
 }
 
-fun EditText.addOnAfterTextChangedListener(afterTextChanged: (Editable?) -> Unit) {
+inline fun EditText.onAfterTextChangedListener(
+    crossinline onAfterTextChanged: (Editable?) -> Unit
+) {
     this.addTextChangedListener(object : TextWatcher {
         override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
 
         override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
 
         override fun afterTextChanged(editable: Editable?) {
-            afterTextChanged(editable)
+            onAfterTextChanged(editable)
         }
     })
 }

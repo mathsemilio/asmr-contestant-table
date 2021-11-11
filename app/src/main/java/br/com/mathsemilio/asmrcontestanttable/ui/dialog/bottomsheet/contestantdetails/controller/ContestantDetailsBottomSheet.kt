@@ -28,7 +28,7 @@ class ContestantDetailsBottomSheet : BaseBottomSheetDialogFragment(),
     ContestantDetailsControllerEventDelegate {
 
     companion object {
-        fun withContestant(contestant: ASMRContestant) = ContestantDetailsBottomSheet().apply {
+        fun with(contestant: ASMRContestant) = ContestantDetailsBottomSheet().apply {
             arguments = Bundle(1).apply {
                 putSerializable(ARG_CONTESTANT, contestant)
             }
@@ -50,7 +50,9 @@ class ContestantDetailsBottomSheet : BaseBottomSheetDialogFragment(),
         savedInstanceState: Bundle?
     ): View {
         val view = compositionRoot.viewFactory.getContestantsDetailsView(container)
+
         controller.bindView(view)
+
         return view.rootView
     }
 
@@ -61,7 +63,7 @@ class ContestantDetailsBottomSheet : BaseBottomSheetDialogFragment(),
 
         controller.bindContestant(contestant)
 
-        controller.addEventDelegate(this)
+        controller.delegate = this
     }
 
     private fun getContestantFromBundle(): ASMRContestant {

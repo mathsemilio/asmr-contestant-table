@@ -22,9 +22,9 @@ import br.com.mathsemilio.asmrcontestanttable.common.*
 import br.com.mathsemilio.asmrcontestanttable.ui.dialog.commom.BaseDialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
-class PromptDialog : BaseDialogFragment(), PromptDialogControllerEventListener {
+class PromptDialog : BaseDialogFragment(), PromptDialogControllerEventDelegate {
 
-    companion object Factory {
+    companion object {
         fun newInstance(
             dialogTitle: String,
             dialogMessage: String,
@@ -68,12 +68,14 @@ class PromptDialog : BaseDialogFragment(), PromptDialogControllerEventListener {
             isCancelable = requireArguments().getBoolean(ARG_IS_CANCELABLE, false)
         }
 
-        controller.registerForControllerEvents(this)
+        controller.delegate = this
 
         return dialogBuilder.create()
     }
 
-    override fun onPromptDialogButtonClicked() = dismiss()
+    override fun onPromptDialogButtonClicked() {
+        dismiss()
+    }
 
     override fun onStart() {
         super.onStart()

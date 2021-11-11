@@ -21,6 +21,7 @@ import android.net.Uri
 import br.com.mathsemilio.asmrcontestanttable.common.READ_EXTERNAL_STORAGE_REQUEST_CODE
 import br.com.mathsemilio.asmrcontestanttable.common.eventbus.EventPublisher
 import br.com.mathsemilio.asmrcontestanttable.domain.usecase.contestants.AddContestantUseCase
+import br.com.mathsemilio.asmrcontestanttable.domain.usecase.contestants.AddContestantUseCase.AddContestantResult
 import br.com.mathsemilio.asmrcontestanttable.ui.common.event.ContestantsModifiedEvent
 import br.com.mathsemilio.asmrcontestanttable.ui.common.helper.PermissionsHelper
 import br.com.mathsemilio.asmrcontestanttable.ui.common.helper.PermissionsHelper.PermissionResult
@@ -37,17 +38,31 @@ class AddContestantBottomSheetController(
     private val eventPublisher: EventPublisher,
     private val addContestantUseCase: AddContestantUseCase
 ) : AddContestantView.Listener,
-    AddContestantUseCase.Listener,
     PermissionsHelper.Listener {
 
     private lateinit var view: AddContestantView
 
-    private lateinit var delegate: AddContestantControllerEventDelegate
+    lateinit var delegate: AddContestantControllerEventDelegate
 
     override fun onAddButtonClicked(contestantName: String, profilePictureUri: Uri?) {
         coroutineScope.launch {
             view.changeAddButtonState()
-            addContestantUseCase.addContestant(contestantName, profilePictureUri)
+            addContestantUseCase.addContestant(contestantName, profilePictureUri).also { result ->
+                handleAddContestantUseCaseResult(result)
+            }
+        }
+    }
+
+    private fun handleAddContestantUseCaseResult(result: AddContestantResult) {
+        when (result) {
+            AddContestantResult.Completed -> {
+                delegate.onDismissBottomSheetRequested()
+                eventPublisher.publish(ContestantsModifiedEvent.ContestantAdded)
+            }
+            AddContestantResult.Failed -> {
+                view.revertAddButtonState()
+                messagesManager.showUnexpectedErrorOccurredMessage()
+            }
         }
     }
 
@@ -60,16 +75,6 @@ class AddContestantBottomSheetController(
                 READ_EXTERNAL_STORAGE_REQUEST_CODE
             )
         }
-    }
-
-    override fun onContestantAddedSuccessfully() {
-        delegate.onDismissBottomSheetRequested()
-        eventPublisher.publish(ContestantsModifiedEvent.ContestantAdded)
-    }
-
-    override fun onAddContestantFailed() {
-        view.revertAddButtonState()
-        messagesManager.showUnexpectedErrorOccurredMessage()
     }
 
     override fun onPermissionRequestResult(result: PermissionResult) {
@@ -91,20 +96,14 @@ class AddContestantBottomSheetController(
         view.bind(imageUri)
     }
 
-    fun addEventDelegate(delegate: AddContestantControllerEventDelegate) {
-        this.delegate = delegate
-    }
-
     fun onStart() {
         view.addListener(this)
         permissionsHelper.addListener(this)
-        addContestantUseCase.addListener(this)
     }
 
     fun onStop() {
         view.removeListener(this)
         permissionsHelper.removeListener(this)
-        addContestantUseCase.removeListener(this)
         coroutineScope.coroutineContext.cancelChildren()
     }
 }

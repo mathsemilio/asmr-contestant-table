@@ -53,9 +53,7 @@ class ContestantsTableScreenViewImpl(
 
         attachRecyclerViewScrollListener()
 
-        fabAddContestant.setOnClickListener {
-            notifyListener { it.onAddContestantButtonClicked() }
-        }
+        attachAddContestantButtonOnClickListener()
     }
 
     private fun initializeViews() {
@@ -89,6 +87,14 @@ class ContestantsTableScreenViewImpl(
         )
     }
 
+    private fun attachAddContestantButtonOnClickListener() {
+        fabAddContestant.setOnClickListener {
+            notify { listener ->
+                listener.onAddContestantButtonClicked()
+            }
+        }
+    }
+
     override fun bindContestants(contestants: List<ASMRContestant>) {
         contestantsTableAdapter.submitData(contestants)
 
@@ -112,6 +118,8 @@ class ContestantsTableScreenViewImpl(
     }
 
     override fun onContestantClicked(contestant: ASMRContestant) {
-        notifyListener { it.onContestantClicked(contestant) }
+        notify { listener ->
+            listener.onContestantClicked(contestant)
+        }
     }
 }

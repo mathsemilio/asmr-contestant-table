@@ -14,9 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
  */
 
-package br.com.mathsemilio.asmrcontestanttable.ui.common.event
+package br.com.mathsemilio.asmrcontestanttable.ui.dialog.promptdialog
 
 sealed class PromptDialogEvent {
     object PositiveButtonClicked : PromptDialogEvent()
+
     object NegativeButtonClicked : PromptDialogEvent()
 }

@@ -18,11 +18,11 @@ package br.com.mathsemilio.asmrcontestanttable.ui.screens.weekhighlightslist.con
 
 import br.com.mathsemilio.asmrcontestanttable.common.eventbus.EventListener
 import br.com.mathsemilio.asmrcontestanttable.common.eventbus.EventSubscriber
-import br.com.mathsemilio.asmrcontestanttable.domain.model.WeekHighlights
 import br.com.mathsemilio.asmrcontestanttable.domain.usecase.weekhighlights.FetchWeekHighlightsUseCase
-import br.com.mathsemilio.asmrcontestanttable.ui.common.event.WeekHighlightsModifiedEvent
+import br.com.mathsemilio.asmrcontestanttable.domain.usecase.weekhighlights.FetchWeekHighlightsUseCase.FetchWeekHighlightsResult
 import br.com.mathsemilio.asmrcontestanttable.ui.common.manager.dialogmanager.DialogManager
 import br.com.mathsemilio.asmrcontestanttable.ui.common.manager.messagesmanager.MessagesManager
+import br.com.mathsemilio.asmrcontestanttable.ui.dialog.bottomsheet.addweekhighlights.WeekHighlightsModifiedEvent
 import br.com.mathsemilio.asmrcontestanttable.ui.screens.weekhighlightslist.view.WeekHighlightsView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.cancelChildren
@@ -35,23 +35,12 @@ class WeekHighlightsController(
     private val coroutineScope: CoroutineScope,
     private val fetchWeekHighlightsUseCase: FetchWeekHighlightsUseCase
 ) : WeekHighlightsView.Listener,
-    FetchWeekHighlightsUseCase.Listener,
     EventListener {
 
     private lateinit var view: WeekHighlightsView
 
     override fun onAddWeekHighlightsButtonClicked() {
         dialogManager.showAddWeekHighlightsBottomSheet()
-    }
-
-    override fun onWeekHighlightsFetchedSuccessfully(weekHighlights: List<WeekHighlights>) {
-        view.hideProgressIndicator()
-        view.bindWeekHighlights(weekHighlights)
-    }
-
-    override fun onWeekHighlightsFetchFailed() {
-        view.hideProgressIndicator()
-        messagesManager.showUnexpectedErrorOccurredMessage()
     }
 
     override fun onEvent(event: Any) {
@@ -63,7 +52,24 @@ class WeekHighlightsController(
     private fun fetchWeekHighlights() {
         coroutineScope.launch {
             view.showProgressIndicator()
-            fetchWeekHighlightsUseCase.fetchWeekHighlights()
+            fetchWeekHighlightsUseCase.fetchWeekHighlights().also { result ->
+                handleFetchWeekHighlightsUseCaseResult(result)
+            }
+        }
+    }
+
+    private fun handleFetchWeekHighlightsUseCaseResult(result: FetchWeekHighlightsResult) {
+        when (result) {
+            is FetchWeekHighlightsResult.Completed -> {
+                result.weekHighlights?.let { weekHighlights ->
+                    view.hideProgressIndicator()
+                    view.bindWeekHighlights(weekHighlights)
+                }
+            }
+            FetchWeekHighlightsResult.Failed -> {
+                view.hideProgressIndicator()
+                messagesManager.showUnexpectedErrorOccurredMessage()
+            }
         }
     }
 
@@ -74,14 +80,12 @@ class WeekHighlightsController(
     fun onStart() {
         view.addListener(this)
         eventSubscriber.subscribe(this)
-        fetchWeekHighlightsUseCase.addListener(this)
         fetchWeekHighlights()
     }
 
     fun onStop() {
         view.removeListener(this)
         eventSubscriber.unsubscribe(this)
-        fetchWeekHighlightsUseCase.removeListener(this)
         coroutineScope.coroutineContext.cancelChildren()
     }
 }

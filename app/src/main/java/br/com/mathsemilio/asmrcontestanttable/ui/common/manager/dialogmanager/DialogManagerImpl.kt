@@ -41,7 +41,7 @@ class DialogManagerImpl(
     }
 
     override fun showContestantDetailsBottomSheet(contestant: ASMRContestant) {
-        val contestantsDetailsBottomSheet = ContestantDetailsBottomSheet.withContestant(contestant)
+        val contestantsDetailsBottomSheet = ContestantDetailsBottomSheet.with(contestant)
         contestantsDetailsBottomSheet.show(fragmentManager, null)
     }
 

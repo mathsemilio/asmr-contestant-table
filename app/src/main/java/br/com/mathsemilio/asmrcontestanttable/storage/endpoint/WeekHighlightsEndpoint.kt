@@ -24,13 +24,13 @@ import kotlinx.coroutines.withContext
 
 open class WeekHighlightsEndpoint(private val weekHighlightsDAO: WeekHighlightsDAO?) {
 
-    open suspend fun insertWeekHighlights(weekHighlights: WeekHighlights): Result<Nothing> {
+    open suspend fun addWeekHighlights(weekHighlights: WeekHighlights): Result<Nothing> {
         return withContext(Dispatchers.IO) {
             try {
                 weekHighlightsDAO?.insertData(weekHighlights)
                 Result.Completed(data = null)
-            } catch (e: Exception) {
-                Result.Failed(e.message!!)
+            } catch (exception: Exception) {
+                Result.Failed(exception = exception)
             }
         }
     }
@@ -39,8 +39,8 @@ open class WeekHighlightsEndpoint(private val weekHighlightsDAO: WeekHighlightsD
         return withContext(Dispatchers.IO) {
             try {
                 Result.Completed(data = weekHighlightsDAO?.fetchWeekHighlights())
-            } catch (e: Exception) {
-                Result.Failed(e.message!!)
+            } catch (exception: Exception) {
+                Result.Failed(exception = exception)
             }
         }
     }
@@ -49,8 +49,8 @@ open class WeekHighlightsEndpoint(private val weekHighlightsDAO: WeekHighlightsD
         return withContext(Dispatchers.IO) {
             try {
                 Result.Completed(data = weekHighlightsDAO?.fetchWeekHighlights()?.size?.plus(1))
-            } catch (e: Exception) {
-                Result.Failed(e.message!!)
+            } catch (exception: Exception) {
+                Result.Failed(exception = exception)
             }
         }
     }

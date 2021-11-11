@@ -18,5 +18,7 @@ package br.com.mathsemilio.asmrcontestanttable.common.eventbus
 
 open class EventPublisher(private val eventBus: EventBus?) {
 
-    open fun publish(event: Any) = eventBus?.postEvent(event)
+    open fun publish(event: Any) {
+        eventBus?.post(event)
+    }
 }

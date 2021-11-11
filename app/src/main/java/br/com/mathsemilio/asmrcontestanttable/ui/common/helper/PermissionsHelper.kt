@@ -36,7 +36,7 @@ class PermissionsHelper(
         DENIED_PERMANENTLY
     }
 
-    private var currentPermissionRequestCode = 0
+    private var permissionRequestCode = 0
 
     fun hasPermission(permission: String): Boolean {
         return ContextCompat.checkSelfPermission(
@@ -46,7 +46,7 @@ class PermissionsHelper(
     }
 
     fun requestPermission(permissions: Array<String>, requestCode: Int) {
-        currentPermissionRequestCode = requestCode
+        permissionRequestCode = requestCode
         ActivityCompat.requestPermissions(activity, permissions, requestCode)
     }
 
@@ -59,7 +59,7 @@ class PermissionsHelper(
             onPermissionResult(PermissionResult.DENIED)
 
         when (requestCode) {
-            currentPermissionRequestCode -> {
+            permissionRequestCode -> {
                 when {
                     grantResults[0] == PackageManager.PERMISSION_GRANTED -> {
                         onPermissionResult(PermissionResult.GRANTED)
@@ -79,7 +79,7 @@ class PermissionsHelper(
     }
 
     private fun onPermissionResult(result: PermissionResult) {
-        notifyListener { listener ->
+        notify { listener ->
             listener.onPermissionRequestResult(result)
         }
     }
