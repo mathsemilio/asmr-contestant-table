@@ -16,28 +16,20 @@ limitations under the License.
 
 package br.com.mathsemilio.asmrcontestanttable.ui.dialog.bottomsheet.addcontestant.controller
 
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import br.com.mathsemilio.asmrcontestanttable.ui.common.helper.imagepicker.ImagePickerHelper
-import br.com.mathsemilio.asmrcontestanttable.ui.common.helper.imagepicker.ImagePickerHelperFactory
 import br.com.mathsemilio.asmrcontestanttable.ui.dialog.commom.BaseBottomSheetDialogFragment
 
 class AddContestantBottomSheet : BaseBottomSheetDialogFragment(),
-    AddContestantControllerEventDelegate,
-    ImagePickerHelper.Listener {
+    AddContestantControllerEventDelegate {
 
     private lateinit var controller: AddContestantBottomSheetController
-
-    private lateinit var imagePickerHelper: ImagePickerHelper
-    private lateinit var imagePickerHelperProvider: ImagePickerHelperFactory
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         controller = compositionRoot.addContestantBottomSheetController
-        imagePickerHelperProvider = ImagePickerHelperFactory
     }
 
     override fun onCreateView(
@@ -56,31 +48,17 @@ class AddContestantBottomSheet : BaseBottomSheetDialogFragment(),
         super.onViewCreated(view, savedInstanceState)
 
         controller.delegate = this
-
-        imagePickerHelper = imagePickerHelperProvider.getImagePickerHelper(this)
     }
 
-    override fun onDismissBottomSheetRequested() {
-        dismiss()
-    }
-
-    override fun onLaunchImagePickerRequested() {
-        imagePickerHelper.launchImagePicker()
-    }
-
-    override fun onImagePickedSuccessfully(imageUri: Uri?) {
-        controller.bindImageUri(imageUri)
-    }
+    override fun onDismissBottomSheetRequested() = dismiss()
 
     override fun onStart() {
         super.onStart()
         controller.onStart()
-        imagePickerHelper.addListener(this)
     }
 
     override fun onStop() {
         super.onStop()
         controller.onStop()
-        imagePickerHelper.addListener(this)
     }
 }

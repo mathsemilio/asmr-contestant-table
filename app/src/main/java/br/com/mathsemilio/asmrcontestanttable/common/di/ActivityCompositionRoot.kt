@@ -20,7 +20,6 @@ import androidx.appcompat.app.AppCompatActivity
 import br.com.mathsemilio.asmrcontestanttable.storage.database.AppDatabase
 import br.com.mathsemilio.asmrcontestanttable.storage.endpoint.ContestantsEndpoint
 import br.com.mathsemilio.asmrcontestanttable.storage.endpoint.WeekHighlightsEndpoint
-import br.com.mathsemilio.asmrcontestanttable.ui.common.helper.PermissionsHelper
 import br.com.mathsemilio.asmrcontestanttable.ui.common.delegate.FragmentContainerDelegate
 import br.com.mathsemilio.asmrcontestanttable.ui.common.manager.FragmentTransactionManager
 import br.com.mathsemilio.asmrcontestanttable.ui.common.navigation.NavigationEventListener
@@ -55,10 +54,6 @@ class ActivityCompositionRoot(
 
     val viewFactory by lazy {
         ViewFactory(activity.layoutInflater)
-    }
-
-    val permissionsHelper by lazy {
-        PermissionsHelper(activity)
     }
 
     val application

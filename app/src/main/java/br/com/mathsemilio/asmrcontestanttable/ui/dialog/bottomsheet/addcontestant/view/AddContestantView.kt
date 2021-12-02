@@ -16,18 +16,13 @@ limitations under the License.
 
 package br.com.mathsemilio.asmrcontestanttable.ui.dialog.bottomsheet.addcontestant.view
 
-import android.net.Uri
 import br.com.mathsemilio.asmrcontestanttable.ui.common.view.BaseObservableView
 
 abstract class AddContestantView : BaseObservableView<AddContestantView.Listener>() {
 
     interface Listener {
-        fun onAddProfilePictureButtonClicked()
-
-        fun onAddButtonClicked(contestantName: String, profilePictureUri: Uri?)
+        fun onAddButtonClicked(contestantName: String)
     }
-
-    abstract fun bind(profilePictureUri: Uri?)
 
     abstract fun changeAddButtonState()
 

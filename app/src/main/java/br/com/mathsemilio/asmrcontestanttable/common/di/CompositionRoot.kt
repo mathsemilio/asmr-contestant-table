@@ -24,7 +24,8 @@ import br.com.mathsemilio.asmrcontestanttable.common.provider.CoroutineScopeProv
 
 class CompositionRoot(val application: Application) {
 
-    val coroutineScopeProvider get() = CoroutineScopeProvider
+    val coroutineScopeProvider
+        get() = CoroutineScopeProvider
 
     private val eventBus by lazy {
         EventBus()

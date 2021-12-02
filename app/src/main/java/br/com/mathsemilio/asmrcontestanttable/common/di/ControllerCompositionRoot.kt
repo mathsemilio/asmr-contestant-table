@@ -73,7 +73,6 @@ class ControllerCompositionRoot(private val activityCompositionRoot: ActivityCom
 
     val addContestantBottomSheetController
         get() = AddContestantBottomSheetController(
-            activityCompositionRoot.permissionsHelper,
             messagesManager,
             activityCompositionRoot.coroutineScopeProvider.UIBoundScope,
             activityCompositionRoot.eventPublisher,

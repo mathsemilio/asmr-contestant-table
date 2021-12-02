@@ -30,5 +30,4 @@ data class ASMRContestant(
     val timesSlept: Int = 0,
     val timesDidNotSlept: Int = 0,
     val timesFeltTired: Int = 0,
-    val profilePicture: String = ""
 ) : Serializable

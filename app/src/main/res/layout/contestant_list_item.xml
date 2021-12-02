@@ -33,10 +33,10 @@
         android:layout_height="32dp"
         android:layout_marginStart="16dp"
         android:importantForAccessibility="no"
+        android:src="@drawable/dr_contestant_profile_picture"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/frame_layout_contestant_position"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:src="@drawable/dr_contestant_profile_picture" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/text_view_contestant_name"

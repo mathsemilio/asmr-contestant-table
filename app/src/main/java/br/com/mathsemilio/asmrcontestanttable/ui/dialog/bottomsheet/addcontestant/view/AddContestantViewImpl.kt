@@ -16,7 +16,6 @@ limitations under the License.
 
 package br.com.mathsemilio.asmrcontestanttable.ui.dialog.bottomsheet.addcontestant.view
 
-import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.EditText
@@ -40,18 +39,12 @@ class AddContestantViewImpl(
     private lateinit var editTextContestantName: EditText
     private lateinit var buttonAddContestant: MaterialButton
 
-    private var profilePictureUri: Uri? = null
-
     init {
         rootView = inflater.inflate(R.layout.bottom_sheet_add_contestant, container, false)
 
         initializeViews()
 
         attachContestantNameEditTextTextWatcher()
-
-        imageViewContestantProfilePicture.setOnClickListener {
-            onContestantProfilePictureImageViewClicked()
-        }
 
         buttonAddContestant.setOnClickListener {
             onAddContestantButtonClicked()
@@ -65,12 +58,6 @@ class AddContestantViewImpl(
         buttonAddContestant = findViewById(R.id.button_add_contestant)
     }
 
-    private fun onContestantProfilePictureImageViewClicked() {
-        notify { listener ->
-            listener.onAddProfilePictureButtonClicked()
-        }
-    }
-
     private fun onAddContestantButtonClicked() {
         val contestantName = editTextContestantName.text.toString()
 
@@ -80,7 +67,7 @@ class AddContestantViewImpl(
             return
         } else {
             notify { listener ->
-                listener.onAddButtonClicked(contestantName, profilePictureUri)
+                listener.onAddButtonClicked(contestantName)
             }
         }
     }
@@ -98,11 +85,6 @@ class AddContestantViewImpl(
                 }
             }
         }
-    }
-
-    override fun bind(profilePictureUri: Uri?) {
-        this.profilePictureUri = profilePictureUri
-        imageViewContestantProfilePicture.setImageURI(profilePictureUri)
     }
 
     override fun changeAddButtonState() {

@@ -16,13 +16,11 @@ limitations under the License.
 
 package br.com.mathsemilio.asmrcontestanttable.ui.screens.contestantstable.view.listitem
 
-import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import br.com.mathsemilio.asmrcontestanttable.R
-import br.com.mathsemilio.asmrcontestanttable.common.getDrawableResource
 import br.com.mathsemilio.asmrcontestanttable.domain.model.ASMRContestant
 
 class ContestantsListItemViewImpl(
@@ -60,32 +58,21 @@ class ContestantsListItemViewImpl(
         textViewContestantPoints = findViewById(R.id.text_view_contestant_points)
     }
 
+    private fun onContestantListItemClicked(contestant: ASMRContestant) {
+        notify { listener ->
+            listener.onContestantClicked(contestant)
+        }
+    }
+
     override fun bindContestant(contestant: ASMRContestant, position: Int) {
         this.contestant = contestant
 
         textViewContestantPosition.text = position.toString()
-
-        bindContestantProfilePicture(contestant.profilePicture)
 
         textViewContestantName.text = contestant.name
         textViewTimesSlept.text = contestant.timesSlept.toString()
         textViewTimesDidNotSlept.text = contestant.timesDidNotSlept.toString()
         textViewTimesFeltTired.text = contestant.timesFeltTired.toString()
         textViewContestantPoints.text = contestant.score.toString()
-    }
-
-    private fun bindContestantProfilePicture(profilePicture: String) {
-        if (profilePicture != "")
-            imageViewContestantProfilePicture.setImageURI(Uri.parse(profilePicture))
-        else
-            imageViewContestantProfilePicture.setImageDrawable(
-                context.getDrawableResource(R.drawable.dr_contestant_profile_picture)
-            )
-    }
-
-    private fun onContestantListItemClicked(contestant: ASMRContestant) {
-        notify { listener ->
-            listener.onContestantClicked(contestant)
-        }
     }
 }

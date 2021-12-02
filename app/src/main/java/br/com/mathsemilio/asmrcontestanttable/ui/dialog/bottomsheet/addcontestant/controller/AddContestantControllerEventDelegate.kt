@@ -18,6 +18,4 @@ package br.com.mathsemilio.asmrcontestanttable.ui.dialog.bottomsheet.addcontesta
 
 interface AddContestantControllerEventDelegate {
     fun onDismissBottomSheetRequested()
-
-    fun onLaunchImagePickerRequested()
 }

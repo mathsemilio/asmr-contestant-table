@@ -16,14 +16,12 @@ limitations under the License.
 
 package br.com.mathsemilio.asmrcontestanttable.ui.dialog.bottomsheet.contestantdetails.view
 
-import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import br.com.mathsemilio.asmrcontestanttable.R
-import br.com.mathsemilio.asmrcontestanttable.common.getDrawableResource
 import br.com.mathsemilio.asmrcontestanttable.domain.model.ASMRContestant
 
 class ContestantDetailsViewImpl(
@@ -78,8 +76,6 @@ class ContestantDetailsViewImpl(
     }
 
     override fun bindContestant(contestant: ASMRContestant) {
-        bindContestantProfilePicture(contestant.profilePicture)
-
         textViewContestantsDetailsName.text = contestant.name
 
         textViewTimesSlept.text = context.getString(
@@ -96,14 +92,5 @@ class ContestantDetailsViewImpl(
             R.string.contestant_times_felt_tired,
             contestant.timesFeltTired
         )
-    }
-
-    private fun bindContestantProfilePicture(profilePicture: String) {
-        if (profilePicture != "")
-            imageViewContestantProfilePicture.setImageURI(Uri.parse(profilePicture))
-        else
-            imageViewContestantProfilePicture.setImageDrawable(
-                context.getDrawableResource(R.drawable.dr_contestant_profile_picture)
-            )
     }
 }
