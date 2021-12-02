@@ -27,7 +27,7 @@
 
     </FrameLayout>
 
-    <de.hdodenhof.circleimageview.CircleImageView
+    <ImageView
         android:id="@+id/image_view_contestant_profile_picture"
         android:layout_width="32dp"
         android:layout_height="32dp"

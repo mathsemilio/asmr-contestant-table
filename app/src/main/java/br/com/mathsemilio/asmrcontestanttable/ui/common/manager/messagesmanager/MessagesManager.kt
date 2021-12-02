@@ -20,8 +20,4 @@ interface MessagesManager {
     fun showAllContestantsDeletedSuccessfullyMessage()
 
     fun showUnexpectedErrorOccurredMessage()
-
-    fun showReadExternalStoragePermissionDeniedMessage()
-
-    fun showReadExternalStoragePermissionDeniedPermanentlyMessage()
 }

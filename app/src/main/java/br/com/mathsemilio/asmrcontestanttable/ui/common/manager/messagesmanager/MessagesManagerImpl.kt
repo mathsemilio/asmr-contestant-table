@@ -30,14 +30,4 @@ class MessagesManagerImpl(private val context: Context) : MessagesManager {
     override fun showUnexpectedErrorOccurredMessage() {
         context.showLongToast(context.getString(R.string.message_unexpected_error_occurred))
     }
-
-    override fun showReadExternalStoragePermissionDeniedMessage() {
-        context.showLongToast(context.getString(R.string.message_read_external_storage_permission_denied))
-    }
-
-    override fun showReadExternalStoragePermissionDeniedPermanentlyMessage() {
-        context.showLongToast(
-            context.getString(R.string.message_read_external_storage_permission_denied_permanently)
-        )
-    }
 }
