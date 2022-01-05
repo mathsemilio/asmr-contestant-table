@@ -16,8 +16,8 @@ limitations under the License.
 
 package br.com.mathsemilio.asmrcontestanttable.ui.common.navigation.destination
 
-import androidx.annotation.StringRes
 import java.io.Serializable
+import androidx.annotation.StringRes
 
 data class NavDestination(
     val name: String,

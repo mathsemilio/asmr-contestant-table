@@ -16,26 +16,22 @@ limitations under the License.
 
 package br.com.mathsemilio.asmrcontestanttable.common.observable
 
-abstract class BaseObservable<Listener> : Observable<Listener> {
+abstract class BaseObservable<Observer> : Observable<Observer> {
 
-    private val _listeners = mutableSetOf<Listener>()
+    private val _observers = mutableSetOf<Observer>()
 
-    protected val listeners
-        get() = _listeners.toSet()
+    protected val observers
+        get() = _observers.toSet()
 
-    override fun addListener(listener: Listener) {
-        _listeners.add(listener)
+    override fun addObserver(observer: Observer) {
+        _observers.add(observer)
     }
 
-    override fun removeListener(listener: Listener) {
-        _listeners.remove(listener)
+    override fun removeObserver(observer: Observer) {
+        _observers.remove(observer)
     }
 
-    protected inline fun BaseObservable<Listener>.notify(
-        crossinline notificationBody: (Listener) -> Unit
-    ) {
-        this@BaseObservable.listeners.forEach { listener ->
-            notificationBody(listener)
-        }
+    protected inline fun notify(crossinline body: (Observer) -> Unit) {
+        observers.forEach { observer -> body(observer) }
     }
 }

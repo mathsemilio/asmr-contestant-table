@@ -16,31 +16,25 @@ limitations under the License.
 
 package br.com.mathsemilio.asmrcontestanttable.ui.screens.contestantstable.controller
 
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
+import android.view.*
+import kotlinx.coroutines.*
 import br.com.mathsemilio.asmrcontestanttable.R
-import br.com.mathsemilio.asmrcontestanttable.common.eventbus.EventListener
-import br.com.mathsemilio.asmrcontestanttable.common.eventbus.EventSubscriber
+import br.com.mathsemilio.asmrcontestanttable.common.eventbus.*
 import br.com.mathsemilio.asmrcontestanttable.domain.model.ASMRContestant
-import br.com.mathsemilio.asmrcontestanttable.domain.usecase.contestants.DeleteContestantsUseCase
-import br.com.mathsemilio.asmrcontestanttable.domain.usecase.contestants.DeleteContestantsUseCase.DeleteContestantsResult
-import br.com.mathsemilio.asmrcontestanttable.domain.usecase.contestants.FetchContestantsUseCase
-import br.com.mathsemilio.asmrcontestanttable.domain.usecase.contestants.FetchContestantsUseCase.FetchContestantsResult
+import br.com.mathsemilio.asmrcontestanttable.domain.usecase.contestants.*
+import br.com.mathsemilio.asmrcontestanttable.ui.common.provider.CoroutineScopeProvider
 import br.com.mathsemilio.asmrcontestanttable.ui.common.event.ContestantsModifiedEvent
+import br.com.mathsemilio.asmrcontestanttable.ui.dialog.promptdialog.PromptDialogEvent
 import br.com.mathsemilio.asmrcontestanttable.ui.common.manager.dialogmanager.DialogManager
 import br.com.mathsemilio.asmrcontestanttable.ui.common.manager.messagesmanager.MessagesManager
-import br.com.mathsemilio.asmrcontestanttable.ui.dialog.promptdialog.PromptDialogEvent
 import br.com.mathsemilio.asmrcontestanttable.ui.screens.contestantstable.view.ContestantsTableScreenView
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.cancelChildren
-import kotlinx.coroutines.launch
+import br.com.mathsemilio.asmrcontestanttable.domain.usecase.contestants.DeleteContestantsUseCase.DeleteContestantsResult
+import br.com.mathsemilio.asmrcontestanttable.domain.usecase.contestants.FetchContestantsUseCase.FetchContestantsResult
 
 class ContestantsTableController(
+    private val dialogManager: DialogManager,
     private val eventSubscriber: EventSubscriber,
     private val messagesManager: MessagesManager,
-    private val dialogManager: DialogManager,
-    private val coroutineScope: CoroutineScope,
     private val fetchContestantsUseCase: FetchContestantsUseCase,
     private val deleteContestantsUseCase: DeleteContestantsUseCase,
 ) : ContestantsTableScreenView.Listener,
@@ -48,20 +42,12 @@ class ContestantsTableController(
 
     private lateinit var view: ContestantsTableScreenView
 
-    override fun onAddContestantButtonClicked() {
-        dialogManager.showAddContestantBottomSheet()
-    }
+    private val coroutineScope = CoroutineScopeProvider.UIBoundScope
+
+    override fun onAddContestantButtonClicked() = dialogManager.showAddContestantBottomSheet()
 
     override fun onContestantClicked(contestant: ASMRContestant) {
         dialogManager.showContestantDetailsBottomSheet(contestant)
-    }
-
-    private fun fetchContestants() {
-        coroutineScope.launch {
-            fetchContestantsUseCase.fetchContestants().also { result ->
-                handleFetchContestantsResult(result)
-            }
-        }
     }
 
     override fun onEvent(event: Any) {
@@ -72,13 +58,30 @@ class ContestantsTableController(
         }
     }
 
+    private fun fetchContestants() {
+        coroutineScope.launch {
+            handleFetchContestantsResult(fetchContestantsUseCase.fetchContestants())
+        }
+    }
+
+    private fun handleFetchContestantsResult(result: FetchContestantsResult) {
+        when (result) {
+            is FetchContestantsResult.Completed -> {
+                view.hideProgressIndicator()
+                view.bindContestants(result.contestants)
+            }
+            FetchContestantsResult.Failed -> {
+                view.hideProgressIndicator()
+                messagesManager.showUnexpectedErrorOccurredMessage()
+            }
+        }
+    }
+
     private fun handlePromptDialogEvent(event: PromptDialogEvent) {
         when (event) {
             PromptDialogEvent.PositiveButtonClicked -> {
                 coroutineScope.launch {
-                    deleteContestantsUseCase.deleteAllContestants().also { result ->
-                        handleDeleteContestantsUseCaseResult(result)
-                    }
+                    handleDeleteContestantsResult(deleteContestantsUseCase.deleteAllContestants())
                 }
             }
             PromptDialogEvent.NegativeButtonClicked -> {
@@ -87,28 +90,13 @@ class ContestantsTableController(
         }
     }
 
-    private fun handleDeleteContestantsUseCaseResult(result: DeleteContestantsResult) {
+    private fun handleDeleteContestantsResult(result: DeleteContestantsResult) {
         when (result) {
             DeleteContestantsResult.Completed -> {
                 fetchContestants()
                 messagesManager.showAllContestantsDeletedSuccessfullyMessage()
             }
             DeleteContestantsResult.Failed -> {
-                view.hideProgressIndicator()
-                messagesManager.showUnexpectedErrorOccurredMessage()
-            }
-        }
-    }
-
-    private fun handleFetchContestantsResult(result: FetchContestantsResult) {
-        when (result) {
-            is FetchContestantsResult.Completed -> {
-                result.contestants?.let { contestants ->
-                    view.hideProgressIndicator()
-                    view.bindContestants(contestants)
-                }
-            }
-            FetchContestantsResult.Failed -> {
                 view.hideProgressIndicator()
                 messagesManager.showUnexpectedErrorOccurredMessage()
             }
@@ -134,13 +122,13 @@ class ContestantsTableController(
     }
 
     fun onStart() {
-        view.addListener(this)
+        view.addObserver(this)
         eventSubscriber.subscribe(this)
         fetchContestants()
     }
 
     fun onStop() {
-        view.removeListener(this)
+        view.removeObserver(this)
         eventSubscriber.unsubscribe(this)
         coroutineScope.coroutineContext.cancelChildren()
     }

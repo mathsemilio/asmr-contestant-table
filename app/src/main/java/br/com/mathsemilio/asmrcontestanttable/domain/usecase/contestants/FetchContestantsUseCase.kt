@@ -16,28 +16,30 @@ limitations under the License.
 
 package br.com.mathsemilio.asmrcontestanttable.domain.usecase.contestants
 
-import br.com.mathsemilio.asmrcontestanttable.domain.model.ASMRContestant
-import br.com.mathsemilio.asmrcontestanttable.domain.model.Result
+import br.com.mathsemilio.asmrcontestanttable.domain.model.*
 import br.com.mathsemilio.asmrcontestanttable.storage.endpoint.ContestantsEndpoint
 
 open class FetchContestantsUseCase(private val endpoint: ContestantsEndpoint?) {
 
     sealed class FetchContestantsResult {
-        data class Completed(val contestants: List<ASMRContestant>?) : FetchContestantsResult()
+        data class Completed(val contestants: List<ASMRContestant>) : FetchContestantsResult()
         object Failed : FetchContestantsResult()
     }
 
     open suspend fun fetchContestants(): FetchContestantsResult {
-        var fetchContestantsResult: FetchContestantsResult
+        var result: FetchContestantsResult
 
-        endpoint?.fetchContestants().also { result ->
-            fetchContestantsResult = when (result) {
-                is Result.Completed -> FetchContestantsResult.Completed(contestants = result.data)
-                is Result.Failed -> FetchContestantsResult.Failed
-                null -> FetchContestantsResult.Failed
+        endpoint?.fetchContestants().also { endpointResult ->
+            result = when (endpointResult) {
+                is Result.Completed ->
+                    FetchContestantsResult.Completed(endpointResult.data ?: emptyList())
+                is Result.Failed ->
+                    FetchContestantsResult.Failed
+                null ->
+                    FetchContestantsResult.Failed
             }
         }
 
-        return fetchContestantsResult
+        return result
     }
 }

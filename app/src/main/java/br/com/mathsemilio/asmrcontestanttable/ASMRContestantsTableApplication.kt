@@ -17,18 +17,20 @@ limitations under the License.
 package br.com.mathsemilio.asmrcontestanttable
 
 import android.app.Application
-import br.com.mathsemilio.asmrcontestanttable.common.di.CompositionRoot
 import kotlinx.coroutines.IO_PARALLELISM_PROPERTY_NAME
+import br.com.mathsemilio.asmrcontestanttable.common.di.CompositionRoot
 
 class ASMRContestantsTableApplication : Application() {
 
-    lateinit var compositionRoot: CompositionRoot
+    private lateinit var _compositionRoot: CompositionRoot
+    val compositionRoot
+        get() = _compositionRoot
 
     override fun onCreate() {
         super.onCreate()
 
         System.setProperty(IO_PARALLELISM_PROPERTY_NAME, Int.MAX_VALUE.toString())
 
-        compositionRoot = CompositionRoot(this)
+        _compositionRoot = CompositionRoot(this)
     }
 }

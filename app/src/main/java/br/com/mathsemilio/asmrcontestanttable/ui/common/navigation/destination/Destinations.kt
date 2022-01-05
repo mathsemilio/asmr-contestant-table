@@ -17,18 +17,17 @@ limitations under the License.
 package br.com.mathsemilio.asmrcontestanttable.ui.common.navigation.destination
 
 import br.com.mathsemilio.asmrcontestanttable.R
-import br.com.mathsemilio.asmrcontestanttable.common.NAV_DESTINATION_CONTESTANTS_TABLE
-import br.com.mathsemilio.asmrcontestanttable.common.NAV_DESTINATION_WEEK_HIGHLIGHTS
+import br.com.mathsemilio.asmrcontestanttable.common.*
 
 object Destinations {
 
     val CONTESTANTS_TABLE = NavDestination(
-        name = NAV_DESTINATION_CONTESTANTS_TABLE,
+        name = DESTINATION_CONTESTANTS_TABLE,
         titleId = R.string.contestants_table
     )
 
     val WEEK_HIGHLIGHTS = NavDestination(
-        name = NAV_DESTINATION_WEEK_HIGHLIGHTS,
+        name = DESTINATION_WEEK_HIGHLIGHTS,
         titleId = R.string.week_highlights
     )
 }

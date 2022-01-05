@@ -18,8 +18,7 @@ package br.com.mathsemilio.asmrcontestanttable.ui.common.manager.messagesmanager
 
 import android.content.Context
 import br.com.mathsemilio.asmrcontestanttable.R
-import br.com.mathsemilio.asmrcontestanttable.common.showLongToast
-import br.com.mathsemilio.asmrcontestanttable.common.showShortToast
+import br.com.mathsemilio.asmrcontestanttable.common.*
 
 class MessagesManagerImpl(private val context: Context) : MessagesManager {
 

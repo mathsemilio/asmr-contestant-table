@@ -21,6 +21,5 @@ sealed class Result<out T>(
     val exception: Exception? = null
 ) {
     class Completed<T>(data: T?) : Result<T>(data)
-
     class Failed<T>(exception: Exception?) : Result<T>(exception = exception)
 }

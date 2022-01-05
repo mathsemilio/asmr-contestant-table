@@ -16,28 +16,27 @@ limitations under the License.
 
 package br.com.mathsemilio.asmrcontestanttable.ui.screens.weekhighlightslist.controller
 
-import br.com.mathsemilio.asmrcontestanttable.common.eventbus.EventListener
-import br.com.mathsemilio.asmrcontestanttable.common.eventbus.EventSubscriber
-import br.com.mathsemilio.asmrcontestanttable.domain.usecase.weekhighlights.FetchWeekHighlightsUseCase
-import br.com.mathsemilio.asmrcontestanttable.domain.usecase.weekhighlights.FetchWeekHighlightsUseCase.FetchWeekHighlightsResult
+import kotlinx.coroutines.*
+import br.com.mathsemilio.asmrcontestanttable.common.eventbus.*
+import br.com.mathsemilio.asmrcontestanttable.ui.common.provider.CoroutineScopeProvider
 import br.com.mathsemilio.asmrcontestanttable.ui.common.manager.dialogmanager.DialogManager
 import br.com.mathsemilio.asmrcontestanttable.ui.common.manager.messagesmanager.MessagesManager
-import br.com.mathsemilio.asmrcontestanttable.ui.dialog.bottomsheet.addweekhighlights.WeekHighlightsModifiedEvent
 import br.com.mathsemilio.asmrcontestanttable.ui.screens.weekhighlightslist.view.WeekHighlightsView
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.cancelChildren
-import kotlinx.coroutines.launch
+import br.com.mathsemilio.asmrcontestanttable.domain.usecase.weekhighlights.FetchWeekHighlightsUseCase
+import br.com.mathsemilio.asmrcontestanttable.ui.dialog.bottomsheet.addweekhighlights.WeekHighlightsModifiedEvent
+import br.com.mathsemilio.asmrcontestanttable.domain.usecase.weekhighlights.FetchWeekHighlightsUseCase.FetchWeekHighlightsResult
 
 class WeekHighlightsController(
+    private val dialogManager: DialogManager,
     private val messagesManager: MessagesManager,
     private val eventSubscriber: EventSubscriber,
-    private val dialogManager: DialogManager,
-    private val coroutineScope: CoroutineScope,
     private val fetchWeekHighlightsUseCase: FetchWeekHighlightsUseCase
 ) : WeekHighlightsView.Listener,
     EventListener {
 
     private lateinit var view: WeekHighlightsView
+
+    private val coroutineScope = CoroutineScopeProvider.UIBoundScope
 
     override fun onAddWeekHighlightsButtonClicked() {
         dialogManager.showAddWeekHighlightsBottomSheet()
@@ -52,19 +51,15 @@ class WeekHighlightsController(
     private fun fetchWeekHighlights() {
         coroutineScope.launch {
             view.showProgressIndicator()
-            fetchWeekHighlightsUseCase.fetchWeekHighlights().also { result ->
-                handleFetchWeekHighlightsUseCaseResult(result)
-            }
+            handleFetchWeekHighlightsResult(fetchWeekHighlightsUseCase.fetchWeekHighlights())
         }
     }
 
-    private fun handleFetchWeekHighlightsUseCaseResult(result: FetchWeekHighlightsResult) {
+    private fun handleFetchWeekHighlightsResult(result: FetchWeekHighlightsResult) {
         when (result) {
             is FetchWeekHighlightsResult.Completed -> {
-                result.weekHighlights?.let { weekHighlights ->
-                    view.hideProgressIndicator()
-                    view.bindWeekHighlights(weekHighlights)
-                }
+                view.hideProgressIndicator()
+                view.bindWeekHighlights(result.highlights)
             }
             FetchWeekHighlightsResult.Failed -> {
                 view.hideProgressIndicator()
@@ -78,13 +73,13 @@ class WeekHighlightsController(
     }
 
     fun onStart() {
-        view.addListener(this)
+        view.addObserver(this)
         eventSubscriber.subscribe(this)
         fetchWeekHighlights()
     }
 
     fun onStop() {
-        view.removeListener(this)
+        view.removeObserver(this)
         eventSubscriber.unsubscribe(this)
         coroutineScope.coroutineContext.cancelChildren()
     }

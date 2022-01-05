@@ -13,7 +13,7 @@
         android:theme="@style/AppTheme">
 
         <activity
-            android:name=".ui.MainActivity"
+            android:name=".ui.screens.container.MainActivity"
             android:configChanges="keyboardHidden"
             android:exported="true">
 

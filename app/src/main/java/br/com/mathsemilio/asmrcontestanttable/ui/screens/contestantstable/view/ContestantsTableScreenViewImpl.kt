@@ -16,25 +16,26 @@ limitations under the License.
 
 package br.com.mathsemilio.asmrcontestanttable.ui.screens.contestantstable.view
 
-import android.view.LayoutInflater
-import android.view.ViewGroup
-import android.widget.LinearLayout
-import android.widget.ProgressBar
-import androidx.constraintlayout.widget.ConstraintLayout
+import android.view.*
+import android.widget.*
 import androidx.core.view.isVisible
-import androidx.recyclerview.widget.RecyclerView
 import br.com.mathsemilio.asmrcontestanttable.R
-import br.com.mathsemilio.asmrcontestanttable.common.MIN_SCROLL_Y_VALUE
-import br.com.mathsemilio.asmrcontestanttable.domain.model.ASMRContestant
+import androidx.recyclerview.widget.RecyclerView
+import androidx.constraintlayout.widget.ConstraintLayout
 import br.com.mathsemilio.asmrcontestanttable.ui.common.view.ViewFactory
-import br.com.mathsemilio.asmrcontestanttable.ui.screens.contestantstable.ContestantsTableAdapter
+import br.com.mathsemilio.asmrcontestanttable.domain.model.ASMRContestant
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import br.com.mathsemilio.asmrcontestanttable.ui.screens.contestantstable.ContestantsTableAdapter
 
 class ContestantsTableScreenViewImpl(
     inflater: LayoutInflater,
     container: ViewGroup?,
     private val viewFactory: ViewFactory
 ) : ContestantsTableScreenView(), ContestantsTableAdapter.Listener {
+
+    companion object {
+        private const val MIN_SCROLL_Y_AXIS_VALUE = 5
+    }
 
     private lateinit var fabAddContestant: FloatingActionButton
     private lateinit var progressBarContestantsTable: ProgressBar
@@ -78,7 +79,7 @@ class ContestantsTableScreenViewImpl(
         recyclerViewContestantsTable.addOnScrollListener(
             object : RecyclerView.OnScrollListener() {
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                    if (dy >= MIN_SCROLL_Y_VALUE)
+                    if (dy >= MIN_SCROLL_Y_AXIS_VALUE)
                         fabAddContestant.hide()
                     else if (dy < 0)
                         fabAddContestant.show()
@@ -89,9 +90,7 @@ class ContestantsTableScreenViewImpl(
 
     private fun attachAddContestantButtonOnClickListener() {
         fabAddContestant.setOnClickListener {
-            notify { listener ->
-                listener.onAddContestantButtonClicked()
-            }
+            notify { observer -> observer.onAddContestantButtonClicked() }
         }
     }
 
@@ -118,8 +117,6 @@ class ContestantsTableScreenViewImpl(
     }
 
     override fun onContestantClicked(contestant: ASMRContestant) {
-        notify { listener ->
-            listener.onContestantClicked(contestant)
-        }
+        notify { observer -> observer.onContestantClicked(contestant) }
     }
 }

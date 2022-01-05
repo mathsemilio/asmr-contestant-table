@@ -20,9 +20,5 @@ import br.com.mathsemilio.asmrcontestanttable.common.observable.BaseObservable
 
 class EventBus : BaseObservable<EventListener>() {
 
-    fun post(event: Any) {
-        notify { listener ->
-            listener.onEvent(event)
-        }
-    }
+    fun post(event: Any) = notify { observer -> observer.onEvent(event) }
 }

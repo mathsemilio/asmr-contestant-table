@@ -21,7 +21,7 @@ import br.com.mathsemilio.asmrcontestanttable.ui.common.view.BaseObservableView
 abstract class AddWeekHighlightsView : BaseObservableView<AddWeekHighlightsView.Listener>() {
 
     interface Listener {
-        fun onAddButtonClicked(firstContestantName: String, secondContestantName: String)
+        fun onAddButtonClicked(contestantsNames: List<String>)
     }
 
     abstract fun changeAddButtonState()

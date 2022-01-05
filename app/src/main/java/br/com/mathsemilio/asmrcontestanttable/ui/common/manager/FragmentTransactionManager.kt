@@ -16,8 +16,7 @@ limitations under the License.
 
 package br.com.mathsemilio.asmrcontestanttable.ui.common.manager
 
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.*
 import br.com.mathsemilio.asmrcontestanttable.ui.common.delegate.FragmentContainerDelegate
 
 class FragmentTransactionManager(
@@ -28,6 +27,7 @@ class FragmentTransactionManager(
         fragmentManager.beginTransaction().apply {
             setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
             replace(fragmentContainerDelegate.fragmentContainerId, fragment)
+            setReorderingAllowed(true)
             commitNow()
         }
     }

@@ -16,41 +16,37 @@ limitations under the License.
 
 package br.com.mathsemilio.asmrcontestanttable.ui.dialog.bottomsheet.addweekhighlights.controller
 
+import kotlinx.coroutines.*
 import br.com.mathsemilio.asmrcontestanttable.common.eventbus.EventPublisher
-import br.com.mathsemilio.asmrcontestanttable.domain.usecase.weekhighlights.AddWeekHighlightsUseCase
-import br.com.mathsemilio.asmrcontestanttable.domain.usecase.weekhighlights.AddWeekHighlightsUseCase.AddWeekHighlightsResult
+import br.com.mathsemilio.asmrcontestanttable.ui.common.provider.CoroutineScopeProvider
 import br.com.mathsemilio.asmrcontestanttable.ui.common.manager.messagesmanager.MessagesManager
-import br.com.mathsemilio.asmrcontestanttable.ui.dialog.bottomsheet.addweekhighlights.WeekHighlightsModifiedEvent
+import br.com.mathsemilio.asmrcontestanttable.domain.usecase.weekhighlights.AddWeekHighlightsUseCase
 import br.com.mathsemilio.asmrcontestanttable.ui.dialog.bottomsheet.addweekhighlights.view.AddWeekHighlightsView
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.cancelChildren
-import kotlinx.coroutines.launch
+import br.com.mathsemilio.asmrcontestanttable.ui.dialog.bottomsheet.addweekhighlights.WeekHighlightsModifiedEvent
+import br.com.mathsemilio.asmrcontestanttable.domain.usecase.weekhighlights.AddWeekHighlightsUseCase.AddWeekHighlightsResult
 
 class AddWeekHighlightsBottomSheetController(
-    private val messagesManager: MessagesManager,
     private val eventPublisher: EventPublisher,
-    private val coroutineScope: CoroutineScope,
+    private val messagesManager: MessagesManager,
     private val addWeekHighlightsUseCase: AddWeekHighlightsUseCase
 ) : AddWeekHighlightsView.Listener {
 
     private lateinit var view: AddWeekHighlightsView
 
-    lateinit var delegate: WeekHighlightsControllerEventDelegate
+    private val coroutineScope = CoroutineScopeProvider.UIBoundScope
 
-    override fun onAddButtonClicked(firstContestantName: String, secondContestantName: String) {
+    private var _delegate: WeekHighlightsControllerEventDelegate? = null
+    private val delegate: WeekHighlightsControllerEventDelegate
+        get() = _delegate!!
+
+    override fun onAddButtonClicked(contestantsNames: List<String>) {
         coroutineScope.launch {
             view.changeAddButtonState()
-
-            addWeekHighlightsUseCase.addWeekHighlights(
-                firstContestantName,
-                secondContestantName
-            ).also { result ->
-                handleAddHighlightsUseCaseResult(result)
-            }
+            handleAddHighlightsResult(addWeekHighlightsUseCase.addWeekHighlights(contestantsNames))
         }
     }
 
-    private fun handleAddHighlightsUseCaseResult(result: AddWeekHighlightsResult) {
+    private fun handleAddHighlightsResult(result: AddWeekHighlightsResult) {
         when (result) {
             AddWeekHighlightsResult.Completed -> {
                 delegate.onDismissBottomSheetRequested()
@@ -67,12 +63,18 @@ class AddWeekHighlightsBottomSheetController(
         this.view = view
     }
 
-    fun onStart() {
-        view.addListener(this)
+    fun addDelegate(delegate: WeekHighlightsControllerEventDelegate) {
+        _delegate = delegate
     }
 
+    fun removeDelegate() {
+        _delegate = null
+    }
+
+    fun onStart() = view.addObserver(this)
+
     fun onStop() {
-        view.removeListener(this)
+        view.removeObserver(this)
         coroutineScope.coroutineContext.cancelChildren()
     }
 }

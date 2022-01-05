@@ -42,16 +42,18 @@ class ContestantsTableAdapter(
         notifyDataSetChanged()
     }
 
-    class ViewHolder(private val listItemView: ContestantsListItemView) :
-        RecyclerView.ViewHolder(listItemView.rootView) {
+    class ViewHolder(
+        private val listItemView: ContestantsListItemView
+    ) : RecyclerView.ViewHolder(listItemView.rootView) {
 
-        fun bind(contestant: ASMRContestant, contestantPosition: Int) =
+        fun bind(contestant: ASMRContestant, contestantPosition: Int) {
             listItemView.bindContestant(contestant, contestantPosition)
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(viewFactory.getContestantsListItemView(parent).also { listItemView ->
-            listItemView.addListener(this)
+            listItemView.addObserver(this)
         })
     }
 
@@ -59,9 +61,7 @@ class ContestantsTableAdapter(
         holder.bind(contestantsList[position], position.plus(1))
     }
 
-    override fun getItemCount(): Int {
-        return contestantsList.size
-    }
+    override fun getItemCount() = contestantsList.size
 
     override fun onContestantClicked(contestant: ASMRContestant) {
         listener.onContestantClicked(contestant)

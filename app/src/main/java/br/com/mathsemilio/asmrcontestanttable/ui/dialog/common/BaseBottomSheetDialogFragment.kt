@@ -14,11 +14,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
  */
 
-package br.com.mathsemilio.asmrcontestanttable.common.provider
+package br.com.mathsemilio.asmrcontestanttable.ui.dialog.common
 
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import br.com.mathsemilio.asmrcontestanttable.ui.common.BaseActivity
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import br.com.mathsemilio.asmrcontestanttable.common.di.ControllerCompositionRoot
 
-object CoroutineScopeProvider {
-    val UIBoundScope get() = CoroutineScope(Dispatchers.Main.immediate)
+abstract class BaseBottomSheetDialogFragment : BottomSheetDialogFragment() {
+
+    protected val compositionRoot by lazy {
+        ControllerCompositionRoot((requireActivity() as BaseActivity).compositionRoot)
+    }
 }

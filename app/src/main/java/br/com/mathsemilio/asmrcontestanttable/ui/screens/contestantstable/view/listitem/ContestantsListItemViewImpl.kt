@@ -16,10 +16,8 @@ limitations under the License.
 
 package br.com.mathsemilio.asmrcontestanttable.ui.screens.contestantstable.view.listitem
 
-import android.view.LayoutInflater
-import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
+import android.view.*
+import android.widget.*
 import br.com.mathsemilio.asmrcontestanttable.R
 import br.com.mathsemilio.asmrcontestanttable.domain.model.ASMRContestant
 
@@ -44,7 +42,7 @@ class ContestantsListItemViewImpl(
         initializeViews()
 
         rootView.setOnClickListener {
-            onContestantListItemClicked(contestant)
+            notify { observer -> observer.onContestantClicked(contestant) }
         }
     }
 
@@ -58,17 +56,9 @@ class ContestantsListItemViewImpl(
         textViewContestantPoints = findViewById(R.id.text_view_contestant_points)
     }
 
-    private fun onContestantListItemClicked(contestant: ASMRContestant) {
-        notify { listener ->
-            listener.onContestantClicked(contestant)
-        }
-    }
-
     override fun bindContestant(contestant: ASMRContestant, position: Int) {
         this.contestant = contestant
-
         textViewContestantPosition.text = position.toString()
-
         textViewContestantName.text = contestant.name
         textViewTimesSlept.text = contestant.timesSlept.toString()
         textViewTimesDidNotSlept.text = contestant.timesDidNotSlept.toString()

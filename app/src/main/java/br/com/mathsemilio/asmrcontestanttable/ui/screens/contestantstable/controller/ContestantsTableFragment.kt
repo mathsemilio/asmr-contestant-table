@@ -30,10 +30,8 @@ class ContestantsTableFragment : BaseFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setHasOptionsMenu(true)
-
-        controller = compositionRoot.contestantsTableController
+        controller = compositionRoot.controllerFactory.contestantsTableController
     }
 
     override fun onCreateView(
@@ -42,9 +40,7 @@ class ContestantsTableFragment : BaseFragment() {
         savedInstanceState: Bundle?
     ): View {
         val view = compositionRoot.viewFactory.getContestantsTableScreenView(container)
-
         controller.bindView(view)
-
         return view.rootView
     }
 

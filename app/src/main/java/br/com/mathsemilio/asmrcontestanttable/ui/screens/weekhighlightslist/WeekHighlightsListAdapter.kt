@@ -17,10 +17,9 @@ limitations under the License.
 package br.com.mathsemilio.asmrcontestanttable.ui.screens.weekhighlightslist
 
 import android.view.ViewGroup
-import androidx.recyclerview.widget.ListAdapter
-import androidx.recyclerview.widget.RecyclerView
-import br.com.mathsemilio.asmrcontestanttable.domain.model.WeekHighlights
+import androidx.recyclerview.widget.*
 import br.com.mathsemilio.asmrcontestanttable.ui.common.view.ViewFactory
+import br.com.mathsemilio.asmrcontestanttable.domain.model.WeekHighlights
 import br.com.mathsemilio.asmrcontestanttable.ui.screens.weekhighlightslist.view.listitem.WeekHighlightsListItemViewImpl
 
 class WeekHighlightsListAdapter(
@@ -28,8 +27,9 @@ class WeekHighlightsListAdapter(
 ) : ListAdapter<WeekHighlights, WeekHighlightsListAdapter.ViewHolder>(
     WeekHighlightsDiffUtilCallback()
 ) {
-    class ViewHolder(private val listItemView: WeekHighlightsListItemViewImpl) :
-        RecyclerView.ViewHolder(listItemView.rootView) {
+    class ViewHolder(
+        private val listItemView: WeekHighlightsListItemViewImpl
+    ) : RecyclerView.ViewHolder(listItemView.rootView) {
 
         fun bind(weekHighlight: WeekHighlights) {
             listItemView.bindWeekHighlight(weekHighlight)

@@ -16,37 +16,37 @@ limitations under the License.
 
 package br.com.mathsemilio.asmrcontestanttable.ui.dialog.bottomsheet.addcontestant.controller
 
+import kotlinx.coroutines.*
 import br.com.mathsemilio.asmrcontestanttable.common.eventbus.EventPublisher
-import br.com.mathsemilio.asmrcontestanttable.domain.usecase.contestants.AddContestantUseCase
-import br.com.mathsemilio.asmrcontestanttable.domain.usecase.contestants.AddContestantUseCase.AddContestantResult
+import br.com.mathsemilio.asmrcontestanttable.ui.common.provider.CoroutineScopeProvider
 import br.com.mathsemilio.asmrcontestanttable.ui.common.event.ContestantsModifiedEvent
+import br.com.mathsemilio.asmrcontestanttable.domain.usecase.contestants.AddContestantUseCase
 import br.com.mathsemilio.asmrcontestanttable.ui.common.manager.messagesmanager.MessagesManager
 import br.com.mathsemilio.asmrcontestanttable.ui.dialog.bottomsheet.addcontestant.view.AddContestantView
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.cancelChildren
-import kotlinx.coroutines.launch
+import br.com.mathsemilio.asmrcontestanttable.domain.usecase.contestants.AddContestantUseCase.AddContestantResult
 
 class AddContestantBottomSheetController(
-    private val messagesManager: MessagesManager,
-    private val coroutineScope: CoroutineScope,
     private val eventPublisher: EventPublisher,
+    private val messagesManager: MessagesManager,
     private val addContestantUseCase: AddContestantUseCase
 ) : AddContestantView.Listener {
 
     private lateinit var view: AddContestantView
 
-    lateinit var delegate: AddContestantControllerEventDelegate
+    private val coroutineScope = CoroutineScopeProvider.UIBoundScope
+
+    private var _delegate: AddContestantControllerEventDelegate? = null
+    private val delegate: AddContestantControllerEventDelegate
+        get() = _delegate!!
 
     override fun onAddButtonClicked(contestantName: String) {
         coroutineScope.launch {
             view.changeAddButtonState()
-            addContestantUseCase.addContestant(contestantName).also { result ->
-                handleAddContestantUseCaseResult(result)
-            }
+            handleAddContestantResult(addContestantUseCase.addContestant(contestantName))
         }
     }
 
-    private fun handleAddContestantUseCaseResult(result: AddContestantResult) {
+    private fun handleAddContestantResult(result: AddContestantResult) {
         when (result) {
             AddContestantResult.Completed -> {
                 delegate.onDismissBottomSheetRequested()
@@ -63,12 +63,18 @@ class AddContestantBottomSheetController(
         this.view = view
     }
 
-    fun onStart() {
-        view.addListener(this)
+    fun addDelegate(delegate: AddContestantControllerEventDelegate) {
+        _delegate = delegate
     }
 
+    fun removeDelegate() {
+        _delegate = null
+    }
+
+    fun onStart() = view.addObserver(this)
+
     fun onStop() {
-        view.removeListener(this)
+        view.removeObserver(this)
         coroutineScope.coroutineContext.cancelChildren()
     }
 }

@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingStart="24dp"
-    android:paddingTop="24dp"
-    android:paddingEnd="24dp"
-    android:paddingBottom="16dp">
+    android:paddingStart="@dimen/margin_24dp"
+    android:paddingTop="@dimen/margin_24dp"
+    android:paddingEnd="@dimen/margin_24dp"
+    android:paddingBottom="@dimen/margin_16dp">
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/text_view_prompt_dialog_title"
@@ -22,7 +22,7 @@
         android:id="@+id/text_view_prompt_dialog_message"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="@dimen/margin_16dp"
         android:textAppearance="?textAppearanceBodyMedium"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -34,7 +34,7 @@
         style="@style/Widget.Material3.Button.TextButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="@dimen/margin_24dp"
         android:minWidth="0dp"
         android:minHeight="0dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -46,8 +46,8 @@
         style="@style/Widget.Material3.Button.TextButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="24dp"
+        android:layout_marginTop="@dimen/margin_24dp"
+        android:layout_marginEnd="@dimen/margin_24dp"
         android:minWidth="0dp"
         android:minHeight="0dp"
         app:layout_constraintEnd_toStartOf="@+id/button_prompt_dialog_positive"

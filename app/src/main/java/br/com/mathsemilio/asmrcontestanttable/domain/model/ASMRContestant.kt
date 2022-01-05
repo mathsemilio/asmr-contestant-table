@@ -16,10 +16,9 @@ limitations under the License.
 
 package br.com.mathsemilio.asmrcontestanttable.domain.model
 
-import androidx.room.Entity
-import androidx.room.PrimaryKey
-import br.com.mathsemilio.asmrcontestanttable.common.CONTESTANT_TABLE
+import androidx.room.*
 import java.io.Serializable
+import br.com.mathsemilio.asmrcontestanttable.common.CONTESTANT_TABLE
 
 @Entity(tableName = CONTESTANT_TABLE)
 data class ASMRContestant(

@@ -18,6 +18,5 @@ package br.com.mathsemilio.asmrcontestanttable.ui.dialog.promptdialog
 
 sealed class PromptDialogEvent {
     object PositiveButtonClicked : PromptDialogEvent()
-
     object NegativeButtonClicked : PromptDialogEvent()
 }
