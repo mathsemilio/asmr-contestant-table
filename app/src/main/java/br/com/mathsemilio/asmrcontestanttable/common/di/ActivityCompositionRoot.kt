@@ -17,27 +17,19 @@ limitations under the License.
 package br.com.mathsemilio.asmrcontestanttable.common.di
 
 import androidx.appcompat.app.AppCompatActivity
+import br.com.mathsemilio.asmrcontestanttable.storage.endpoint.*
+import br.com.mathsemilio.asmrcontestanttable.ui.common.navigation.*
+import br.com.mathsemilio.asmrcontestanttable.ui.common.view.ViewFactory
 import br.com.mathsemilio.asmrcontestanttable.storage.database.AppDatabase
-import br.com.mathsemilio.asmrcontestanttable.storage.endpoint.ContestantsEndpoint
-import br.com.mathsemilio.asmrcontestanttable.storage.endpoint.WeekHighlightsEndpoint
 import br.com.mathsemilio.asmrcontestanttable.ui.common.delegate.FragmentContainerDelegate
 import br.com.mathsemilio.asmrcontestanttable.ui.common.manager.FragmentTransactionManager
-import br.com.mathsemilio.asmrcontestanttable.ui.common.navigation.NavigationEventListener
-import br.com.mathsemilio.asmrcontestanttable.ui.common.navigation.ScreensNavigator
-import br.com.mathsemilio.asmrcontestanttable.ui.common.view.ViewFactory
 
 class ActivityCompositionRoot(
     private val activity: AppCompatActivity,
     private val compositionRoot: CompositionRoot
 ) {
     private val database
-        get() = AppDatabase.getDatabase(activity)
-
-    private val contestantsDao
-        get() = database.contestantDAO
-
-    private val weekHighlightsDAO
-        get() = database.weekHighlightsDAO
+        get() = AppDatabase.getDatabase(application)
 
     private val fragmentTransactionManager
         get() = FragmentTransactionManager(
@@ -52,18 +44,13 @@ class ActivityCompositionRoot(
         )
     }
 
-    val viewFactory by lazy {
-        ViewFactory(activity.layoutInflater)
-    }
+    val viewFactory by lazy { ViewFactory(activity.layoutInflater) }
 
     val application
         get() = compositionRoot.application
 
-    val coroutineScopeProvider
-        get() = compositionRoot.coroutineScopeProvider
-
     val contestantsEndpoint
-        get() = ContestantsEndpoint(contestantsDao, weekHighlightsDAO)
+        get() = ContestantsEndpoint(database.contestantDAO, database.weekHighlightsDAO)
 
     val eventPublisher
         get() = compositionRoot.eventPublisher
@@ -75,5 +62,5 @@ class ActivityCompositionRoot(
         get() = activity.supportFragmentManager
 
     val weekHighlightsEndpoint
-        get() = WeekHighlightsEndpoint(weekHighlightsDAO)
+        get() = WeekHighlightsEndpoint(database.weekHighlightsDAO)
 }

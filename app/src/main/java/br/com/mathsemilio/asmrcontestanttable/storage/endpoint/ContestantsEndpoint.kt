@@ -16,12 +16,9 @@ limitations under the License.
 
 package br.com.mathsemilio.asmrcontestanttable.storage.endpoint
 
-import br.com.mathsemilio.asmrcontestanttable.data.dao.ContestantDAO
-import br.com.mathsemilio.asmrcontestanttable.data.dao.WeekHighlightsDAO
-import br.com.mathsemilio.asmrcontestanttable.domain.model.ASMRContestant
-import br.com.mathsemilio.asmrcontestanttable.domain.model.Result
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
+import br.com.mathsemilio.asmrcontestanttable.data.dao.*
+import br.com.mathsemilio.asmrcontestanttable.domain.model.*
 
 open class ContestantsEndpoint(
     private val contestantsDAO: ContestantDAO?,
@@ -30,7 +27,7 @@ open class ContestantsEndpoint(
     open suspend fun addContestant(contestant: ASMRContestant): Result<Nothing> {
         return withContext(Dispatchers.IO) {
             try {
-                contestantsDAO?.insertData(contestant)
+                contestantsDAO?.insert(contestant)
                 Result.Completed(data = null)
             } catch (exception: Exception) {
                 Result.Failed(exception = exception)
@@ -41,7 +38,7 @@ open class ContestantsEndpoint(
     open suspend fun updateContestant(contestant: ASMRContestant): Result<Nothing> {
         return withContext(Dispatchers.IO) {
             try {
-                contestantsDAO?.updateData(contestant)
+                contestantsDAO?.update(contestant)
                 Result.Completed(data = null)
             } catch (exception: Exception) {
                 Result.Failed(exception = exception)

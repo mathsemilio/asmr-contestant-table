@@ -3,13 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="16dp">
+    android:padding="@dimen/padding_16dp">
 
     <ImageView
         android:id="@+id/image_view_bottom_sheet_slider"
-        android:layout_width="40dp"
-        android:layout_height="4dp"
-        android:layout_marginTop="8dp"
+        android:layout_width="@dimen/bottom_sheet_slider_width"
+        android:layout_height="@dimen/bottom_sheet_slider_height"
+        android:layout_marginTop="@dimen/margin_8dp"
         android:contentDescription="@string/content_description_bottom_sheet_slider"
         android:src="@drawable/ic_bottom_sheet_slider"
         app:layout_constraintEnd_toEndOf="parent"
@@ -20,7 +20,7 @@
         android:id="@+id/text_view_add_week_highlights"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="@dimen/margin_24dp"
         android:text="@string/add_week_highlights"
         android:textAppearance="?textAppearanceTitleLarge"
         app:layout_constraintStart_toStartOf="parent"
@@ -30,7 +30,7 @@
         android:id="@+id/edit_text_first_contestant_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="@dimen/margin_24dp"
         android:autofillHints="@string/first_contestant"
         android:hint="@string/first_contestant"
         android:inputType="textPersonName"
@@ -42,7 +42,7 @@
         android:id="@+id/edit_text_second_contestant_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="@dimen/margin_16dp"
         android:autofillHints="@string/second_contestant"
         android:hint="@string/second_contestant"
         android:inputType="textPersonName"
@@ -54,7 +54,7 @@
         android:id="@+id/button_add_week_highlight"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="@dimen/margin_24dp"
         android:text="@string/add"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edit_text_second_contestant_name" />

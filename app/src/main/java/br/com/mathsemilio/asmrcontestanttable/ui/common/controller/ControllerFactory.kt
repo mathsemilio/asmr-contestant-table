@@ -1,0 +1,71 @@
+/*
+Copyright 2021 Matheus Menezes
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+ */
+
+package br.com.mathsemilio.asmrcontestanttable.ui.common.controller
+
+import br.com.mathsemilio.asmrcontestanttable.common.di.ControllerCompositionRoot
+import br.com.mathsemilio.asmrcontestanttable.ui.dialog.promptdialog.controller.PromptDialogController
+import br.com.mathsemilio.asmrcontestanttable.ui.screens.contestantstable.controller.ContestantsTableController
+import br.com.mathsemilio.asmrcontestanttable.ui.screens.weekhighlightslist.controller.WeekHighlightsController
+import br.com.mathsemilio.asmrcontestanttable.ui.dialog.bottomsheet.addcontestant.controller.AddContestantBottomSheetController
+import br.com.mathsemilio.asmrcontestanttable.ui.dialog.bottomsheet.addweekhighlights.controller.AddWeekHighlightsBottomSheetController
+import br.com.mathsemilio.asmrcontestanttable.ui.dialog.bottomsheet.contestantdetails.controller.ContestantsDetailsBottomSheetController
+
+class ControllerFactory(private val controllerCompositionRoot: ControllerCompositionRoot) {
+
+    val addContestantBottomSheetController
+        get() = AddContestantBottomSheetController(
+            controllerCompositionRoot.eventPublisher,
+            controllerCompositionRoot.messagesManager,
+            controllerCompositionRoot.addContestantUseCase
+        )
+
+    val contestantsTableController
+        get() = ContestantsTableController(
+            controllerCompositionRoot.dialogManager,
+            controllerCompositionRoot.eventSubscriber,
+            controllerCompositionRoot.messagesManager,
+            controllerCompositionRoot.fetchContestantsUseCase,
+            controllerCompositionRoot.deleteContestantsUseCase
+        )
+
+    val weekHighlightsController
+        get() = WeekHighlightsController(
+            controllerCompositionRoot.dialogManager,
+            controllerCompositionRoot.messagesManager,
+            controllerCompositionRoot.eventSubscriber,
+            controllerCompositionRoot.fetchWeekHighlightsUseCase
+        )
+
+    val addWeekHighlightsBottomSheetController
+        get() = AddWeekHighlightsBottomSheetController(
+            controllerCompositionRoot.eventPublisher,
+            controllerCompositionRoot.messagesManager,
+            controllerCompositionRoot.addWeekHighlightsUseCase
+        )
+
+    val contestantDetailsBottomSheetController
+        get() = ContestantsDetailsBottomSheetController(
+            controllerCompositionRoot.eventPublisher,
+            controllerCompositionRoot.messagesManager,
+            controllerCompositionRoot.updateContestantTimesSleptUseCase,
+            controllerCompositionRoot.updateContestantTimesFeltTiredUseCase,
+            controllerCompositionRoot.updateContestantTimesDidNotSleptUseCase
+        )
+
+    val promptDialogController
+        get() = PromptDialogController(controllerCompositionRoot.eventPublisher)
+}

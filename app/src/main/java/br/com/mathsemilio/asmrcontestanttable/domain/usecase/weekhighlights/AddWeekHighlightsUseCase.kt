@@ -16,49 +16,48 @@ limitations under the License.
 
 package br.com.mathsemilio.asmrcontestanttable.domain.usecase.weekhighlights
 
-import br.com.mathsemilio.asmrcontestanttable.common.EXCEPTION_GET_WEEK_NUMBER_FAILED
-import br.com.mathsemilio.asmrcontestanttable.domain.model.Result
-import br.com.mathsemilio.asmrcontestanttable.domain.model.WeekHighlights
+import br.com.mathsemilio.asmrcontestanttable.domain.model.*
 import br.com.mathsemilio.asmrcontestanttable.storage.endpoint.WeekHighlightsEndpoint
 
 open class AddWeekHighlightsUseCase(private val endpoint: WeekHighlightsEndpoint?) {
+
+    companion object {
+        const val FETCH_WEEK_NUMBER_FAILED = "Failed to fetch the week's number from the database"
+    }
 
     sealed class AddWeekHighlightsResult {
         object Completed : AddWeekHighlightsResult()
         object Failed : AddWeekHighlightsResult()
     }
 
-    open suspend fun addWeekHighlights(
-        firstContestantName: String,
-        secondContestantName: String
-    ): AddWeekHighlightsResult {
-        var weekHighlightsResult: AddWeekHighlightsResult
+    open suspend fun addWeekHighlights(contestantsNames: List<String>): AddWeekHighlightsResult {
+        var result: AddWeekHighlightsResult
 
         val weekHighlights = WeekHighlights(
             id = 0,
-            weekNumber = getWeekNumber() ?: throw RuntimeException(EXCEPTION_GET_WEEK_NUMBER_FAILED),
-            firstContestantName = firstContestantName,
-            secondContestantName = secondContestantName
+            weekNumber = getWeekNumber() ?: throw RuntimeException(FETCH_WEEK_NUMBER_FAILED),
+            firstContestantName = contestantsNames[0],
+            secondContestantName = contestantsNames[1]
         )
 
-        endpoint?.addWeekHighlights(weekHighlights).also { result ->
-            weekHighlightsResult = when (result) {
+        endpoint?.addWeekHighlights(weekHighlights).also { endpointResult ->
+            result = when (endpointResult) {
                 is Result.Completed -> AddWeekHighlightsResult.Completed
                 is Result.Failed -> AddWeekHighlightsResult.Failed
                 null -> AddWeekHighlightsResult.Failed
             }
         }
 
-        return weekHighlightsResult
+        return result
     }
 
     private suspend fun getWeekNumber(): Int? {
         var weekNumber: Int? = 0
 
-        endpoint?.getWeekNumber().also { result ->
-            when (result) {
-                is Result.Completed -> weekNumber = result.data
-                is Result.Failed -> throw RuntimeException(result.exception?.message)
+        endpoint?.getWeekNumber().also { endpointResult ->
+            when (endpointResult) {
+                is Result.Completed -> weekNumber = endpointResult.data
+                is Result.Failed -> throw RuntimeException(endpointResult.exception?.message)
             }
         }
 

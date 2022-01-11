@@ -14,22 +14,26 @@ See the License for the specific language governing permissions and
 limitations under the License.
  */
 
-package br.com.mathsemilio.asmrcontestanttable.ui
+package br.com.mathsemilio.asmrcontestanttable.ui.screens.container
 
 import android.os.Bundle
-import br.com.mathsemilio.asmrcontestanttable.common.OUT_STATE_CURRENT_DESTINATION
 import br.com.mathsemilio.asmrcontestanttable.ui.common.BaseActivity
+import br.com.mathsemilio.asmrcontestanttable.ui.common.navigation.ScreensNavigator
+import br.com.mathsemilio.asmrcontestanttable.ui.common.others.BottomNavigationItem
+import br.com.mathsemilio.asmrcontestanttable.ui.screens.container.view.MainActivityView
 import br.com.mathsemilio.asmrcontestanttable.ui.common.delegate.FragmentContainerDelegate
 import br.com.mathsemilio.asmrcontestanttable.ui.common.navigation.NavigationEventListener
-import br.com.mathsemilio.asmrcontestanttable.ui.common.navigation.ScreensNavigator
 import br.com.mathsemilio.asmrcontestanttable.ui.common.navigation.destination.Destinations
 import br.com.mathsemilio.asmrcontestanttable.ui.common.navigation.destination.NavDestination
-import br.com.mathsemilio.asmrcontestanttable.ui.common.others.BottomNavigationItem
 
 class MainActivity : BaseActivity(),
     MainActivityView.Listener,
     FragmentContainerDelegate,
     NavigationEventListener {
+
+    companion object {
+        private const val CURRENT_DESTINATION_KEY = "CURRENT_DESTINATION"
+    }
 
     private lateinit var view: MainActivityView
 
@@ -55,11 +59,11 @@ class MainActivity : BaseActivity(),
     }
 
     override val fragmentContainerId
-        get() = view.fragmentContainer.id
+        get() = view.fragmentContainerId
 
     private fun onStateRestored(savedInstanceState: Bundle) {
         destination = savedInstanceState.getSerializable(
-            OUT_STATE_CURRENT_DESTINATION
+            CURRENT_DESTINATION_KEY
         ) as NavDestination
 
         view.setToolbarTitle(destination.titleId)
@@ -80,16 +84,16 @@ class MainActivity : BaseActivity(),
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putSerializable(OUT_STATE_CURRENT_DESTINATION, destination)
+        outState.putSerializable(CURRENT_DESTINATION_KEY, destination)
     }
 
     override fun onStart() {
         super.onStart()
-        view.addListener(this)
+        view.addObserver(this)
     }
 
     override fun onStop() {
         super.onStop()
-        view.removeListener(this)
+        view.removeObserver(this)
     }
 }

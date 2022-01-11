@@ -16,22 +16,19 @@ limitations under the License.
 
 package br.com.mathsemilio.asmrcontestanttable.ui.dialog.bottomsheet.contestantdetails.controller
 
+import android.view.*
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import br.com.mathsemilio.asmrcontestanttable.common.ARG_CONTESTANT
 import br.com.mathsemilio.asmrcontestanttable.domain.model.ASMRContestant
-import br.com.mathsemilio.asmrcontestanttable.ui.dialog.commom.BaseBottomSheetDialogFragment
+import br.com.mathsemilio.asmrcontestanttable.ui.dialog.common.BaseBottomSheetDialogFragment
 
 class ContestantDetailsBottomSheet : BaseBottomSheetDialogFragment(),
     ContestantDetailsControllerEventDelegate {
 
     companion object {
+        private const val ARG_CONTESTANT = "ARG_CONTESTANT"
+
         fun with(contestant: ASMRContestant) = ContestantDetailsBottomSheet().apply {
-            arguments = Bundle(1).apply {
-                putSerializable(ARG_CONTESTANT, contestant)
-            }
+            arguments = Bundle(1).apply { putSerializable(ARG_CONTESTANT, contestant) }
         }
     }
 
@@ -41,7 +38,7 @@ class ContestantDetailsBottomSheet : BaseBottomSheetDialogFragment(),
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        controller = compositionRoot.contestantDetailsBottomSheetController
+        controller = compositionRoot.controllerFactory.contestantDetailsBottomSheetController
     }
 
     override fun onCreateView(
@@ -50,20 +47,15 @@ class ContestantDetailsBottomSheet : BaseBottomSheetDialogFragment(),
         savedInstanceState: Bundle?
     ): View {
         val view = compositionRoot.viewFactory.getContestantsDetailsView(container)
-
         controller.bindView(view)
-
         return view.rootView
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         contestant = getContestantFromBundle()
-
         controller.bindContestant(contestant)
-
-        controller.delegate = this
+        controller.addDelegate(this)
     }
 
     private fun getContestantFromBundle(): ASMRContestant {
@@ -80,5 +72,6 @@ class ContestantDetailsBottomSheet : BaseBottomSheetDialogFragment(),
     override fun onStop() {
         super.onStop()
         controller.onStop()
+        controller.removeDelegate()
     }
 }

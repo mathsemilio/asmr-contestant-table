@@ -16,15 +16,21 @@ limitations under the License.
 
 package br.com.mathsemilio.asmrcontestanttable.ui.dialog.promptdialog.controller
 
-import android.app.Dialog
 import android.os.Bundle
-import br.com.mathsemilio.asmrcontestanttable.common.*
-import br.com.mathsemilio.asmrcontestanttable.ui.dialog.commom.BaseDialogFragment
+import android.app.Dialog
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import br.com.mathsemilio.asmrcontestanttable.ui.dialog.common.BaseDialogFragment
+import br.com.mathsemilio.asmrcontestanttable.ui.dialog.promptdialog.view.PromptDialogView
 
 class PromptDialog : BaseDialogFragment(), PromptDialogControllerEventDelegate {
 
     companion object {
+        private const val ARG_DIALOG_TITLE = "ARG_DIALOG_TITLE"
+        private const val ARG_DIALOG_MESSAGE = "ARG_DIALOG_MESSAGE"
+        private const val ARG_POSITIVE_BUTTON_TEXT = "ARG_POSITIVE_BUTTON_TEXT"
+        private const val ARG_NEGATIVE_BUTTON_TEXT = "ARG_NEGATIVE_BUTTON_TEXT"
+        private const val ARG_IS_CANCELABLE = "ARG_IS_CANCELABLE"
+
         fun newInstance(
             dialogTitle: String,
             dialogMessage: String,
@@ -32,50 +38,55 @@ class PromptDialog : BaseDialogFragment(), PromptDialogControllerEventDelegate {
             negativeButtonText: String?,
             isCancelable: Boolean = false
         ): PromptDialog {
-            val args = Bundle(5).apply {
-                putString(ARG_DIALOG_TITLE, dialogTitle)
-                putString(ARG_DIALOG_MESSAGE, dialogMessage)
-                putString(ARG_POSITIVE_BUTTON_TEXT, positiveButtonText)
-                putString(ARG_NEGATIVE_BUTTON_TEXT, negativeButtonText)
-                putBoolean(ARG_IS_CANCELABLE, isCancelable)
+            return PromptDialog().apply {
+                arguments = Bundle(5).apply {
+                    putString(ARG_DIALOG_TITLE, dialogTitle)
+                    putString(ARG_DIALOG_MESSAGE, dialogMessage)
+                    putString(ARG_POSITIVE_BUTTON_TEXT, positiveButtonText)
+                    putString(ARG_NEGATIVE_BUTTON_TEXT, negativeButtonText)
+                    putBoolean(ARG_IS_CANCELABLE, isCancelable)
+                }
             }
-            val promptDialog = PromptDialog()
-            promptDialog.arguments = args
-            return promptDialog
         }
     }
+
+    private lateinit var view: PromptDialogView
 
     private lateinit var controller: PromptDialogController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        controller = compositionRoot.promptDialogController
+        controller = compositionRoot.controllerFactory.promptDialogController
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val dialogView = compositionRoot.viewFactory.promptDialogView
+        view = compositionRoot.viewFactory.promptDialogView
 
+        bindDataToController()
+
+        controller.addDelegate(this)
+
+        return getDialogBuilder().create()
+    }
+
+    private fun bindDataToController() {
         controller.run {
-            bindView(dialogView)
+            bindView(view)
             bindTitle(requireArguments().getString(ARG_DIALOG_TITLE, ""))
             bindMessage(requireArguments().getString(ARG_DIALOG_MESSAGE, ""))
             bindPositiveButtonText(requireArguments().getString(ARG_POSITIVE_BUTTON_TEXT, ""))
             bindNegativeButtonText(requireArguments().getString(ARG_NEGATIVE_BUTTON_TEXT))
         }
+    }
 
-        val dialogBuilder = MaterialAlertDialogBuilder(requireContext()).apply {
-            setView(dialogView.rootView)
+    private fun getDialogBuilder(): MaterialAlertDialogBuilder {
+        return MaterialAlertDialogBuilder(requireContext()).apply {
+            setView(view.rootView)
             isCancelable = requireArguments().getBoolean(ARG_IS_CANCELABLE, false)
         }
-
-        controller.delegate = this
-
-        return dialogBuilder.create()
     }
 
-    override fun onPromptDialogButtonClicked() {
-        dismiss()
-    }
+    override fun onPromptDialogButtonClicked() = dismiss()
 
     override fun onStart() {
         super.onStart()
@@ -85,5 +96,6 @@ class PromptDialog : BaseDialogFragment(), PromptDialogControllerEventDelegate {
     override fun onStop() {
         super.onStop()
         controller.onStop()
+        controller.removeDelegate()
     }
 }

@@ -16,8 +16,8 @@ limitations under the License.
 
 package br.com.mathsemilio.asmrcontestanttable.ui.dialog.promptdialog.view
 
-import android.view.LayoutInflater
 import android.widget.TextView
+import android.view.LayoutInflater
 import androidx.core.view.isVisible
 import br.com.mathsemilio.asmrcontestanttable.R
 import com.google.android.material.button.MaterialButton
@@ -49,7 +49,9 @@ class PromptDialogViewImpl(inflater: LayoutInflater) : PromptDialogView() {
     override fun setPositiveButtonText(positiveButtonText: String) {
         buttonPromptDialogPositive.apply {
             text = positiveButtonText
-            setOnClickListener { notify { it.onPositiveButtonClicked() } }
+            setOnClickListener {
+                notify { observer -> observer.onPositiveButtonClicked() }
+            }
         }
     }
 
@@ -57,7 +59,9 @@ class PromptDialogViewImpl(inflater: LayoutInflater) : PromptDialogView() {
         if (negativeButtonText != null)
             buttonPromptDialogNegative.apply {
                 text = negativeButtonText
-                setOnClickListener { notify { it.onNegativeButtonClicked() } }
+                setOnClickListener {
+                    notify { observer -> observer.onNegativeButtonClicked() }
+                }
             }
         else
             buttonPromptDialogNegative.isVisible = false

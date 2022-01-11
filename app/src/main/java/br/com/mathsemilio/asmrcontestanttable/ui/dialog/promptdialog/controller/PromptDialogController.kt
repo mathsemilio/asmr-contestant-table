@@ -26,7 +26,9 @@ class PromptDialogController(
 
     private lateinit var view: PromptDialogView
 
-    lateinit var delegate: PromptDialogControllerEventDelegate
+    private var _delegate: PromptDialogControllerEventDelegate? = null
+    private val delegate: PromptDialogControllerEventDelegate
+        get() = _delegate!!
 
     override fun onPositiveButtonClicked() {
         delegate.onPromptDialogButtonClicked()
@@ -42,13 +44,9 @@ class PromptDialogController(
         this.view = view
     }
 
-    fun bindTitle(title: String) {
-        view.setTitle(title)
-    }
+    fun bindTitle(title: String) = view.setTitle(title)
 
-    fun bindMessage(message: String) {
-        view.setMessage(message)
-    }
+    fun bindMessage(message: String) = view.setMessage(message)
 
     fun bindPositiveButtonText(positiveButtonText: String) {
         view.setPositiveButtonText(positiveButtonText)
@@ -58,11 +56,15 @@ class PromptDialogController(
         view.setNegativeButtonText(negativeButtonText)
     }
 
-    fun onStart() {
-        view.addListener(this)
+    fun addDelegate(delegate: PromptDialogControllerEventDelegate) {
+        _delegate = delegate
     }
 
-    fun onStop() {
-        view.removeListener(this)
+    fun removeDelegate() {
+        _delegate = null
     }
+
+    fun onStart() = view.addObserver(this)
+
+    fun onStop() = view.removeObserver(this)
 }

@@ -16,21 +16,21 @@ limitations under the License.
 
 package br.com.mathsemilio.asmrcontestanttable.ui.common.view
 
-import android.view.LayoutInflater
-import android.view.ViewGroup
-import br.com.mathsemilio.asmrcontestanttable.ui.MainActivityViewImpl
-import br.com.mathsemilio.asmrcontestanttable.ui.dialog.bottomsheet.addcontestant.view.AddContestantViewImpl
-import br.com.mathsemilio.asmrcontestanttable.ui.dialog.bottomsheet.addweekhighlights.view.AddWeekHighlightsViewImpl
-import br.com.mathsemilio.asmrcontestanttable.ui.dialog.bottomsheet.contestantdetails.view.ContestantDetailsViewImpl
+import android.view.*
+import br.com.mathsemilio.asmrcontestanttable.ui.screens.container.view.MainActivityViewImpl
 import br.com.mathsemilio.asmrcontestanttable.ui.dialog.promptdialog.view.PromptDialogViewImpl
+import br.com.mathsemilio.asmrcontestanttable.ui.screens.weekhighlightslist.view.WeekHighlightsViewImpl
+import br.com.mathsemilio.asmrcontestanttable.ui.dialog.bottomsheet.addcontestant.view.AddContestantViewImpl
 import br.com.mathsemilio.asmrcontestanttable.ui.screens.contestantstable.view.ContestantsTableScreenViewImpl
 import br.com.mathsemilio.asmrcontestanttable.ui.screens.contestantstable.view.listitem.ContestantsListItemViewImpl
-import br.com.mathsemilio.asmrcontestanttable.ui.screens.weekhighlightslist.view.WeekHighlightsViewImpl
+import br.com.mathsemilio.asmrcontestanttable.ui.dialog.bottomsheet.addweekhighlights.view.AddWeekHighlightsViewImpl
+import br.com.mathsemilio.asmrcontestanttable.ui.dialog.bottomsheet.contestantdetails.view.ContestantDetailsViewImpl
 import br.com.mathsemilio.asmrcontestanttable.ui.screens.weekhighlightslist.view.listitem.WeekHighlightsListItemViewImpl
 
 class ViewFactory(private val layoutInflater: LayoutInflater) {
 
-    val promptDialogView get() = PromptDialogViewImpl(layoutInflater)
+    val promptDialogView
+        get() = PromptDialogViewImpl(layoutInflater)
 
     fun getMainActivityView(parent: ViewGroup?) =
         MainActivityViewImpl(layoutInflater, parent)

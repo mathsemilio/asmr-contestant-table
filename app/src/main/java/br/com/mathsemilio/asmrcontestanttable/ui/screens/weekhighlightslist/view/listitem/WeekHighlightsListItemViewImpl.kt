@@ -16,8 +16,7 @@ limitations under the License.
 
 package br.com.mathsemilio.asmrcontestanttable.ui.screens.weekhighlightslist.view.listitem
 
-import android.view.LayoutInflater
-import android.view.ViewGroup
+import android.view.*
 import android.widget.TextView
 import br.com.mathsemilio.asmrcontestanttable.R
 import br.com.mathsemilio.asmrcontestanttable.domain.model.WeekHighlights
@@ -32,11 +31,10 @@ class WeekHighlightsListItemViewImpl(
 
     init {
         rootView = inflater.inflate(R.layout.week_highlights_list_item, parent, false)
-
-        initiializeViews()
+        initializeViews()
     }
 
-    private fun initiializeViews() {
+    private fun initializeViews() {
         textViewWeekHighlightsItemWeekNumber =
             findViewById(R.id.text_view_week_highlights_item_week)
         textViewWeekHighlightsItemContestants =

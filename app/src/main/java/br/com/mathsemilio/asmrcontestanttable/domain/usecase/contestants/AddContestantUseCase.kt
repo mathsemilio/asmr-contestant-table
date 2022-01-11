@@ -16,8 +16,7 @@ limitations under the License.
 
 package br.com.mathsemilio.asmrcontestanttable.domain.usecase.contestants
 
-import br.com.mathsemilio.asmrcontestanttable.domain.model.ASMRContestant
-import br.com.mathsemilio.asmrcontestanttable.domain.model.Result
+import br.com.mathsemilio.asmrcontestanttable.domain.model.*
 import br.com.mathsemilio.asmrcontestanttable.storage.endpoint.ContestantsEndpoint
 
 open class AddContestantUseCase(private val endpoint: ContestantsEndpoint?) {
@@ -27,19 +26,17 @@ open class AddContestantUseCase(private val endpoint: ContestantsEndpoint?) {
         object Failed : AddContestantResult()
     }
 
-    open suspend fun addContestant(contestantName: String): AddContestantResult {
-        var addContestantResult: AddContestantResult
+    open suspend fun addContestant(name: String): AddContestantResult {
+        var result: AddContestantResult
 
-        val contestant = ASMRContestant(id = 0, name = contestantName)
-
-        endpoint?.addContestant(contestant).also { result ->
-            addContestantResult = when (result) {
+        endpoint?.addContestant(ASMRContestant(id = 0, name = name)).also { endpointResult ->
+            result = when (endpointResult) {
                 is Result.Completed -> AddContestantResult.Completed
                 is Result.Failed -> AddContestantResult.Failed
                 null -> AddContestantResult.Failed
             }
         }
 
-        return addContestantResult
+        return result
     }
 }

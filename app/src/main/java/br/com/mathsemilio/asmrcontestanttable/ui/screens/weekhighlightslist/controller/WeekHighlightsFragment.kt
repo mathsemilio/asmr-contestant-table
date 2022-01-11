@@ -16,10 +16,8 @@ limitations under the License.
 
 package br.com.mathsemilio.asmrcontestanttable.ui.screens.weekhighlightslist.controller
 
+import android.view.*
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import br.com.mathsemilio.asmrcontestanttable.ui.common.BaseFragment
 
 class WeekHighlightsFragment : BaseFragment() {
@@ -32,7 +30,7 @@ class WeekHighlightsFragment : BaseFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        controller = compositionRoot.weekHighlightsController
+        controller = compositionRoot.controllerFactory.weekHighlightsController
     }
 
     override fun onCreateView(
@@ -41,9 +39,7 @@ class WeekHighlightsFragment : BaseFragment() {
         savedInstanceState: Bundle?
     ): View {
         val view = compositionRoot.viewFactory.getWeekHighlightsListScreenView(container)
-
         controller.bindView(view)
-
         return view.rootView
     }
 

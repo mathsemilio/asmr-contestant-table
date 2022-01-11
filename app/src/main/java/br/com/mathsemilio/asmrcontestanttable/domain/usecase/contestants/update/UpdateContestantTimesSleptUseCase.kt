@@ -16,8 +16,7 @@ limitations under the License.
 
 package br.com.mathsemilio.asmrcontestanttable.domain.usecase.contestants.update
 
-import br.com.mathsemilio.asmrcontestanttable.domain.model.ASMRContestant
-import br.com.mathsemilio.asmrcontestanttable.domain.model.Result
+import br.com.mathsemilio.asmrcontestanttable.domain.model.*
 import br.com.mathsemilio.asmrcontestanttable.storage.endpoint.ContestantsEndpoint
 
 open class UpdateContestantTimesSleptUseCase(private val endpoint: ContestantsEndpoint?) {
@@ -30,21 +29,21 @@ open class UpdateContestantTimesSleptUseCase(private val endpoint: ContestantsEn
     open suspend fun updateContestantTimesSlept(
         contestant: ASMRContestant
     ): UpdateContestantTimesSleptResult {
-        var updateContestantTimesSleptResult: UpdateContestantTimesSleptResult
+        var result: UpdateContestantTimesSleptResult
 
         val updatedContestant = contestant.copy(
             score = contestant.score.plus(3),
             timesSlept = contestant.timesSlept.inc()
         )
 
-        endpoint?.updateContestant(updatedContestant).also { result ->
-            updateContestantTimesSleptResult = when (result) {
+        endpoint?.updateContestant(updatedContestant).also { endpointResult ->
+            result = when (endpointResult) {
                 is Result.Completed -> UpdateContestantTimesSleptResult.Completed
                 is Result.Failed -> UpdateContestantTimesSleptResult.Failed
                 null -> UpdateContestantTimesSleptResult.Failed
             }
         }
 
-        return updateContestantTimesSleptResult
+        return result
     }
 }

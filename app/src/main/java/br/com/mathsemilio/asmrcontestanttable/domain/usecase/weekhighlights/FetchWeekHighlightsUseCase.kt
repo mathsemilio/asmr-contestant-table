@@ -16,28 +16,30 @@ limitations under the License.
 
 package br.com.mathsemilio.asmrcontestanttable.domain.usecase.weekhighlights
 
-import br.com.mathsemilio.asmrcontestanttable.domain.model.Result
-import br.com.mathsemilio.asmrcontestanttable.domain.model.WeekHighlights
+import br.com.mathsemilio.asmrcontestanttable.domain.model.*
 import br.com.mathsemilio.asmrcontestanttable.storage.endpoint.WeekHighlightsEndpoint
 
 open class FetchWeekHighlightsUseCase(private val endpoint: WeekHighlightsEndpoint?) {
 
     sealed class FetchWeekHighlightsResult {
-        data class Completed(val weekHighlights: List<WeekHighlights>?) : FetchWeekHighlightsResult()
+        data class Completed(val highlights: List<WeekHighlights>) : FetchWeekHighlightsResult()
         object Failed : FetchWeekHighlightsResult()
     }
 
     open suspend fun fetchWeekHighlights(): FetchWeekHighlightsResult {
-        var fetchWeekHighlightsResult: FetchWeekHighlightsResult
+        var result: FetchWeekHighlightsResult
 
-        endpoint?.fetchWeekHighlights().also { result ->
-            fetchWeekHighlightsResult = when (result) {
-                is Result.Completed -> FetchWeekHighlightsResult.Completed(weekHighlights = result.data)
-                is Result.Failed -> FetchWeekHighlightsResult.Failed
-                null -> FetchWeekHighlightsResult.Failed
+        endpoint?.fetchWeekHighlights().also { endpointResult ->
+            result = when (endpointResult) {
+                is Result.Completed ->
+                    FetchWeekHighlightsResult.Completed(endpointResult.data ?: emptyList())
+                is Result.Failed ->
+                    FetchWeekHighlightsResult.Failed
+                null ->
+                    FetchWeekHighlightsResult.Failed
             }
         }
 
-        return fetchWeekHighlightsResult
+        return result
     }
 }

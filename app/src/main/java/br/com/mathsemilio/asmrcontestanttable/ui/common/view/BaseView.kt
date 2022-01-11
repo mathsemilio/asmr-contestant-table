@@ -25,13 +25,12 @@ abstract class BaseView : View {
 
     override var rootView: android.view.View
         get() = _rootView
-        set(value) {
-            _rootView = value
-        }
+        set(view) { _rootView = view }
 
-    protected fun <T : android.view.View> findViewById(id: Int): T = _rootView.findViewById(id)
-
-    protected val context: Context get() = _rootView.context
+    protected val context: Context
+        get() = _rootView.context
 
     protected fun getString(@StringRes id: Int) = context.getString(id)
+
+    protected fun <T : android.view.View> findViewById(id: Int): T = _rootView.findViewById(id)
 }

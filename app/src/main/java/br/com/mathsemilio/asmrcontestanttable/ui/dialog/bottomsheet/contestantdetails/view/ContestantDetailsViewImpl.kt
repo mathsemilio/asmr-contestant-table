@@ -16,11 +16,8 @@ limitations under the License.
 
 package br.com.mathsemilio.asmrcontestanttable.ui.dialog.bottomsheet.contestantdetails.view
 
-import android.view.LayoutInflater
-import android.view.ViewGroup
-import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.TextView
+import android.view.*
+import android.widget.*
 import br.com.mathsemilio.asmrcontestanttable.R
 import br.com.mathsemilio.asmrcontestanttable.domain.model.ASMRContestant
 
@@ -59,35 +56,26 @@ class ContestantDetailsViewImpl(
 
     private fun attachClickListeners() {
         buttonIncrementTimesSlept.setOnClickListener {
-            notify { listener ->
-                listener.onIncrementTimesSleptButtonClicked()
-            }
+            notify { observer -> observer.onIncrementTimesSleptButtonClicked() }
         }
         buttonIncrementTimesDidNotSlept.setOnClickListener {
-            notify { listener ->
-                listener.onIncrementTimesDidNotSleptButtonClicked()
-            }
+            notify { observer -> observer.onIncrementTimesDidNotSleptButtonClicked() }
         }
         buttonIncrementTimesFeltTired.setOnClickListener {
-            notify { listener ->
-                listener.onIncrementTimesFeltTiredButtonClicked()
-            }
+            notify { observer -> observer.onIncrementTimesFeltTiredButtonClicked() }
         }
     }
 
     override fun bindContestant(contestant: ASMRContestant) {
         textViewContestantsDetailsName.text = contestant.name
-
         textViewTimesSlept.text = context.getString(
             R.string.contestant_times_slept,
             contestant.timesSlept
         )
-
         textViewTimesDidNotSlept.text = context.getString(
             R.string.contestant_times_did_not_slept,
             contestant.timesDidNotSlept
         )
-
         textViewTimesFeltTired.text = context.getString(
             R.string.contestant_times_felt_tired,
             contestant.timesFeltTired

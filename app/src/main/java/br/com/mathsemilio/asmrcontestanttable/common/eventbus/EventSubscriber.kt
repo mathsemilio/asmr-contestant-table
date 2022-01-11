@@ -19,10 +19,10 @@ package br.com.mathsemilio.asmrcontestanttable.common.eventbus
 open class EventSubscriber(private val eventBus: EventBus?) {
 
     open fun subscribe(listener: EventListener) {
-        eventBus?.addListener(listener)
+        eventBus?.addObserver(listener)
     }
 
     open fun unsubscribe(listener: EventListener) {
-        eventBus?.removeListener(listener)
+        eventBus?.removeObserver(listener)
     }
 }

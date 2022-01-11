@@ -16,17 +16,11 @@ limitations under the License.
 
 package br.com.mathsemilio.asmrcontestanttable.ui.dialog.bottomsheet.addcontestant.view
 
-import android.view.LayoutInflater
-import android.view.ViewGroup
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.TextView
+import android.view.*
+import android.widget.*
 import androidx.core.view.isVisible
 import br.com.mathsemilio.asmrcontestanttable.R
-import br.com.mathsemilio.asmrcontestanttable.common.onAfterTextChangedListener
-import br.com.mathsemilio.asmrcontestanttable.common.setDisabledState
-import br.com.mathsemilio.asmrcontestanttable.common.setEnabledState
-import br.com.mathsemilio.asmrcontestanttable.common.showErrorState
+import br.com.mathsemilio.asmrcontestanttable.common.*
 import com.google.android.material.button.MaterialButton
 
 class AddContestantViewImpl(
@@ -46,9 +40,7 @@ class AddContestantViewImpl(
 
         attachContestantNameEditTextTextWatcher()
 
-        buttonAddContestant.setOnClickListener {
-            onAddContestantButtonClicked()
-        }
+        buttonAddContestant.setOnClickListener { onAddContestantButtonClicked() }
     }
 
     private fun initializeViews() {
@@ -66,9 +58,7 @@ class AddContestantViewImpl(
             revertAddButtonState()
             return
         } else {
-            notify { listener ->
-                listener.onAddButtonClicked(contestantName)
-            }
+            notify { observer -> observer.onAddButtonClicked(contestantName) }
         }
     }
 

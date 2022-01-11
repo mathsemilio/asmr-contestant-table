@@ -14,13 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
  */
 
-package br.com.mathsemilio.asmrcontestanttable.ui
+package br.com.mathsemilio.asmrcontestanttable.ui.screens.container.view
 
-import android.widget.FrameLayout
 import androidx.annotation.StringRes
+import com.google.android.material.appbar.MaterialToolbar
 import br.com.mathsemilio.asmrcontestanttable.ui.common.others.BottomNavigationItem
 import br.com.mathsemilio.asmrcontestanttable.ui.common.view.BaseObservableView
-import com.google.android.material.appbar.MaterialToolbar
 
 abstract class MainActivityView : BaseObservableView<MainActivityView.Listener>() {
 
@@ -30,7 +29,7 @@ abstract class MainActivityView : BaseObservableView<MainActivityView.Listener>(
 
     abstract val toolbar: MaterialToolbar
 
-    abstract val fragmentContainer: FrameLayout
+    abstract val fragmentContainerId: Int
 
     abstract fun setToolbarTitle(@StringRes titleId: Int?)
 

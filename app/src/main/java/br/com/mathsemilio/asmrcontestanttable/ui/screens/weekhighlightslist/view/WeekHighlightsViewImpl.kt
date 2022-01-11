@@ -16,17 +16,15 @@ limitations under the License.
 
 package br.com.mathsemilio.asmrcontestanttable.ui.screens.weekhighlightslist.view
 
-import android.view.LayoutInflater
-import android.view.ViewGroup
-import android.widget.LinearLayout
-import android.widget.ProgressBar
+import android.view.*
+import android.widget.*
 import androidx.core.view.isVisible
-import androidx.recyclerview.widget.RecyclerView
 import br.com.mathsemilio.asmrcontestanttable.R
-import br.com.mathsemilio.asmrcontestanttable.domain.model.WeekHighlights
+import androidx.recyclerview.widget.RecyclerView
 import br.com.mathsemilio.asmrcontestanttable.ui.common.view.ViewFactory
-import br.com.mathsemilio.asmrcontestanttable.ui.screens.weekhighlightslist.WeekHighlightsListAdapter
+import br.com.mathsemilio.asmrcontestanttable.domain.model.WeekHighlights
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import br.com.mathsemilio.asmrcontestanttable.ui.screens.weekhighlightslist.WeekHighlightsListAdapter
 
 class WeekHighlightsViewImpl(
     inflater: LayoutInflater,
@@ -69,9 +67,7 @@ class WeekHighlightsViewImpl(
 
     private fun attachAddWeekHighlightsButtonOnClickListener() {
         fabAddWeekHighlights.setOnClickListener {
-            notify { listener ->
-                listener.onAddWeekHighlightsButtonClicked()
-            }
+            notify { observer -> observer.onAddWeekHighlightsButtonClicked() }
         }
     }
 

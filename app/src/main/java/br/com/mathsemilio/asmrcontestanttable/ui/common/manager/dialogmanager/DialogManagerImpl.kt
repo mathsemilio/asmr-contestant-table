@@ -20,10 +20,10 @@ import android.content.Context
 import androidx.fragment.app.FragmentManager
 import br.com.mathsemilio.asmrcontestanttable.R
 import br.com.mathsemilio.asmrcontestanttable.domain.model.ASMRContestant
+import br.com.mathsemilio.asmrcontestanttable.ui.dialog.promptdialog.builder.PromptDialogBuilder
 import br.com.mathsemilio.asmrcontestanttable.ui.dialog.bottomsheet.addcontestant.controller.AddContestantBottomSheet
 import br.com.mathsemilio.asmrcontestanttable.ui.dialog.bottomsheet.addweekhighlights.controller.AddWeekHighlightsBottomSheet
 import br.com.mathsemilio.asmrcontestanttable.ui.dialog.bottomsheet.contestantdetails.controller.ContestantDetailsBottomSheet
-import br.com.mathsemilio.asmrcontestanttable.ui.dialog.promptdialog.controller.PromptDialog
 
 class DialogManagerImpl(
     private val fragmentManager: FragmentManager,
@@ -46,13 +46,14 @@ class DialogManagerImpl(
     }
 
     override fun showResetContestDialog() {
-        val promptDialog = PromptDialog.newInstance(
-            context.getString(R.string.dialog_title_reset_contest),
-            context.getString(R.string.dialog_message_reset_contest),
-            context.getString(R.string.dialog_positive_button_reset),
-            context.getString(R.string.dialog_negative_button_cancel),
-            isCancelable = true
-        )
+        val promptDialog = PromptDialogBuilder
+            .withTitle(context.getString(R.string.dialog_title_reset_contest))
+            .withMessage(context.getString(R.string.dialog_message_reset_contest))
+            .withPositiveButtonText(context.getString(R.string.dialog_positive_button_reset))
+            .withNegativeButtonText(context.getString(R.string.dialog_negative_button_cancel))
+            .setIsCancelable(true)
+            .build()
+
         promptDialog.show(fragmentManager, null)
     }
 }

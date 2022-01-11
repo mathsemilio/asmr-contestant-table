@@ -3,18 +3,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="80dp"
-    android:layout_margin="8dp">
+    android:layout_height="@dimen/week_highlights_cell_height"
+    android:layout_margin="@dimen/margin_8dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="16dp">
+        android:padding="@dimen/padding_16dp">
 
         <ImageView
             android:id="@+id/image_view_week_highlights_icon"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
+            android:layout_width="@dimen/week_highlight_icon_dimension"
+            android:layout_height="@dimen/week_highlight_icon_dimension"
             android:contentDescription="@string/content_description_week_highlights"
             app:layout_constraintBottom_toBottomOf="@id/divider_week_highlights_item"
             app:layout_constraintStart_toStartOf="parent"
@@ -23,9 +23,9 @@
 
         <View
             android:id="@+id/divider_week_highlights_item"
-            android:layout_width="1dp"
+            android:layout_width="@dimen/vertical_divider_width"
             android:layout_height="0dp"
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="@dimen/margin_16dp"
             android:background="?android:attr/listDivider"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@id/image_view_week_highlights_icon"
@@ -35,7 +35,7 @@
             android:id="@+id/text_view_week_highlights_item_week"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="@dimen/margin_16dp"
             android:ellipsize="end"
             android:maxLines="1"
             android:textAppearance="?textAppearanceTitleMedium"

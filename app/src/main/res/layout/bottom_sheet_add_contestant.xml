@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:fillViewport="true"
-    android:padding="16dp">
+    android:padding="@dimen/padding_16dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -13,20 +13,20 @@
 
         <ImageView
             android:id="@+id/image_view_bottom_sheet_slider"
-            android:layout_width="40dp"
-            android:layout_height="4dp"
-            android:layout_marginTop="8dp"
+            android:layout_width="@dimen/bottom_sheet_slider_width"
+            android:layout_height="@dimen/bottom_sheet_slider_height"
+            android:layout_marginTop="@dimen/margin_8dp"
             android:importantForAccessibility="no"
             android:src="@drawable/ic_bottom_sheet_slider"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <de.hdodenhof.circleimageview.CircleImageView
+        <ImageView
             android:id="@+id/image_view_contestant_profile_picture"
-            android:layout_width="128dp"
-            android:layout_height="128dp"
-            android:layout_marginTop="24dp"
+            android:layout_width="@dimen/add_contestant_profile_picture_dimension"
+            android:layout_height="@dimen/add_contestant_profile_picture_dimension"
+            android:layout_marginTop="@dimen/margin_24dp"
             android:contentDescription="@string/content_description_add_profile_picture"
             android:src="@drawable/dr_contestant_profile_picture"
             app:layout_constraintEnd_toEndOf="parent"
@@ -37,9 +37,9 @@
             android:id="@+id/text_view_add_contestant_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="16dp"
+            android:layout_marginStart="@dimen/margin_16dp"
+            android:layout_marginTop="@dimen/margin_20dp"
+            android:layout_marginEnd="@dimen/margin_16dp"
             android:ellipsize="end"
             android:maxLines="1"
             android:textAlignment="center"
@@ -55,7 +55,7 @@
             android:id="@+id/edit_text_contestant_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="@dimen/margin_32dp"
             android:autofillHints="@string/name"
             android:hint="@string/name"
             android:inputType="textPersonName"
@@ -67,7 +67,7 @@
             android:id="@+id/button_add_contestant"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="@dimen/margin_24dp"
             android:text="@string/add"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/edit_text_contestant_name" />

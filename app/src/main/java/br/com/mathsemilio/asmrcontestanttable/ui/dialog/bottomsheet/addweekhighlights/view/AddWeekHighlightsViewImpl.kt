@@ -16,13 +16,10 @@ limitations under the License.
 
 package br.com.mathsemilio.asmrcontestanttable.ui.dialog.bottomsheet.addweekhighlights.view
 
-import android.view.LayoutInflater
-import android.view.ViewGroup
+import android.view.*
 import android.widget.EditText
 import br.com.mathsemilio.asmrcontestanttable.R
-import br.com.mathsemilio.asmrcontestanttable.common.setDisabledState
-import br.com.mathsemilio.asmrcontestanttable.common.setEnabledState
-import br.com.mathsemilio.asmrcontestanttable.common.showErrorState
+import br.com.mathsemilio.asmrcontestanttable.common.*
 import com.google.android.material.button.MaterialButton
 
 class AddWeekHighlightsViewImpl(
@@ -39,9 +36,7 @@ class AddWeekHighlightsViewImpl(
 
         initializeViews()
 
-        buttonAddWeekHighlight.setOnClickListener {
-            onAddWeekHighlightButtonClicked()
-        }
+        buttonAddWeekHighlight.setOnClickListener { onAddWeekHighlightButtonClicked() }
     }
 
     private fun initializeViews() {
@@ -58,7 +53,6 @@ class AddWeekHighlightsViewImpl(
             editTextFirstContestantName.showErrorState(
                 context.getString(R.string.please_enter_contestant_name)
             )
-
             return
         }
 
@@ -66,12 +60,11 @@ class AddWeekHighlightsViewImpl(
             editTextSecondContestantName.showErrorState(
                 getString(R.string.please_enter_contestant_name)
             )
-
             return
         }
 
-        notify { listener ->
-            listener.onAddButtonClicked(firstContestantName, secondContestantName)
+        notify { observer ->
+            observer.onAddButtonClicked(listOf(firstContestantName, secondContestantName))
         }
     }
 

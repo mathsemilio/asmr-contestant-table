@@ -16,11 +16,9 @@ limitations under the License.
 
 package br.com.mathsemilio.asmrcontestanttable.ui.dialog.bottomsheet.addweekhighlights.controller
 
+import android.view.*
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import br.com.mathsemilio.asmrcontestanttable.ui.dialog.commom.BaseBottomSheetDialogFragment
+import br.com.mathsemilio.asmrcontestanttable.ui.dialog.common.BaseBottomSheetDialogFragment
 
 class AddWeekHighlightsBottomSheet : BaseBottomSheetDialogFragment(),
     WeekHighlightsControllerEventDelegate {
@@ -29,7 +27,7 @@ class AddWeekHighlightsBottomSheet : BaseBottomSheetDialogFragment(),
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        controller = compositionRoot.addWeekHighlightsBottomSheetController
+        controller = compositionRoot.controllerFactory.addWeekHighlightsBottomSheetController
     }
 
     override fun onCreateView(
@@ -38,21 +36,16 @@ class AddWeekHighlightsBottomSheet : BaseBottomSheetDialogFragment(),
         savedInstanceState: Bundle?
     ): View {
         val view = compositionRoot.viewFactory.getAddWeekHighlightsView(container)
-
         controller.bindView(view)
-
         return view.rootView
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        controller.delegate = this
+        controller.addDelegate(this)
     }
 
-    override fun onDismissBottomSheetRequested() {
-        dismiss()
-    }
+    override fun onDismissBottomSheetRequested() = dismiss()
 
     override fun onStart() {
         super.onStart()
@@ -62,5 +55,6 @@ class AddWeekHighlightsBottomSheet : BaseBottomSheetDialogFragment(),
     override fun onStop() {
         super.onStop()
         controller.onStop()
+        controller.removeDelegate()
     }
 }

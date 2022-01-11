@@ -16,18 +16,16 @@ limitations under the License.
 
 package br.com.mathsemilio.asmrcontestanttable.storage.endpoint
 
+import kotlinx.coroutines.*
+import br.com.mathsemilio.asmrcontestanttable.domain.model.*
 import br.com.mathsemilio.asmrcontestanttable.data.dao.WeekHighlightsDAO
-import br.com.mathsemilio.asmrcontestanttable.domain.model.Result
-import br.com.mathsemilio.asmrcontestanttable.domain.model.WeekHighlights
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 
 open class WeekHighlightsEndpoint(private val weekHighlightsDAO: WeekHighlightsDAO?) {
 
     open suspend fun addWeekHighlights(weekHighlights: WeekHighlights): Result<Nothing> {
         return withContext(Dispatchers.IO) {
             try {
-                weekHighlightsDAO?.insertData(weekHighlights)
+                weekHighlightsDAO?.insert(weekHighlights)
                 Result.Completed(data = null)
             } catch (exception: Exception) {
                 Result.Failed(exception = exception)

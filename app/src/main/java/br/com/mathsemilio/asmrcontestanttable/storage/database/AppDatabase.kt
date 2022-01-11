@@ -16,15 +16,10 @@ limitations under the License.
 
 package br.com.mathsemilio.asmrcontestanttable.storage.database
 
+import androidx.room.*
 import android.content.Context
-import androidx.room.Database
-import androidx.room.Room
-import androidx.room.RoomDatabase
-import br.com.mathsemilio.asmrcontestanttable.common.APP_DATABASE
-import br.com.mathsemilio.asmrcontestanttable.data.dao.ContestantDAO
-import br.com.mathsemilio.asmrcontestanttable.data.dao.WeekHighlightsDAO
-import br.com.mathsemilio.asmrcontestanttable.domain.model.ASMRContestant
-import br.com.mathsemilio.asmrcontestanttable.domain.model.WeekHighlights
+import br.com.mathsemilio.asmrcontestanttable.data.dao.*
+import br.com.mathsemilio.asmrcontestanttable.domain.model.*
 
 @Database(
     entities = [ASMRContestant::class, WeekHighlights::class],
@@ -38,6 +33,7 @@ abstract class AppDatabase : RoomDatabase() {
 
     companion object {
         private val LOCK = Any()
+        private const val DATABASE_NAME = "app_database"
 
         @Volatile
         private var INSTANCE: AppDatabase? = null
@@ -52,7 +48,7 @@ abstract class AppDatabase : RoomDatabase() {
                 val databaseInstance = Room.databaseBuilder(
                     context.applicationContext,
                     AppDatabase::class.java,
-                    APP_DATABASE
+                    DATABASE_NAME
                 ).build()
 
                 INSTANCE = databaseInstance
