@@ -14,7 +14,7 @@ all contestants and clear the week highlights section.
 
 ## External Libraries featured
 1. <a href="https://developer.android.com/training/data-storage/room">Room</a>;
-2. <a href="https://developer.android.com/kotlin/coroutines">Kotlin Coroutines for Android</a>;
+2. <a href="https://developer.android.com/kotlin/coroutines">Kotlin Coroutines for Android</a>.
 
 ## License
 ```
