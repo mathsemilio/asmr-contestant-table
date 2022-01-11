@@ -58,6 +58,7 @@ open class AddWeekHighlightsUseCase(private val endpoint: WeekHighlightsEndpoint
             when (endpointResult) {
                 is Result.Completed -> weekNumber = endpointResult.data
                 is Result.Failed -> throw RuntimeException(endpointResult.exception?.message)
+                else -> throw RuntimeException(endpointResult?.exception?.message)
             }
         }
 
