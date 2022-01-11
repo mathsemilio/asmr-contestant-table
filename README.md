@@ -13,12 +13,8 @@ mistake by clicking on the "Reset Contest" option in the menu. Rebooting the con
 all contestants and clear the week highlights section.
 
 ## External Libraries featured
-1. Room
-2. Kotlin Coroutines for Android
-
-*For information regarding the libraries used, please refer to these links:*
-<p><a href="https://developer.android.com/training/data-storage/room">Room</a></p>
-<p><a href="https://developer.android.com/kotlin/coroutines">Kotlin Coroutines for Android</a></p>
+1. <a href="https://developer.android.com/training/data-storage/room">Room</a>;
+2. <a href="https://developer.android.com/kotlin/coroutines">Kotlin Coroutines for Android</a>;
 
 ## License
 ```
