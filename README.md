@@ -1,7 +1,7 @@
 # ASMR Contestant Table
 Simple Android application that manages a contest for ASMR artists.
 
-## App Objective
+## Objective
 This app manages a simple contest for ASMR artists. The user adds contestants and manages them by
 updating their attributes based on his experience. It also has a "Week Highlights" section, where
 the user can feature contestants that performed best in a particular week.
@@ -12,7 +12,9 @@ during insertion or while updating a contestant data, the user will only be able
 mistake by clicking on the "Reset Contest" option in the menu. Rebooting the contest will delete 
 all contestants and clear the week highlights section.
 
-## External Libraries featured
+## Development Technologies
+3rd party libraries used:
+
 1. <a href="https://developer.android.com/training/data-storage/room">Room</a>;
 2. <a href="https://developer.android.com/kotlin/coroutines">Kotlin Coroutines for Android</a>.
 
